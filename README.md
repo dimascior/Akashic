@@ -200,7 +200,7 @@ See `docs/install-sequence.md` for the complete procedure and `docs/package-arch
 | Stale gate cleanup | Implemented, code-reviewed — `tools/Move-HeliosStaleGateArtifacts.ps1` |
 | Settings integrity | Verified — `Test-HeliosSettingsIntegrity` passes against live settings.json |
 | Rebaseline schema | Validated — fixture record matches `schemas/helios-rebaseline.schema.json` |
-| Phase 4.1 evidence | Partial — `evidence/phase41/` (7 evidence files, live execution deferred) |
+| Phase 4.1 evidence | Partial — `evidence/phase41/` (9 evidence files, live execution deferred) |
 | TCE main preservation | Verified — TCE main preserved at `c594a75` with no adapter entries |
 
 ### Provenance

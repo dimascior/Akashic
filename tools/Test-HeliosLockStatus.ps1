@@ -58,15 +58,16 @@ function Test-FileLockStatus {
 
     $aclOutput = & icacls $FilePath 2>&1 | Out-String
 
-    # icacls renders the account as the SID (*S-1-1-0) or the localized
-    # display name (Everyone, Tout le monde, Jeder, etc.).  We look for
-    # a DENY ACE on either form that specifically includes write (W) or
-    # delete (D) rights.  This avoids false positives from deny entries
-    # that restrict other operations or target a different principal.
+    # Lock-HeliosProtectedFiles applies deny ACEs using the SID
+    # (*S-1-1-0), so icacls will normally echo that SID back.  On
+    # English Windows it may also appear as "Everyone".  We match
+    # both forms.  Non-English localized names (Tout le monde, Jeder,
+    # etc.) are NOT matched — SID matching covers those systems
+    # because the lock command uses the SID, not the display name.
     #
-    # Typical icacls output line:
-    #   *S-1-1-0:(DENY)(W,D)
-    #   Everyone:(DENY)(W,D)
+    # We further require the deny ACE to include write (W) or
+    # delete (D) rights, avoiding false positives from unrelated
+    # deny entries.
     $lines = $aclOutput -split "`n"
     $hasDenyWD = $false
     foreach ($line in $lines) {

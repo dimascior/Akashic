@@ -16,11 +16,13 @@
     { "label": "manifest\\helios-envelope.sha256", "expected": "UNLOCKED", "file_exists": true }
   ],
   "detection_method": {
-    "description": "Test-HeliosLockStatus parses icacls output per-line, matching (S-1-1-0|Everyone) + (DENY) + rights containing W or D",
+    "description": "Test-HeliosLockStatus parses icacls output per-line, matching (*S-1-1-0|Everyone) + (DENY) + rights containing W or D",
     "handles_sid_output": true,
-    "handles_localized_name": true,
+    "handles_english_everyone": true,
+    "handles_non_english_localized_names": false,
+    "localization_note": "SID matching covers non-English systems because Lock-HeliosProtectedFiles applies deny ACEs using the SID, not the display name",
     "checks_specific_rights": true,
-    "false_positive_mitigation": "Only matches deny ACEs with W or D rights on the Everyone principal"
+    "false_positive_mitigation": "Only matches deny ACEs with W or D rights on the *S-1-1-0 or Everyone principal"
   },
   "result": "BASELINE_RECORDED — all 8 files exist, no locks applied, ready for lock/unlock verification"
 }
