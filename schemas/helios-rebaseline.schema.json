@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "helios-rebaseline.v1",
+  "title": "Helios Rebaseline Record",
+  "description": "Records a coordinated unlock-update-relock-verify rebaseline cycle.",
+  "type": "object",
+  "required": ["schema_version", "started_utc", "completed_utc", "rebaselined_by", "steps", "status"],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "started_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "completed_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "rebaselined_by": {
+      "type": "string",
+      "description": "Who authorized the rebaseline (human, automated, etc.)."
+    },
+    "steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["step", "status", "timestamp_utc"],
+        "properties": {
+          "step": {
+            "type": "string",
+            "enum": [
+              "preflight_lock_check",
+              "unlock",
+              "update_action",
+              "regenerate_manifest",
+              "relock",
+              "postflight_lock_check",
+              "envelope_integrity",
+              "emergency_relock"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": ["PASS", "FAIL", "FAILED", "WARN", "RECOVERED"]
+          },
+          "detail": {
+            "type": "string"
+          },
+          "timestamp_utc": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": ["IN_PROGRESS", "COMPLETE", "FAILED", "FAILED_WITH_RELOCK", "PARTIAL_RELOCK", "RELOCK_FAILED"]
+    }
+  }
+}

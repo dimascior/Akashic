@@ -122,6 +122,7 @@ See `schemas/` for JSON Schema definitions of:
 - `helios-envelope.v1` — durable manifest
 - `helios-baseline.v1` — session baseline
 - `helios-command-evidence.v1` — before, decision, after, compare evidence
+- `helios-rebaseline.v1` — rebaseline audit record
 
 ## Packaging
 
@@ -146,6 +147,17 @@ git clone https://github.com/dimascior/helios-integrity-adapter.git
 | `tools/Test-HeliosEndToEndInstallPlan.ps1` | Simulate install in temp directory |
 | `tools/New-HeliosInstallPlan.ps1` | Generate adapter-only install plan |
 
+### Lock Tools
+
+| Tool | Purpose |
+|---|---|
+| `tools/Lock-HeliosProtectedFiles.ps1` | Apply OS-native write/delete deny ACLs to protected files |
+| `tools/Unlock-HeliosProtectedFiles.ps1` | Remove deny ACLs for maintenance rebaseline |
+| `tools/Test-HeliosLockStatus.ps1` | Verify all lock targets are in expected state |
+| `tools/Invoke-HeliosRebaseline.ps1` | Coordinated unlock→update→relock→verify cycle |
+| `tools/Move-HeliosStaleGateArtifacts.ps1` | Clean expired pending/ and orphaned inflight/ gates |
+| `tools/Test-HeliosSettingsIntegrity.ps1` | Verify settings.json hook entries (control-plane check) |
+
 ### Install Flow
 
 1. Pull adapter package and runtime bundle.
@@ -160,14 +172,14 @@ See `docs/install-sequence.md` for the complete procedure and `docs/package-arch
 
 ## Current Status
 
-**Phase:** 4.0 — lock design from gap evidence.
+**Phase:** 4.1 — lock/unlock/rebaseline tooling (Windows).
 
 | Component | Status |
 |---|---|
 | Bridge implementation (7 functions) | Complete |
 | Sync, manifest, integrity tools | Complete |
 | Pester test suite (18 tests) | Complete |
-| Schemas (3 JSON Schema files) | Complete |
+| Schemas (4 JSON Schema files) | Complete |
 | TCE adapter spec | Complete — `docs/tce-helios-integrity-adapter-spec.md` |
 | Orchestration workflow | Complete — `tools/Invoke-HeliosGapTest.ps1` |
 | Evidence parser/normalizer | Complete — `tools/ConvertFrom-HeliosEvidence.ps1` |
@@ -182,6 +194,12 @@ See `docs/install-sequence.md` for the complete procedure and `docs/package-arch
 | Package validation (3.99.1) | Complete — adapter verifier BOM checks, runtime manifest completeness, e2e execution |
 | Install sequence | Complete — `docs/install-sequence.md` |
 | Lock design (4.0) | Complete — `docs/phase40-lock-design-from-gap-evidence.md` |
+| Lock tooling (4.1) | Complete — `docs/phase41-lock-implementation.md` |
+| Lock/unlock tools | Complete — `Lock-HeliosProtectedFiles`, `Unlock-HeliosProtectedFiles`, `Test-HeliosLockStatus` |
+| Rebaseline workflow | Complete — `tools/Invoke-HeliosRebaseline.ps1` (7-step atomic cycle) |
+| Stale gate cleanup | Complete — `tools/Move-HeliosStaleGateArtifacts.ps1` |
+| Settings integrity | Complete — `tools/Test-HeliosSettingsIntegrity.ps1` |
+| Rebaseline schema | Complete — `schemas/helios-rebaseline.schema.json` |
 | TCE main preservation | Verified — TCE main preserved at `c594a75` with no adapter entries |
 
 ### Provenance
@@ -199,7 +217,7 @@ Extracted from [TerminalContextExporter](https://github.com/dimascior/TerminalCo
 | Phase 3.99.1 | Complete (package validation + manifest hardening + execution proof) |
 | Phase 3.99.2 | Complete (final readback audit) |
 | Phase 4.0 | Complete (lock design from gap evidence) |
-| Phase 4.1 | Future — lock/unlock/rebaseline tooling |
+| Phase 4.1 | Complete (lock/unlock/rebaseline tooling — Windows) |
 | Phase 4.2 | Future — live lock verification evidence |
 | Phase 5 | Future — lock system packaging |
 | Phase 6 | Future — long-term lock verification + audit strategy |
