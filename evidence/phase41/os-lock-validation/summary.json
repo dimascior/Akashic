@@ -1,0 +1,42 @@
+{
+  "schema_version": "akashic-os-lock-summary.v1",
+  "generated_utc": "2026-06-28T12:11:00Z",
+  "platforms": {
+    "windows": {
+      "result": "PASS",
+      "backend": "icacls",
+      "strength": "strong",
+      "privilege_mode": "Auto",
+      "filesystem_type": "NTFS",
+      "blockers": [],
+      "evidence_file": "windows.json"
+    },
+    "void_linux": {
+      "result": "NOT_TESTED",
+      "backend": "chattr",
+      "strength": "strong_if_supported",
+      "privilege_mode": null,
+      "filesystem_type": null,
+      "blockers": ["REQUIRES_PHYSICAL_MACHINE_TEST"],
+      "evidence_file": null,
+      "notes": "Requires fixture test on Void Linux machine with chattr/lsattr and privilege path validated"
+    },
+    "macos": {
+      "result": "NOT_TESTED",
+      "backend": "chflags",
+      "strength": "strong_user_immutable",
+      "privilege_mode": null,
+      "filesystem_type": null,
+      "blockers": ["REQUIRES_PHYSICAL_MACHINE_TEST"],
+      "evidence_file": null,
+      "notes": "Requires fixture test on macOS machine with chflags uchg validated"
+    }
+  },
+  "active_runtime_touched": false,
+  "design_rule": "Akashic proves backend against disposable fixture first; active Helios runtime locking deferred until explicit approval",
+  "remaining_blockers": [
+    "Void Linux fixture test not yet executed",
+    "macOS fixture test not yet executed",
+    "Active runtime lock activation deferred"
+  ]
+}

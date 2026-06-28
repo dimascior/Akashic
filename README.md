@@ -104,14 +104,22 @@ When any protected file changes (including the vendored bridge after sync):
 2. Verify: `AkashicEnvelopeIntegrityValidation.ps1 -HeliosGateRoot <path>`.
 3. The manifest JSON and sidecar hash are regenerated.
 
-## Phase 4+ Lock Handoff
+## Cross-Platform Lock Strategy
 
-After this adapter contract is stable, Phase 4 adds OS-native filesystem locks:
+Akashic decides **what** to protect. The OS backend decides **how** to protect it. Evidence proves **whether** protection worked on that machine.
 
-- Windows: `icacls` read-only ACL on protected files
-- Linux: `chattr +i` immutable attribute
-- macOS: `chflags uchg` user immutable flag
-- POSIX fallback: `chmod a-w`
+PowerShell is the orchestration language for all lock operations. Native OS commands are backend lock mechanisms only, invoked through `& $CommandPath @Arguments`, never through shell strings or Invoke-Expression.
+
+| Platform | Backend | Lock | Unlock | Status | Strength |
+|---|---|---|---|---|---|
+| Windows | icacls | `/deny "*S-1-1-0:(W,D)"` | `/remove:d "*S-1-1-0"` | Parse DENY ACE | strong |
+| Linux | chattr | `+i` | `-i` | lsattr for `i` flag | strong_if_supported |
+| macOS | chflags | `uchg` | `nouchg` | `ls -lO` for `uchg` | strong_user_immutable |
+| POSIX | chmod | `a-w` | `u+w` | mode bits | weak_fallback (opt-in) |
+
+`Get-AkashicLockStrategy.ps1` resolves the backend at runtime. Lock/unlock/status tools dot-source `tools/lib/AkashicLockTargets.ps1` (protected file inventory) and `tools/lib/AkashicLockBackend.ps1` (backend dispatch). No platform-specific `if` blocks in consumer tools.
+
+Linux/macOS support requires fixture validation (`Test-AkashicOsLockFixture.ps1`) before being marked complete. Active Helios runtime locking remains deferred until explicitly approved.
 
 The lock workflow: unlock → rebaseline → relock. This repo owns the lock/unlock tooling.
 
@@ -151,10 +159,14 @@ git clone https://github.com/dimascior/Akashic.git
 
 | Tool | Purpose |
 |---|---|
-| `tools/Lock-AkashicProtectedFiles.ps1` | Apply OS-native write/delete deny ACLs to protected files |
-| `tools/Unlock-AkashicProtectedFiles.ps1` | Remove deny ACLs for maintenance rebaseline |
+| `tools/Get-AkashicLockStrategy.ps1` | Resolve OS-native lock backend (icacls/chattr/chflags/chmod) |
+| `tools/lib/AkashicLockTargets.ps1` | Protected file and mutable directory inventory |
+| `tools/lib/AkashicLockBackend.ps1` | Backend dispatch: privilege wrapping, lock/unlock/status, evidence format |
+| `tools/Lock-AkashicProtectedFiles.ps1` | Apply OS-native locks to protected files |
+| `tools/Unlock-AkashicProtectedFiles.ps1` | Remove locks for maintenance rebaseline |
 | `tools/AkashicLockStatus.ps1` | Verify all lock targets are in expected state |
 | `tools/Invoke-AkashicRebaseline.ps1` | Coordinated unlock→update→relock→verify cycle |
+| `tools/Test-AkashicOsLockFixture.ps1` | Disposable fixture test for lock backend validation |
 | `tools/Move-AkashicStaleGateArtifacts.ps1` | Clean expired pending/ and orphaned inflight/ gates |
 | `tools/AkashicSettingsIntegrity.ps1` | Verify settings.json hook entries (control-plane check) |
 
@@ -172,7 +184,7 @@ See `docs/install-sequence.md` for the complete procedure and `docs/package-arch
 
 ## Current Status
 
-**Phase:** 4.1 — lock/unlock/rebaseline tooling (Windows, implementation in progress — verification pending).
+**Phase:** 4.1 — cross-platform lock/unlock/rebaseline tooling (Windows fixture-validated, Linux/macOS pending physical machine test).
 
 | Component | Status |
 |---|---|
@@ -188,16 +200,19 @@ See `docs/install-sequence.md` for the complete procedure and `docs/package-arch
 | Package architecture | Complete — `docs/package-architecture.md` |
 | Adapter package tools (3) | Complete — build, verify, install-plan |
 | Runtime bundle tools (2) | Complete — build, verify |
-| Combined installer | Complete — `tools/New-HeliosCombinedInstallPlan.ps1` |
-| End-to-end simulation | Complete — `tools/Test-HeliosEndToEndInstallPlan.ps1` |
+| Combined installer | Complete — `tools/AkashicCombinedInstallPlan.ps1` |
+| End-to-end simulation | Complete — `tools/AkashicEndToEndInstallPlanValidation.ps1` |
 | BOM hardening | Complete — manifest/sidecar writes BOM-free, integrity check includes BOM detection |
 | Package validation (3.99.1) | Complete — adapter verifier BOM checks, runtime manifest completeness, e2e execution |
 | Install sequence | Complete — `docs/install-sequence.md` |
 | Lock design (4.0) | Complete — `docs/phase40-lock-design-from-gap-evidence.md` |
-| Lock tooling (4.1) | In progress — `docs/phase41-lock-implementation.md` (live verification pending) |
-| Lock/unlock tools | Fixture-validated — lock, unlock, status detection, mutable writability proven |
-| Rebaseline workflow | Implemented, code-reviewed — live 7-step cycle pending |
-| Stale gate cleanup | Implemented, code-reviewed — `tools/Move-HeliosStaleGateArtifacts.ps1` |
+| Lock tooling (4.1) | Cross-platform — `docs/phase41-lock-implementation.md` |
+| Lock strategy resolver | Complete — `Get-AkashicLockStrategy.ps1` (icacls/chattr/chflags/chmod) |
+| Lock dispatch layer | Complete — `lib/AkashicLockTargets.ps1` + `lib/AkashicLockBackend.ps1` (inventory + backend dispatch) |
+| Lock/unlock tools | Cross-platform — strategy-driven dispatch, Windows fixture PASS |
+| Lock fixture test | Complete — `Test-AkashicOsLockFixture.ps1` (Windows PASS, Linux/macOS pending) |
+| Rebaseline workflow | Implemented — live 7-step cycle pending |
+| Stale gate cleanup | Implemented — `tools/Move-AkashicStaleGateArtifacts.ps1` |
 | Settings integrity | Verified — `AkashicSettingsIntegrity` passes against live settings.json |
 | Rebaseline schema | Validated — fixture record matches `schemas/helios-rebaseline.schema.json` |
 | Phase 4.1 evidence | Partial — `evidence/phase41/` (10 evidence files, fixture validation complete, live runtime deferred) |
@@ -218,7 +233,7 @@ Originally extracted from [TerminalContextExporter](https://github.com/dimascior
 | Phase 3.99.1 | Complete (package validation + manifest hardening + execution proof) |
 | Phase 3.99.2 | Complete (final readback audit) |
 | Phase 4.0 | Complete (lock design from gap evidence) |
-| Phase 4.1 | In progress (lock/unlock/rebaseline tooling — Windows, live verification pending) |
+| Phase 4.1 | In progress (cross-platform lock strategy — Windows PASS, Linux/macOS pending physical test) |
 | Phase 4.2 | Future — live lock verification evidence |
 | Phase 5 | Future — lock system packaging |
 | Phase 6 | Future — long-term lock verification + audit strategy |

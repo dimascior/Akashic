@@ -2,18 +2,29 @@
 .SYNOPSIS
     Verify that all Helios protected runtime files have OS-native locks in place.
 .DESCRIPTION
-    Checks icacls output for deny ACEs on each protected file.
-    Returns structured results indicating LOCKED, UNLOCKED, or NOT_FOUND for each target.
+    Uses Get-AkashicLockStrategy to resolve the platform backend, then
+    dispatches through AkashicLockDispatch to check lock status.
+
+    Windows: parse icacls output for deny ACEs with W/D
+    Linux:   parse lsattr output for immutable (i) flag
+    macOS:   parse ls -lO output for uchg flag
+    POSIX:   check mode bits for absent write permission
 .PARAMETER HeliosGateRoot
     Path to the .command-gate directory.
 .PARAMETER IncludeSettingsJson
     Also check the Claude settings.json lock status.
 .PARAMETER SettingsJsonPath
-    Path to Claude settings.json. Defaults to $env:USERPROFILE\.claude\settings.json.
+    Path to Claude settings.json.
 .PARAMETER IncludeTemplates
     Also check the templates/ directory lock status.
 .PARAMETER IncludeMutableLifecycle
-    Also verify that mutable lifecycle directories (pending/, inflight/, evidence/, blocked/) are writable.
+    Verify that mutable lifecycle directories are writable.
+.PARAMETER PrivilegeMode
+    Privilege escalation mode for Linux. Auto|None|Sudo|Doas|RootOnly.
+.PARAMETER RequireStrongLock
+    Fail if a strong backend is not available.
+.PARAMETER AllowWeakFallback
+    Allow degradation to chmod-based status check.
 #>
 [CmdletBinding()]
 param(
@@ -22,32 +33,40 @@ param(
 
     [switch]$IncludeSettingsJson,
 
-    [string]$SettingsJsonPath = (Join-Path $env:USERPROFILE '.claude\settings.json'),
+    [string]$SettingsJsonPath,
 
     [switch]$IncludeTemplates,
 
-    [switch]$IncludeMutableLifecycle
+    [switch]$IncludeMutableLifecycle,
+
+    [ValidateSet('Auto', 'None', 'Sudo', 'Doas', 'RootOnly')]
+    [string]$PrivilegeMode = 'Auto',
+
+    [switch]$RequireStrongLock,
+
+    [switch]$AllowWeakFallback
 )
 
 $ErrorActionPreference = 'Stop'
 
-$ProtectedFiles = @(
-    'hooks\helios_pretooluse.ps1',
-    'hooks\gate_check.ps1',
-    'hooks\evidence_capture.ps1',
-    'hooks\tier_classifier.ps1',
-    'hooks\lib\HeliosIntegrityBridge.ps1',
-    'policy\command-policy.json',
-    'manifest\helios-envelope.json',
-    'manifest\helios-envelope.sha256'
-)
+$libDir = Join-Path $PSScriptRoot 'lib'
+. (Join-Path $libDir 'AkashicLockTargets.ps1')
+. (Join-Path $libDir 'AkashicLockBackend.ps1')
 
-$MutableDirs = @(
-    'pending',
-    'inflight',
-    'evidence',
-    'blocked'
-)
+if (-not $SettingsJsonPath) {
+    $homeDir = if ($env:USERPROFILE) { $env:USERPROFILE } elseif ($env:HOME) { $env:HOME } else { '~' }
+    $SettingsJsonPath = Resolve-AkashicPath $homeDir '.claude/settings.json'
+}
+
+$Strategy = & (Join-Path $PSScriptRoot 'Get-AkashicLockStrategy.ps1') `
+    -PrivilegeMode $PrivilegeMode `
+    -RequireStrongLock:$RequireStrongLock `
+    -AllowWeakFallback:$AllowWeakFallback
+
+if (-not $Strategy.implemented) {
+    Write-Error "No lock backend available. Blockers: $($Strategy.blockers -join ', '). Notes: $($Strategy.notes -join '; ')"
+    return @()
+}
 
 function Test-FileLockStatus {
     param([string]$FilePath, [string]$Label)
@@ -56,34 +75,10 @@ function Test-FileLockStatus {
         return @{ Path = $FilePath; Label = $Label; Status = 'NOT_FOUND'; Locked = $false }
     }
 
-    $aclOutput = & icacls $FilePath 2>&1 | Out-String
+    $locked = Test-AkashicLockState -Strategy $Strategy -Path $FilePath
 
-    # Lock-AkashicProtectedFiles applies deny ACEs using the SID
-    # (*S-1-1-0), so icacls will normally echo that SID back.  On
-    # English Windows it may also appear as "Everyone".  We match
-    # both forms.  Non-English localized names (Tout le monde, Jeder,
-    # etc.) are NOT matched — SID matching covers those systems
-    # because the lock command uses the SID, not the display name.
-    #
-    # We further require the deny ACE to include write (W) or
-    # delete (D) rights, avoiding false positives from unrelated
-    # deny entries.
-    $lines = $aclOutput -split "`n"
-    $hasDenyWD = $false
-    foreach ($line in $lines) {
-        if ($line -match '(?i)(\*S-1-1-0|Everyone)') {
-            if ($line -match '\(DENY\)' -and $line -match '\([^)]*[WD][^)]*\)') {
-                $hasDenyWD = $true
-                break
-            }
-        }
-    }
-
-    if ($hasDenyWD) {
-        return @{ Path = $FilePath; Label = $Label; Status = 'LOCKED'; Locked = $true }
-    } else {
-        return @{ Path = $FilePath; Label = $Label; Status = 'UNLOCKED'; Locked = $false }
-    }
+    $status = if ($locked) { 'LOCKED' } else { 'UNLOCKED' }
+    @{ Path = $FilePath; Label = $Label; Status = $status; Locked = $locked; Backend = $Strategy.backend }
 }
 
 function Test-DirWritable {
@@ -93,7 +88,7 @@ function Test-DirWritable {
         return @{ Path = $DirPath; Label = $Label; Status = 'NOT_FOUND'; Writable = $null }
     }
 
-    $testFile = Join-Path $DirPath ".helios-lock-test-$(Get-Random)"
+    $testFile = Join-Path $DirPath ".akashic-lock-test-$(Get-Random)"
     try {
         [System.IO.File]::WriteAllText($testFile, 'lock-test')
         Remove-Item $testFile -Force
@@ -106,11 +101,11 @@ function Test-DirWritable {
 $results = @()
 $allPassed = $true
 
-Write-Host "=== Protected Runtime Lock Status ==="
+Write-Host "=== Protected Runtime Lock Status ($($Strategy.backend) on $($Strategy.platform)) ==="
 Write-Host ""
 
-foreach ($relPath in $ProtectedFiles) {
-    $fullPath = Join-Path $HeliosGateRoot $relPath
+foreach ($relPath in $AkashicProtectedFiles) {
+    $fullPath = Resolve-AkashicPath $HeliosGateRoot $relPath
     $r = Test-FileLockStatus -FilePath $fullPath -Label $relPath
     $results += $r
 
@@ -122,7 +117,7 @@ foreach ($relPath in $ProtectedFiles) {
 
 if ($IncludeTemplates) {
     Write-Host ""
-    Write-Host "=== Template Lock Status (Conditional) ==="
+    Write-Host "=== Template Lock Status ==="
     Write-Host ""
     $templatesDir = Join-Path $HeliosGateRoot 'templates'
     $r = Test-FileLockStatus -FilePath $templatesDir -Label 'templates/ (directory)'
@@ -133,7 +128,7 @@ if ($IncludeTemplates) {
     if (Test-Path $templatesDir) {
         $templateFiles = Get-ChildItem -Path $templatesDir -File -Recurse
         foreach ($tf in $templateFiles) {
-            $relLabel = "templates\$($tf.Name)"
+            $relLabel = "templates/$($tf.Name)"
             $r = Test-FileLockStatus -FilePath $tf.FullName -Label $relLabel
             $results += $r
             $icon = if ($r.Locked) { '[LOCKED]' } else { '[UNLOCKED]' }
@@ -157,7 +152,7 @@ if ($IncludeMutableLifecycle) {
     Write-Host ""
     Write-Host "=== Mutable Lifecycle Directory Status ==="
     Write-Host ""
-    foreach ($dir in $MutableDirs) {
+    foreach ($dir in $AkashicMutableDirs) {
         $fullPath = Join-Path $HeliosGateRoot $dir
         $r = Test-DirWritable -DirPath $fullPath -Label "$dir/"
         $results += $r
@@ -168,11 +163,12 @@ if ($IncludeMutableLifecycle) {
 }
 
 Write-Host ""
-$lockedCount = ($results | Where-Object { $_.Status -eq 'LOCKED' }).Count
+$lockedCount   = ($results | Where-Object { $_.Status -eq 'LOCKED' }).Count
 $unlockedCount = ($results | Where-Object { $_.Status -eq 'UNLOCKED' }).Count
-$missingCount = ($results | Where-Object { $_.Status -eq 'NOT_FOUND' }).Count
+$missingCount  = ($results | Where-Object { $_.Status -eq 'NOT_FOUND' }).Count
 
 Write-Host "--- Status Summary ---"
+Write-Host "Backend:  $($Strategy.backend) ($($Strategy.strength))"
 Write-Host "Locked:   $lockedCount"
 Write-Host "Unlocked: $unlockedCount"
 Write-Host "Missing:  $missingCount"

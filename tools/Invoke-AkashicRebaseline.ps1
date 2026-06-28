@@ -27,6 +27,12 @@
     Also unlock/relock templates/ during rebaseline.
 .PARAMETER ToolsRoot
     Path to the adapter tools directory. Defaults to the tools/ sibling of this script.
+.PARAMETER PrivilegeMode
+    Privilege escalation mode for Linux. Auto|None|Sudo|Doas|RootOnly.
+.PARAMETER RequireStrongLock
+    Fail if a strong backend is not available.
+.PARAMETER AllowWeakFallback
+    Allow degradation to chmod a-w.
 #>
 [CmdletBinding()]
 param(
@@ -41,11 +47,18 @@ param(
 
     [switch]$IncludeSettingsJson,
 
-    [string]$SettingsJsonPath = (Join-Path $env:USERPROFILE '.claude\settings.json'),
+    [string]$SettingsJsonPath,
 
     [switch]$IncludeTemplates,
 
-    [string]$ToolsRoot = $PSScriptRoot
+    [string]$ToolsRoot = $PSScriptRoot,
+
+    [ValidateSet('Auto', 'None', 'Sudo', 'Doas', 'RootOnly')]
+    [string]$PrivilegeMode = 'Auto',
+
+    [switch]$RequireStrongLock,
+
+    [switch]$AllowWeakFallback
 )
 
 $ErrorActionPreference = 'Stop'
@@ -73,7 +86,17 @@ foreach ($script in @($lockScript, $unlockScript, $lockStatusScript, $manifestSc
     }
 }
 
-$commonParams = @{ HeliosGateRoot = $HeliosGateRoot }
+if (-not $SettingsJsonPath) {
+    $homeDir = if ($env:USERPROFILE) { $env:USERPROFILE } elseif ($env:HOME) { $env:HOME } else { '~' }
+    $SettingsJsonPath = Join-Path $homeDir '.claude/settings.json'
+}
+
+$commonParams = @{
+    HeliosGateRoot    = $HeliosGateRoot
+    PrivilegeMode     = $PrivilegeMode
+}
+if ($RequireStrongLock) { $commonParams['RequireStrongLock'] = $true }
+if ($AllowWeakFallback) { $commonParams['AllowWeakFallback'] = $true }
 if ($IncludeSettingsJson) {
     $commonParams['IncludeSettingsJson'] = $true
     $commonParams['SettingsJsonPath'] = $SettingsJsonPath

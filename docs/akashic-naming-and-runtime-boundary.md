@@ -16,6 +16,9 @@ The following are Akashic-owned and carry the Akashic name:
 | Package name field | `"package_name": "akashic"` |
 | Adapter tools | `AkashicPackage.ps1`, `AkashicPackageValidation.ps1`, `Sync-AkashicBridge.ps1`, etc. |
 | Lock/control tools | `Lock-AkashicProtectedFiles.ps1`, `Invoke-AkashicRebaseline.ps1`, etc. |
+| Lock strategy | `Get-AkashicLockStrategy.ps1` (OS backend detection) |
+| Lock lib (shared) | `tools/lib/AkashicLockTargets.ps1`, `tools/lib/AkashicLockBackend.ps1` |
+| Lock fixture test | `Test-AkashicOsLockFixture.ps1` (disposable validation) |
 | Install planner | `AkashicInstallPlan.ps1`, `AkashicCombinedInstallPlan.ps1` |
 | Evidence tools | `ConvertFrom-AkashicEvidence.ps1`, `Invoke-AkashicGapTest.ps1` |
 | Test suite | `Tests/AkashicIntegrityBridge.Tests.ps1` |

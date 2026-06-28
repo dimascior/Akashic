@@ -2,19 +2,27 @@
 .SYNOPSIS
     Apply OS-native filesystem locks to Helios protected runtime files.
 .DESCRIPTION
-    Implements Phase 4.1 protected runtime locks derived from Phase 4.0 gap evidence.
-    Windows: icacls deny write/delete to Everyone (*S-1-1-0).
-    Lock targets from Phase 4.0 Section 9 decision table.
+    Uses Get-AkashicLockStrategy to resolve the platform backend, then
+    dispatches through AkashicLockDispatch to apply locks.
+
+    Windows: icacls deny write/delete to Everyone (*S-1-1-0)
+    Linux:   chattr +i immutable attribute
+    macOS:   chflags uchg user immutable flag
+    POSIX:   chmod a-w (weak fallback, opt-in)
 .PARAMETER HeliosGateRoot
-    Path to the .command-gate directory (e.g., C:\Users\dimas\Desktop\MythosJustAFable\.command-gate).
+    Path to the .command-gate directory.
 .PARAMETER IncludeSettingsJson
-    Also lock the Claude settings.json (external control-plane, Phase 4.0 test #11).
+    Also lock the Claude settings.json.
 .PARAMETER SettingsJsonPath
-    Path to Claude settings.json. Defaults to $env:USERPROFILE\.claude\settings.json.
+    Path to Claude settings.json.
 .PARAMETER IncludeTemplates
-    Also lock the templates/ directory (conditional, Phase 4.0 test #12).
-.PARAMETER WhatIf
-    Show what would be locked without applying changes.
+    Also lock the templates/ directory and its contents.
+.PARAMETER PrivilegeMode
+    Privilege escalation mode for Linux. Auto|None|Sudo|Doas|RootOnly.
+.PARAMETER RequireStrongLock
+    Fail if a strong backend is not available.
+.PARAMETER AllowWeakFallback
+    Allow degradation to chmod a-w.
 #>
 [CmdletBinding(SupportsShouldProcess)]
 param(
@@ -23,23 +31,40 @@ param(
 
     [switch]$IncludeSettingsJson,
 
-    [string]$SettingsJsonPath = (Join-Path $env:USERPROFILE '.claude\settings.json'),
+    [string]$SettingsJsonPath,
 
-    [switch]$IncludeTemplates
+    [switch]$IncludeTemplates,
+
+    [ValidateSet('Auto', 'None', 'Sudo', 'Doas', 'RootOnly')]
+    [string]$PrivilegeMode = 'Auto',
+
+    [switch]$RequireStrongLock,
+
+    [switch]$AllowWeakFallback
 )
 
 $ErrorActionPreference = 'Stop'
 
-$ProtectedFiles = @(
-    'hooks\helios_pretooluse.ps1',
-    'hooks\gate_check.ps1',
-    'hooks\evidence_capture.ps1',
-    'hooks\tier_classifier.ps1',
-    'hooks\lib\HeliosIntegrityBridge.ps1',
-    'policy\command-policy.json',
-    'manifest\helios-envelope.json',
-    'manifest\helios-envelope.sha256'
-)
+$libDir = Join-Path $PSScriptRoot 'lib'
+. (Join-Path $libDir 'AkashicLockTargets.ps1')
+. (Join-Path $libDir 'AkashicLockBackend.ps1')
+
+if (-not $SettingsJsonPath) {
+    $homeDir = if ($env:USERPROFILE) { $env:USERPROFILE } elseif ($env:HOME) { $env:HOME } else { '~' }
+    $SettingsJsonPath = Resolve-AkashicPath $homeDir '.claude/settings.json'
+}
+
+$Strategy = & (Join-Path $PSScriptRoot 'Get-AkashicLockStrategy.ps1') `
+    -PrivilegeMode $PrivilegeMode `
+    -RequireStrongLock:$RequireStrongLock `
+    -AllowWeakFallback:$AllowWeakFallback
+
+Write-Host "Lock backend: $($Strategy.backend) ($($Strategy.strength)) on $($Strategy.platform)"
+
+if (-not $Strategy.implemented) {
+    Write-Error "No lock backend available. Blockers: $($Strategy.blockers -join ', '). Notes: $($Strategy.notes -join '; ')"
+    return @()
+}
 
 function Lock-SingleFile {
     param([string]$FilePath, [string]$Label)
@@ -49,27 +74,25 @@ function Lock-SingleFile {
         return @{ Path = $FilePath; Label = $Label; Status = 'NOT_FOUND' }
     }
 
-    if ($PSCmdlet.ShouldProcess($FilePath, 'Apply deny write/delete ACL')) {
-        $result = & icacls $FilePath /deny "*S-1-1-0:(W,D)" 2>&1
-        $exitCode = $LASTEXITCODE
-
-        if ($exitCode -eq 0) {
-            Write-Host "LOCKED: $Label -> $FilePath"
-            return @{ Path = $FilePath; Label = $Label; Status = 'LOCKED' }
+    if ($PSCmdlet.ShouldProcess($FilePath, "Apply $($Strategy.backend) lock")) {
+        $r = Invoke-AkashicLockPath -Strategy $Strategy -Path $FilePath
+        if ($r.ExitCode -eq 0) {
+            Write-Host "LOCKED: $Label -> $FilePath [$($Strategy.backend)]"
+            return @{ Path = $FilePath; Label = $Label; Status = 'LOCKED'; Backend = $Strategy.backend }
         } else {
-            Write-Warning "FAILED to lock $Label : $result"
-            return @{ Path = $FilePath; Label = $Label; Status = 'FAILED'; Detail = "$result" }
+            Write-Warning "FAILED to lock $Label : $($r.Output)"
+            return @{ Path = $FilePath; Label = $Label; Status = 'FAILED'; Detail = $r.Output; Backend = $Strategy.backend }
         }
     } else {
-        Write-Host "WOULD LOCK: $Label -> $FilePath"
-        return @{ Path = $FilePath; Label = $Label; Status = 'WHATIF' }
+        Write-Host "WOULD LOCK: $Label -> $FilePath [$($Strategy.backend)]"
+        return @{ Path = $FilePath; Label = $Label; Status = 'WHATIF'; Backend = $Strategy.backend }
     }
 }
 
 $results = @()
 
-foreach ($relPath in $ProtectedFiles) {
-    $fullPath = Join-Path $HeliosGateRoot $relPath
+foreach ($relPath in $AkashicProtectedFiles) {
+    $fullPath = Resolve-AkashicPath $HeliosGateRoot $relPath
     $results += Lock-SingleFile -FilePath $fullPath -Label $relPath
 }
 
@@ -78,17 +101,17 @@ if ($IncludeTemplates) {
     if (Test-Path $templatesDir) {
         $templateFiles = Get-ChildItem -Path $templatesDir -File -Recurse
         foreach ($tf in $templateFiles) {
-            $relLabel = "templates\$($tf.Name)"
+            $relLabel = "templates/$($tf.Name)"
             $results += Lock-SingleFile -FilePath $tf.FullName -Label $relLabel
         }
-        if ($PSCmdlet.ShouldProcess($templatesDir, 'Apply deny write/delete ACL on templates directory')) {
-            $dirResult = & icacls $templatesDir /deny "*S-1-1-0:(W,D)" 2>&1
-            if ($LASTEXITCODE -eq 0) {
-                Write-Host "LOCKED: templates/ directory -> $templatesDir"
-                $results += @{ Path = $templatesDir; Label = 'templates/ (directory)'; Status = 'LOCKED' }
+        if ($PSCmdlet.ShouldProcess($templatesDir, "Apply $($Strategy.backend) lock on templates directory")) {
+            $r = Invoke-AkashicLockPath -Strategy $Strategy -Path $templatesDir
+            if ($r.ExitCode -eq 0) {
+                Write-Host "LOCKED: templates/ directory -> $templatesDir [$($Strategy.backend)]"
+                $results += @{ Path = $templatesDir; Label = 'templates/ (directory)'; Status = 'LOCKED'; Backend = $Strategy.backend }
             } else {
-                Write-Warning "FAILED to lock templates/ directory: $dirResult"
-                $results += @{ Path = $templatesDir; Label = 'templates/ (directory)'; Status = 'FAILED'; Detail = "$dirResult" }
+                Write-Warning "FAILED to lock templates/ directory: $($r.Output)"
+                $results += @{ Path = $templatesDir; Label = 'templates/ (directory)'; Status = 'FAILED'; Detail = $r.Output; Backend = $Strategy.backend }
             }
         }
     } else {
@@ -101,12 +124,13 @@ if ($IncludeSettingsJson) {
     $results += Lock-SingleFile -FilePath $SettingsJsonPath -Label 'settings.json (external control-plane)'
 }
 
-$locked = ($results | Where-Object { $_.Status -eq 'LOCKED' }).Count
-$failed = ($results | Where-Object { $_.Status -eq 'FAILED' }).Count
+$locked   = ($results | Where-Object { $_.Status -eq 'LOCKED' }).Count
+$failed   = ($results | Where-Object { $_.Status -eq 'FAILED' }).Count
 $notFound = ($results | Where-Object { $_.Status -eq 'NOT_FOUND' }).Count
-$whatIf = ($results | Where-Object { $_.Status -eq 'WHATIF' }).Count
+$whatIf   = ($results | Where-Object { $_.Status -eq 'WHATIF' }).Count
 
 Write-Host "`n--- Lock Summary ---"
+Write-Host "Backend:   $($Strategy.backend) ($($Strategy.strength))"
 Write-Host "Locked:    $locked"
 Write-Host "Failed:    $failed"
 Write-Host "Not found: $notFound"

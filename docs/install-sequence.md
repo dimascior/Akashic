@@ -116,6 +116,18 @@ Expected: `verdict = "CLEAN"`, `sidecar_valid = True`, all files CLEAN.
 
 If verdict is DRIFT: **STOP**. Investigate the drifted files before proceeding.
 
+### Step 10.5: Validate Lock Backend (First Install Only)
+
+Before locking any live runtime files, validate the OS lock backend against a disposable fixture:
+
+```powershell
+& "$PackageRoot\tools\Test-AkashicOsLockFixture.ps1"
+```
+
+Expected: `overall_result = "PASS"`. Evidence written to `evidence/phase41/os-lock-validation/<platform>.json`.
+
+If BLOCKED or FAIL: the lock backend is not supported on this filesystem. Investigate before proceeding with lock operations.
+
 ### Step 11: Prepare Claude Settings Activation Plan
 
 ```powershell

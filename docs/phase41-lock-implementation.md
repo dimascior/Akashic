@@ -8,18 +8,16 @@ Phase 4.1 implements the lock/control tooling justified by Phase 4.0 gap evidenc
 
 ## Platform Strategy
 
-**Primary target: Windows.** All lock tools use `icacls` ACL operations.
+**Cross-platform.** `Get-AkashicLockStrategy.ps1` resolves the OS-native lock backend at runtime. Consumer tools dot-source `tools/lib/AkashicLockTargets.ps1` (inventory) and `tools/lib/AkashicLockBackend.ps1` (dispatch). No platform-specific `if` blocks in consumer tools.
 
-| Operation | icacls Command |
-|---|---|
-| Lock (deny write+delete) | `icacls <file> /deny "*S-1-1-0:(W,D)"` |
-| Unlock (remove deny) | `icacls <file> /remove:d "*S-1-1-0"` |
-| Verify (check deny ACE) | `icacls <file>` → parse for `*S-1-1-0` DENY |
+| Platform | Backend | Lock | Unlock | Status | Strength |
+|---|---|---|---|---|---|
+| Windows | icacls | `/deny "*S-1-1-0:(W,D)"` | `/remove:d "*S-1-1-0"` | Parse DENY ACE | strong |
+| Linux | chattr | `+i` | `-i` | lsattr for `i` flag | strong_if_supported |
+| macOS | chflags | `uchg` | `nouchg` | `ls -lO` for `uchg` | strong_user_immutable |
+| POSIX | chmod | `a-w` | `u+w` | mode bits | weak_fallback (opt-in) |
 
-Future platform support (Phase 4.1+):
-- Linux: `chattr +i` / `chattr -i`
-- macOS: `chflags uchg` / `chflags nouchg`
-- POSIX fallback: `chmod a-w` / `chmod u+w`
+Backend dispatch uses `& $CommandPath @Arguments` (never Invoke-Expression, bash -c, or shell strings). Privilege wrapping (sudo -n, doas) is handled in `Invoke-AkashicNativeCommand`.
 
 ## Tools Implemented
 
@@ -81,7 +79,7 @@ From Phase 4.0 Section 9 decision table:
 
 ## Rebaseline Workflow
 
-The `Invoke-HeliosRebaseline` tool implements a 7-step atomic cycle:
+The `Invoke-AkashicRebaseline` tool implements a 7-step atomic cycle:
 
 ```
 1. Pre-flight lock check    → verify locks are in place
@@ -154,7 +152,7 @@ Deferred to Phase 4.2+:
 | 1 | Lock granularity | Individual file locks. More precise, avoids interfering with mutable directories. |
 | 2 | Unlock authorization | Human-initiated via `Invoke-HeliosRebaseline -RebaselinedBy human`. No automated unlock. |
 | 3 | Rebaseline atomicity | 7-step cycle with emergency relock on failure. Not truly atomic but minimized window. |
-| 4 | Cross-platform | Windows first (icacls). Other platforms deferred. |
+| 4 | Cross-platform | Resolved: strategy-driven dispatch. Windows PASS, Linux/macOS pending physical machine test. |
 | 5 | Evidence integrity scope | Minimum viable: content hashing + tamper marking. Signing/archival deferred. |
 | 6 | Template trust scope | Conditional. Lock with `-IncludeTemplates` when templates are trusted. |
 | 7 | settings.json unlock frequency | Expected to be rare. Lock by default, unlock only for config changes. |
@@ -185,6 +183,16 @@ Evidence files are in `evidence/phase41/`.
 - [x] Phase 4.1 tools included in adapter package file list — 6 tools + 1 schema + 2 docs added (`package-tool-coverage.json`)
 - [ ] Package builder, runtime bundle, and e2e install test execution — deferred (package builder path dependency, see `package-tool-coverage.json`)
 
+### Cross-Platform Fixture Validation
+
+`Test-AkashicOsLockFixture.ps1` creates a disposable fixture directory and runs a 7-phase lifecycle test identical on all platforms. Evidence written to `evidence/phase41/os-lock-validation/`.
+
+| Platform | Result | Evidence |
+|---|---|---|
+| Windows (NTFS, icacls) | PASS | `windows.json` |
+| Void Linux (chattr) | NOT_TESTED | Requires physical machine |
+| macOS (chflags) | NOT_TESTED | Requires physical machine |
+
 ### Remaining gaps before Phase 4.1 complete
 
 1. ~~**Live lock/unlock execution**~~ — Resolved: fixture validation proves icacls lock/unlock (`fixture-lock-unlock-validation.json`).
@@ -192,3 +200,5 @@ Evidence files are in `evidence/phase41/`.
 3. **Live rebaseline cycle** — Full 7-step cycle has not been executed end-to-end.
 4. ~~**Mutable directory writability after lock**~~ — Resolved: all 4 mutable dirs writable while protected files locked.
 5. **Package builder path dependency** — `AkashicPackage.ps1` standalone packaging deferred to Phase 5.
+6. **Linux fixture test** — Requires physical Void Linux machine with chattr/lsattr and privilege path validated.
+7. **macOS fixture test** — Requires physical macOS machine with chflags uchg validated.
