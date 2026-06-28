@@ -195,12 +195,12 @@ See `docs/install-sequence.md` for the complete procedure and `docs/package-arch
 | Install sequence | Complete — `docs/install-sequence.md` |
 | Lock design (4.0) | Complete — `docs/phase40-lock-design-from-gap-evidence.md` |
 | Lock tooling (4.1) | In progress — `docs/phase41-lock-implementation.md` (live verification pending) |
-| Lock/unlock tools | Implemented, code-reviewed — live lock/unlock execution pending |
+| Lock/unlock tools | Fixture-validated — lock, unlock, status detection, mutable writability proven |
 | Rebaseline workflow | Implemented, code-reviewed — live 7-step cycle pending |
 | Stale gate cleanup | Implemented, code-reviewed — `tools/Move-HeliosStaleGateArtifacts.ps1` |
 | Settings integrity | Verified — `Test-HeliosSettingsIntegrity` passes against live settings.json |
 | Rebaseline schema | Validated — fixture record matches `schemas/helios-rebaseline.schema.json` |
-| Phase 4.1 evidence | Partial — `evidence/phase41/` (9 evidence files, live execution deferred) |
+| Phase 4.1 evidence | Partial — `evidence/phase41/` (10 evidence files, fixture validation complete, live runtime deferred) |
 | TCE main preservation | Verified — TCE main preserved at `c594a75` with no adapter entries |
 
 ### Provenance

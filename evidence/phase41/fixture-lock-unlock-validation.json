@@ -1,0 +1,66 @@
+{
+  "description": "Phase 4.1 live lock/unlock validation against disposable fixture",
+  "validated_utc": "2026-06-28T14:42:00Z",
+  "mode": "live_execution_against_disposable_fixture",
+  "fixture_root": "E:\\AppData\\Local\\Temp\\claude\\...\\scratchpad\\fixture-gate-root",
+  "fixture_note": "Placeholder files at all 8 protected relative paths plus 4 mutable dirs; no live runtime files affected",
+  "tests": [
+    {
+      "step": 1,
+      "tool": "Lock-HeliosProtectedFiles.ps1",
+      "action": "Apply icacls deny *S-1-1-0:(W,D) to all 8 protected files",
+      "result": "PASS",
+      "locked_count": 8,
+      "failed_count": 0,
+      "not_found_count": 0,
+      "gate_correlation_id": "phase41-fixture-lock"
+    },
+    {
+      "step": 2,
+      "tool": "Test-HeliosLockStatus.ps1 -IncludeMutableLifecycle",
+      "action": "Verify lock detection and mutable dir writability",
+      "result": "PASS",
+      "protected_files": {
+        "locked": 8,
+        "unlocked": 0,
+        "missing": 0
+      },
+      "mutable_directories": {
+        "writable": 4,
+        "not_writable": 0,
+        "dirs_tested": ["pending/", "inflight/", "evidence/", "blocked/"]
+      },
+      "gate_correlation_id": "phase41-fixture-lockstatus"
+    },
+    {
+      "step": 3,
+      "tool": "Unlock-HeliosProtectedFiles.ps1",
+      "action": "Remove icacls deny ACEs from all 8 protected files",
+      "result": "PASS",
+      "unlocked_count": 8,
+      "failed_count": 0,
+      "not_found_count": 0,
+      "gate_correlation_id": "phase41-fixture-unlock"
+    },
+    {
+      "step": 4,
+      "tool": "Test-HeliosLockStatus.ps1",
+      "action": "Verify unlock detection — all files should report UNLOCKED",
+      "result": "PASS",
+      "protected_files": {
+        "locked": 0,
+        "unlocked": 8,
+        "missing": 0
+      },
+      "gate_correlation_id": "phase41-fixture-lockstatus-post-unlock"
+    }
+  ],
+  "cosmetic_note": "Em dash (U+2014) in Write-Host output renders as garbled characters in PowerShell 5.1 subprocess — cosmetic only, does not affect functional behavior",
+  "overall_result": "PASS — lock, detect, mutable-writable, unlock, detect-unlocked all verified against live icacls execution",
+  "checklist_items_resolved": [
+    "All 8 protected files lockable via Lock-HeliosProtectedFiles",
+    "All 8 protected files unlockable via Unlock-HeliosProtectedFiles",
+    "Test-HeliosLockStatus reports LOCKED after live lock",
+    "Mutable directories remain writable after lock operation"
+  ]
+}

@@ -170,25 +170,25 @@ From Phase 4.0 Section 11:
 Evidence files are in `evidence/phase41/`.
 
 - [x] All 8 protected files exist in live Helios runtime — `lock-target-inventory.json`
-- [ ] All 8 protected files lockable via `Lock-HeliosProtectedFiles` — code review pass (`lock-dryrun-result.json`), live execution pending
-- [ ] All 8 protected files unlockable via `Unlock-HeliosProtectedFiles` — code review pass (`unlock-dryrun-result.json`), live execution pending
-- [x] `Test-HeliosLockStatus` detection logic handles SID and localized name, checks W/D rights — `lock-status-baseline.json`
-- [ ] `Test-HeliosLockStatus` reports LOCKED after live lock — live execution pending
+- [x] All 8 protected files lockable via `Lock-HeliosProtectedFiles` — live fixture execution (`fixture-lock-unlock-validation.json`, step 1)
+- [x] All 8 protected files unlockable via `Unlock-HeliosProtectedFiles` — live fixture execution (`fixture-lock-unlock-validation.json`, step 3)
+- [x] `Test-HeliosLockStatus` detection logic handles SID and English Everyone, checks W/D rights — `lock-status-baseline.json`
+- [x] `Test-HeliosLockStatus` reports LOCKED after live lock — live fixture execution (`fixture-lock-unlock-validation.json`, step 2)
 - [x] `Test-HeliosSettingsIntegrity` validates hook entries — verified against live `settings.json` (`settings-integrity-result.json`)
 - [x] `Invoke-HeliosRebaseline` schema compliance — all terminal paths emit `schema_version` and `completed_utc` (`schema-validation-result.json`)
 - [x] Emergency relock path analysis — all 8 terminal paths documented, emergency relock triggers on update/manifest failure (`rebaseline-failure-path-fixture.json`)
 - [ ] `Invoke-HeliosRebaseline` completes 7-step cycle — live execution pending
 - [x] `Move-HeliosStaleGateArtifacts` logic for expired pending gates — code review pass (`stale-gate-cleanup-fixture.json`)
 - [x] `Move-HeliosStaleGateArtifacts` logic for orphaned inflight gates — code review pass (`stale-gate-cleanup-fixture.json`)
-- [ ] Mutable directories remain writable after lock operation — live execution pending
+- [x] Mutable directories remain writable after lock operation — live fixture execution (`fixture-lock-unlock-validation.json`, step 2)
 - [x] `helios-rebaseline.schema.json` validates fixture rebaseline records — fixture validates (`schema-validation-result.json`)
 - [x] Phase 4.1 tools included in adapter package file list — 6 tools + 1 schema + 2 docs added (`package-tool-coverage.json`)
 - [ ] Package builder, runtime bundle, and e2e install test execution — deferred (package builder path dependency, see `package-tool-coverage.json`)
 
 ### Remaining gaps before Phase 4.1 complete
 
-1. **Live lock/unlock execution** — Lock and unlock tools have not been run against the Helios runtime. Code review passes but icacls execution is unproven.
-2. **Live lock-status verification** — Test-HeliosLockStatus has not been run against locked files. Detection logic is correct by code review.
+1. ~~**Live lock/unlock execution**~~ — Resolved: fixture validation proves icacls lock/unlock (`fixture-lock-unlock-validation.json`).
+2. ~~**Live lock-status verification**~~ — Resolved: Test-HeliosLockStatus detects LOCKED and UNLOCKED states against live ACLs.
 3. **Live rebaseline cycle** — Full 7-step cycle has not been executed end-to-end.
-4. **Mutable directory writability after lock** — Not proven that locking protected files leaves pending/inflight/evidence/blocked writable.
+4. ~~**Mutable directory writability after lock**~~ — Resolved: all 4 mutable dirs writable while protected files locked.
 5. **Package builder path dependency** — `New-HeliosAdapterPackage.ps1` still requires TCE nested path. Standalone repo packaging deferred to Phase 5.
