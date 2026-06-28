@@ -64,7 +64,7 @@ This preserves per-file commit history but:
 
 From `MyExporter/Adapters/Helios/` on `helios-integrity-adapter` at the final extraction seed commit:
 
-- `HeliosIntegrityBridge.ps1` — 7-function integrity witness bridge
+- `AkashicIntegrityBridge.ps1` — 7-function integrity witness bridge
 - `README.md` — adapter documentation with packaging, install, and phase roadmap
 - `schemas/` — 3 JSON Schema definitions (envelope, baseline, command-evidence)
 - `tools/` — 13 tools (sync, manifest, integrity, gap-test, packaging, install)
@@ -92,4 +92,4 @@ After PR #2 merges into Helios main, Helios owns the runtime `.command-gate/` tr
 1. **TCE adapter package** — bridge source, schemas, tools, docs
 2. **Helios runtime bundle** — vendored bridge, hooks, policy, manifest
 
-Helios installs the runtime bundle via `New-HeliosCombinedInstallPlan.ps1`. The adapter repo remains the source-of-truth for the bridge implementation.
+Helios installs the runtime bundle via `AkashicCombinedInstallPlan.ps1`. The adapter repo remains the source-of-truth for the bridge implementation.

@@ -27,22 +27,22 @@ Future platform support (Phase 4.1+):
 
 | Tool | Purpose | Phase 4.0 Evidence |
 |---|---|---|
-| `Lock-HeliosProtectedFiles.ps1` | Apply deny ACLs to all protected files | Tests #1, #2, #3, #11, #12 |
-| `Unlock-HeliosProtectedFiles.ps1` | Remove deny ACLs for maintenance | Inverse of lock |
-| `Test-HeliosLockStatus.ps1` | Verify lock state of all targets | Verification for all lock tests |
-| `Invoke-HeliosRebaseline.ps1` | Coordinated unlock→update→relock→verify | Phase 4.0 Section 15, open question #3 |
+| `Lock-AkashicProtectedFiles.ps1` | Apply deny ACLs to all protected files | Tests #1, #2, #3, #11, #12 |
+| `Unlock-AkashicProtectedFiles.ps1` | Remove deny ACLs for maintenance | Inverse of lock |
+| `AkashicLockStatus.ps1` | Verify lock state of all targets | Verification for all lock tests |
+| `Invoke-AkashicRebaseline.ps1` | Coordinated unlock→update→relock→verify | Phase 4.0 Section 15, open question #3 |
 
 ### Mutable Lifecycle Tools (Phase 4.0 Section 10)
 
 | Tool | Purpose | Phase 4.0 Evidence |
 |---|---|---|
-| `Move-HeliosStaleGateArtifacts.ps1` | Clean expired pending/ and orphaned inflight/ | Test #5 (stale gate) |
+| `Move-AkashicStaleGateArtifacts.ps1` | Clean expired pending/ and orphaned inflight/ | Test #5 (stale gate) |
 
 ### External Control-Plane Tools (Phase 4.0 Section 12)
 
 | Tool | Purpose | Phase 4.0 Evidence |
 |---|---|---|
-| `Test-HeliosSettingsIntegrity.ps1` | Verify settings.json hook entries | Test #11 (highest severity) |
+| `AkashicSettingsIntegrity.ps1` | Verify settings.json hook entries | Test #11 (highest severity) |
 
 ### Schema
 
@@ -106,8 +106,8 @@ From Phase 4.0 Section 10:
 
 | Directory | Control | Tool |
 |---|---|---|
-| `pending/` | TTL enforcement, stale gate cleanup | `Move-HeliosStaleGateArtifacts.ps1` |
-| `inflight/` | Orphan detection, age-based cleanup | `Move-HeliosStaleGateArtifacts.ps1` |
+| `pending/` | TTL enforcement, stale gate cleanup | `Move-AkashicStaleGateArtifacts.ps1` |
+| `inflight/` | Orphan detection, age-based cleanup | `Move-AkashicStaleGateArtifacts.ps1` |
 | `evidence/` | Content hashing at creation (existing via bridge) | `Write-HeliosIntegrityEvidence` in bridge |
 | `blocked/` | Audit trail preservation | Lifecycle cleanup via stale artifact tool |
 
@@ -117,9 +117,9 @@ From Phase 4.0 Section 10:
 
 From Phase 4.0 Section 12:
 
-1. **Lock** `settings.json` with `Lock-HeliosProtectedFiles -IncludeSettingsJson`.
-2. **Verify** hook entries with `Test-HeliosSettingsIntegrity.ps1` as a pre-flight check.
-3. **Unlock** for legitimate config changes via `Invoke-HeliosRebaseline -IncludeSettingsJson`.
+1. **Lock** `settings.json` with `Lock-AkashicProtectedFiles -IncludeSettingsJson`.
+2. **Verify** hook entries with `AkashicSettingsIntegrity.ps1` as a pre-flight check.
+3. **Unlock** for legitimate config changes via `Invoke-AkashicRebaseline -IncludeSettingsJson`.
 4. **Re-verify** after unlock/relock that hook entries still point to Helios scripts.
 
 ## Template Trust Decision
@@ -129,7 +129,7 @@ From Phase 4.0 Section 13:
 **Decision: Conditional lock.** `templates/` is locked with `-IncludeTemplates` flag, not by default.
 
 - When `operating-catalog.json` is intentionally created, it should be added to the manifest and the directory locked.
-- The `Test-HeliosLockStatus -IncludeTemplates` check reports template lock state separately.
+- The `AkashicLockStatus -IncludeTemplates` check reports template lock state separately.
 
 ## Evidence Integrity Strategy
 
@@ -170,16 +170,16 @@ From Phase 4.0 Section 11:
 Evidence files are in `evidence/phase41/`.
 
 - [x] All 8 protected files exist in live Helios runtime — `lock-target-inventory.json`
-- [x] All 8 protected files lockable via `Lock-HeliosProtectedFiles` — live fixture execution (`fixture-lock-unlock-validation.json`, step 1)
-- [x] All 8 protected files unlockable via `Unlock-HeliosProtectedFiles` — live fixture execution (`fixture-lock-unlock-validation.json`, step 3)
-- [x] `Test-HeliosLockStatus` detection logic handles SID and English Everyone, checks W/D rights — `lock-status-baseline.json`
-- [x] `Test-HeliosLockStatus` reports LOCKED after live lock — live fixture execution (`fixture-lock-unlock-validation.json`, step 2)
-- [x] `Test-HeliosSettingsIntegrity` validates hook entries — verified against live `settings.json` (`settings-integrity-result.json`)
-- [x] `Invoke-HeliosRebaseline` schema compliance — all terminal paths emit `schema_version` and `completed_utc` (`schema-validation-result.json`)
+- [x] All 8 protected files lockable via `Lock-AkashicProtectedFiles` — live fixture execution (`fixture-lock-unlock-validation.json`, step 1)
+- [x] All 8 protected files unlockable via `Unlock-AkashicProtectedFiles` — live fixture execution (`fixture-lock-unlock-validation.json`, step 3)
+- [x] `AkashicLockStatus` detection logic handles SID and English Everyone, checks W/D rights — `lock-status-baseline.json`
+- [x] `AkashicLockStatus` reports LOCKED after live lock — live fixture execution (`fixture-lock-unlock-validation.json`, step 2)
+- [x] `AkashicSettingsIntegrity` validates hook entries — verified against live `settings.json` (`settings-integrity-result.json`)
+- [x] `Invoke-AkashicRebaseline` schema compliance — all terminal paths emit `schema_version` and `completed_utc` (`schema-validation-result.json`)
 - [x] Emergency relock path analysis — all 8 terminal paths documented, emergency relock triggers on update/manifest failure (`rebaseline-failure-path-fixture.json`)
-- [ ] `Invoke-HeliosRebaseline` completes 7-step cycle — live execution pending
-- [x] `Move-HeliosStaleGateArtifacts` logic for expired pending gates — code review pass (`stale-gate-cleanup-fixture.json`)
-- [x] `Move-HeliosStaleGateArtifacts` logic for orphaned inflight gates — code review pass (`stale-gate-cleanup-fixture.json`)
+- [ ] `Invoke-AkashicRebaseline` completes 7-step cycle — live execution pending
+- [x] `Move-AkashicStaleGateArtifacts` logic for expired pending gates — code review pass (`stale-gate-cleanup-fixture.json`)
+- [x] `Move-AkashicStaleGateArtifacts` logic for orphaned inflight gates — code review pass (`stale-gate-cleanup-fixture.json`)
 - [x] Mutable directories remain writable after lock operation — live fixture execution (`fixture-lock-unlock-validation.json`, step 2)
 - [x] `helios-rebaseline.schema.json` validates fixture rebaseline records — fixture validates (`schema-validation-result.json`)
 - [x] Phase 4.1 tools included in adapter package file list — 6 tools + 1 schema + 2 docs added (`package-tool-coverage.json`)
@@ -191,4 +191,4 @@ Evidence files are in `evidence/phase41/`.
 2. ~~**Live lock-status verification**~~ — Resolved: Test-HeliosLockStatus detects LOCKED and UNLOCKED states against live ACLs.
 3. **Live rebaseline cycle** — Full 7-step cycle has not been executed end-to-end.
 4. ~~**Mutable directory writability after lock**~~ — Resolved: all 4 mutable dirs writable while protected files locked.
-5. **Package builder path dependency** — `New-HeliosAdapterPackage.ps1` still requires TCE nested path. Standalone repo packaging deferred to Phase 5.
+5. **Package builder path dependency** — `AkashicPackage.ps1` standalone packaging deferred to Phase 5.

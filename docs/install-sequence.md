@@ -34,7 +34,7 @@ $HeliosTargetRoot = "C:\path\to\target-repo\.command-gate"
 ### Step 3: Verify Akashic Adapter Package Checksum
 
 ```powershell
-& "$PackageRoot\tools\Test-HeliosAdapterPackage.ps1" -PackageRoot $PackageRoot
+& "$PackageRoot\tools\AkashicPackageValidation.ps1" -PackageRoot $PackageRoot
 ```
 
 Expected output: all files present, checksums match, bridge exists, schemas valid.
@@ -46,7 +46,7 @@ If checksum verification fails: **STOP**. Do not proceed with a tampered or corr
 If the Helios runtime bundle is a fresh download, verify its checksums. If it is an existing `.command-gate/` directory, verify envelope integrity:
 
 ```powershell
-& "$PackageRoot\tools\Test-HeliosEnvelopeIntegrity.ps1" -HeliosGateRoot $HeliosTargetRoot
+& "$PackageRoot\tools\AkashicEnvelopeIntegrityValidation.ps1" -HeliosGateRoot $HeliosTargetRoot
 ```
 
 Expected: CLEAN verdict (existing installation) or directory-not-found (fresh installation).
@@ -54,7 +54,7 @@ Expected: CLEAN verdict (existing installation) or directory-not-found (fresh in
 ### Step 5: Copy Akashic Bridge into Helios
 
 ```powershell
-& "$PackageRoot\tools\Sync-HeliosBridge.ps1" `
+& "$PackageRoot\tools\Sync-AkashicBridge.ps1" `
     -AdapterRoot $PackageRoot `
     -HeliosGateRoot $HeliosTargetRoot
 ```
@@ -66,7 +66,7 @@ Expected output: `byte_identical = True`, matching SHA-256 hashes.
 The sync tool reports byte identity. Confirm:
 
 ```powershell
-$SourceHash = (Get-FileHash "$PackageRoot\HeliosIntegrityBridge.ps1" -Algorithm SHA256).Hash
+$SourceHash = (Get-FileHash "$PackageRoot\AkashicIntegrityBridge.ps1" -Algorithm SHA256).Hash
 $VendorHash = (Get-FileHash "$HeliosTargetRoot\hooks\lib\HeliosIntegrityBridge.ps1" -Algorithm SHA256).Hash
 if ($SourceHash -ne $VendorHash) { throw "Bridge byte identity verification FAILED" }
 ```
@@ -88,7 +88,7 @@ foreach ($dir in $MutableDirs) {
 ### Step 8: Generate Local Manifest
 
 ```powershell
-& "$PackageRoot\tools\New-HeliosEnvelopeManifest.ps1" `
+& "$PackageRoot\tools\AkashicEnvelopeManifest.ps1" `
     -HeliosGateRoot $HeliosTargetRoot `
     -RebaselinedBy "installer" `
     -Note "Initial installation rebaseline"
@@ -98,7 +98,7 @@ The manifest is generated from the actual file hashes on the target machine. BOM
 
 ### Step 9: Generate Sidecar
 
-The `New-HeliosEnvelopeManifest.ps1` tool generates both the manifest and sidecar in a single call. Verify the sidecar exists:
+The `AkashicEnvelopeManifest.ps1` tool generates both the manifest and sidecar in a single call. Verify the sidecar exists:
 
 ```powershell
 if (-not (Test-Path (Join-Path $HeliosTargetRoot 'manifest\helios-envelope.sha256'))) {
@@ -109,7 +109,7 @@ if (-not (Test-Path (Join-Path $HeliosTargetRoot 'manifest\helios-envelope.sha25
 ### Step 10: Verify Envelope Integrity
 
 ```powershell
-$IntegrityResult = & "$PackageRoot\tools\Test-HeliosEnvelopeIntegrity.ps1" -HeliosGateRoot $HeliosTargetRoot
+$IntegrityResult = & "$PackageRoot\tools\AkashicEnvelopeIntegrityValidation.ps1" -HeliosGateRoot $HeliosTargetRoot
 ```
 
 Expected: `verdict = "CLEAN"`, `sidecar_valid = True`, all files CLEAN.
@@ -119,7 +119,7 @@ If verdict is DRIFT: **STOP**. Investigate the drifted files before proceeding.
 ### Step 11: Prepare Claude Settings Activation Plan
 
 ```powershell
-$Plan = & "$PackageRoot\tools\New-HeliosInstallPlan.ps1" `
+$Plan = & "$PackageRoot\tools\AkashicInstallPlan.ps1" `
     -PackageRoot $PackageRoot `
     -HeliosTargetRoot $HeliosTargetRoot `
     -ClaudeSettingsPath "$env:USERPROFILE\.claude\settings.json" `
@@ -242,9 +242,9 @@ If installation fails or the user wants to remove Helios:
 
 ## Post-Install Verification Checklist
 
-- [ ] `Test-HeliosAdapterPackage` passes on the package.
-- [ ] `Test-HeliosRuntimeBundle` passes on the runtime bundle.
-- [ ] `Test-HeliosEnvelopeIntegrity` returns CLEAN on the target.
+- [ ] `AkashicPackageValidation` passes on the package.
+- [ ] `AkashicRuntimeBundleValidation` passes on the runtime bundle.
+- [ ] `AkashicEnvelopeIntegrityValidation` returns CLEAN on the target.
 - [ ] Bridge byte identity confirmed.
 - [ ] Mutable directories exist.
 - [ ] Manifest and sidecar present, valid, and BOM-free.
@@ -263,11 +263,11 @@ $AdapterPkg = "akashic-v0.4.1"
 $RuntimePkg = "helios-runtime-v0.4.1"
 
 # 2. Verify both packages
-& "$AdapterPkg\tools\Test-HeliosAdapterPackage.ps1" -PackageRoot $AdapterPkg
-& "$AdapterPkg\tools\Test-HeliosRuntimeBundle.ps1" -BundleRoot $RuntimePkg
+& "$AdapterPkg\tools\AkashicPackageValidation.ps1" -PackageRoot $AdapterPkg
+& "$AdapterPkg\tools\AkashicRuntimeBundleValidation.ps1" -BundleRoot $RuntimePkg
 
 # 3. Generate combined install plan
-& "$AdapterPkg\tools\New-HeliosCombinedInstallPlan.ps1" `
+& "$AdapterPkg\tools\AkashicCombinedInstallPlan.ps1" `
     -AdapterPackageRoot $AdapterPkg `
     -RuntimeBundleRoot $RuntimePkg `
     -TargetGateRoot "C:\path\to\repo\.command-gate" `
@@ -285,7 +285,7 @@ $RuntimePkg = "helios-runtime-v0.4.1"
 Before a real install, run the simulation to verify both packages work together:
 
 ```powershell
-& "$AdapterPkg\tools\Test-HeliosEndToEndInstallPlan.ps1" `
+& "$AdapterPkg\tools\AkashicEndToEndInstallPlanValidation.ps1" `
     -AdapterPackageRoot $AdapterPkg `
     -RuntimeBundleRoot $RuntimePkg
 ```

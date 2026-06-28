@@ -1,0 +1,53 @@
+{
+  "schema_version": "akashic-rename-evidence.v1",
+  "timestamp_utc": "2026-06-28T00:00:00Z",
+  "operation": "rename standalone adapter identity to Akashic",
+  "scope": {
+    "bridge_source": "HeliosIntegrityBridge.ps1 → AkashicIntegrityBridge.ps1",
+    "test_suite": "Tests/HeliosIntegrityBridge.Tests.ps1 → Tests/AkashicIntegrityBridge.Tests.ps1",
+    "tools_renamed": 19,
+    "compatibility_wrappers_created": 19,
+    "docs_updated": 7,
+    "readme_updated": true,
+    "package_name": "helios-integrity-adapter → akashic",
+    "evidence_created": true,
+    "naming_boundary_doc": "docs/akashic-naming-and-runtime-boundary.md"
+  },
+  "files_renamed": [
+    { "old": "HeliosIntegrityBridge.ps1", "new": "AkashicIntegrityBridge.ps1" },
+    { "old": "Tests/HeliosIntegrityBridge.Tests.ps1", "new": "Tests/AkashicIntegrityBridge.Tests.ps1" },
+    { "old": "tools/New-HeliosAdapterPackage.ps1", "new": "tools/AkashicPackage.ps1" },
+    { "old": "tools/Test-HeliosAdapterPackage.ps1", "new": "tools/AkashicPackageValidation.ps1" },
+    { "old": "tools/New-HeliosRuntimeBundle.ps1", "new": "tools/AkashicRuntimeBundle.ps1" },
+    { "old": "tools/Test-HeliosRuntimeBundle.ps1", "new": "tools/AkashicRuntimeBundleValidation.ps1" },
+    { "old": "tools/New-HeliosInstallPlan.ps1", "new": "tools/AkashicInstallPlan.ps1" },
+    { "old": "tools/New-HeliosCombinedInstallPlan.ps1", "new": "tools/AkashicCombinedInstallPlan.ps1" },
+    { "old": "tools/Test-HeliosEndToEndInstallPlan.ps1", "new": "tools/AkashicEndToEndInstallPlanValidation.ps1" },
+    { "old": "tools/Sync-HeliosBridge.ps1", "new": "tools/Sync-AkashicBridge.ps1" },
+    { "old": "tools/New-HeliosEnvelopeManifest.ps1", "new": "tools/AkashicEnvelopeManifest.ps1" },
+    { "old": "tools/Test-HeliosEnvelopeIntegrity.ps1", "new": "tools/AkashicEnvelopeIntegrityValidation.ps1" },
+    { "old": "tools/Lock-HeliosProtectedFiles.ps1", "new": "tools/Lock-AkashicProtectedFiles.ps1" },
+    { "old": "tools/Unlock-HeliosProtectedFiles.ps1", "new": "tools/Unlock-AkashicProtectedFiles.ps1" },
+    { "old": "tools/Test-HeliosLockStatus.ps1", "new": "tools/AkashicLockStatus.ps1" },
+    { "old": "tools/Invoke-HeliosRebaseline.ps1", "new": "tools/Invoke-AkashicRebaseline.ps1" },
+    { "old": "tools/Move-HeliosStaleGateArtifacts.ps1", "new": "tools/Move-AkashicStaleGateArtifacts.ps1" },
+    { "old": "tools/Test-HeliosSettingsIntegrity.ps1", "new": "tools/AkashicSettingsIntegrity.ps1" },
+    { "old": "tools/Invoke-HeliosGapTest.ps1", "new": "tools/Invoke-AkashicGapTest.ps1" },
+    { "old": "tools/ConvertFrom-HeliosEvidence.ps1", "new": "tools/ConvertFrom-AkashicEvidence.ps1" },
+    { "old": "tools/New-HeliosGapTestMatrix.ps1", "new": "tools/AkashicGapTestMatrix.ps1" }
+  ],
+  "preserved_helios_names": [
+    "hooks/lib/HeliosIntegrityBridge.ps1 (vendor copy path)",
+    "hooks/helios_pretooluse.ps1 (runtime hook)",
+    "hooks/gate_check.ps1 (runtime hook)",
+    "hooks/evidence_capture.ps1 (runtime hook)",
+    "hooks/tier_classifier.ps1 (runtime hook)",
+    "policy/command-policy.json (runtime policy)",
+    "manifest/helios-envelope.json (runtime manifest)",
+    "manifest/helios-envelope.sha256 (runtime sidecar)",
+    "schemas/helios-*.schema.json (envelope schemas)",
+    "All bridge function names (Get-HeliosEnvelopeSnapshot, etc.)"
+  ],
+  "boundary_rule": "Akashic = repo, package, source-of-truth tooling, installer planner, release artifact, lock-control system. Helios = runtime target, .command-gate, hooks, policy, manifest, command-gate enforcement environment. TCE = historical provenance only.",
+  "verdict": "COMPLETE"
+}

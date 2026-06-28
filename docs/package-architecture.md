@@ -1,4 +1,4 @@
-# Helios TCE Adapter — Package Architecture
+# Akashic — Package Architecture
 
 ## Package Goals
 
@@ -9,16 +9,16 @@
 
 ## Two-Package Model
 
-### Package 1: TCE Helios Adapter Package
+### Package 1: Akashic Adapter Package
 
-**Source:** `TerminalContextExporter` repo, `helios-integrity-adapter` branch.
+**Source:** `Akashic` standalone repo (originally extracted from `TerminalContextExporter`, `helios-integrity-adapter` branch).
 **Purpose:** Source-of-truth adapter package. Contains the bridge implementation, schemas, tools, documentation, and gap-test evidence that prove the adapter contract.
 
 **Contents:**
 
 | Directory | Files | Role |
 |---|---|---|
-| `/` | `HeliosIntegrityBridge.ps1` | Source-of-truth bridge implementation |
+| `/` | `AkashicIntegrityBridge.ps1` | Source-of-truth bridge implementation |
 | `/` | `README.md` | Adapter documentation |
 | `docs/` | `tce-helios-integrity-adapter-spec.md` | Adapter specification |
 | `docs/` | `phase4-lock-requirements-from-gap-tests.md` | Lock requirement derivations |
@@ -30,16 +30,16 @@
 | `schemas/` | `helios-envelope.schema.json` | Envelope manifest schema |
 | `schemas/` | `helios-baseline.schema.json` | Session baseline schema |
 | `schemas/` | `helios-command-evidence.schema.json` | Per-command evidence schema |
-| `tools/` | `Sync-HeliosBridge.ps1` | Bridge sync (source → vendor copy) |
-| `tools/` | `New-HeliosEnvelopeManifest.ps1` | Manifest rebaseline |
-| `tools/` | `Test-HeliosEnvelopeIntegrity.ps1` | Envelope integrity verification |
-| `tools/` | `Invoke-HeliosGapTest.ps1` | Gap-test orchestration |
-| `tools/` | `ConvertFrom-HeliosEvidence.ps1` | Evidence parser/normalizer |
-| `tools/` | `New-HeliosGapTestMatrix.ps1` | Gap-test matrix generator |
-| `tools/` | `New-HeliosAdapterPackage.ps1` | Package builder |
-| `tools/` | `Test-HeliosAdapterPackage.ps1` | Package verification |
-| `tools/` | `New-HeliosInstallPlan.ps1` | Install-plan generator |
-| `Tests/` | `HeliosIntegrityBridge.Tests.ps1` | Pester test suite |
+| `tools/` | `Sync-AkashicBridge.ps1` | Bridge sync (source → vendor copy) |
+| `tools/` | `AkashicEnvelopeManifest.ps1` | Manifest rebaseline |
+| `tools/` | `AkashicEnvelopeIntegrityValidation.ps1` | Envelope integrity verification |
+| `tools/` | `Invoke-AkashicGapTest.ps1` | Gap-test orchestration |
+| `tools/` | `ConvertFrom-AkashicEvidence.ps1` | Evidence parser/normalizer |
+| `tools/` | `AkashicGapTestMatrix.ps1` | Gap-test matrix generator |
+| `tools/` | `AkashicPackage.ps1` | Package builder |
+| `tools/` | `AkashicPackageValidation.ps1` | Package verification |
+| `tools/` | `AkashicInstallPlan.ps1` | Install-plan generator |
+| `Tests/` | `AkashicIntegrityBridge.Tests.ps1` | Pester test suite |
 | `evidence/gap-tests/` | 12 subdirectories | Gap-test evidence artifacts |
 
 ### Package 2: Helios Runtime Bundle
@@ -73,12 +73,12 @@ The installer connects the two packages. It is a set of PowerShell tools that sh
 
 1. **Verify package checksums** — confirm package contents match `checksums.sha256`.
 2. **Locate or create target Helios gate root** — find or initialize `.command-gate/` at the target path.
-3. **Copy TCE bridge** — `HeliosIntegrityBridge.ps1` → `hooks/lib/HeliosIntegrityBridge.ps1`.
+3. **Copy Akashic bridge** — `AkashicIntegrityBridge.ps1` → `hooks/lib/HeliosIntegrityBridge.ps1`.
 4. **Verify byte identity** — SHA-256 match between source and vendored copy.
 5. **Create mutable runtime directories** — `pending/`, `inflight/`, `evidence/`, `blocked/`.
-6. **Write target-machine manifest** — `New-HeliosEnvelopeManifest.ps1` on the target machine.
+6. **Write target-machine manifest** — `AkashicEnvelopeManifest.ps1` on the target machine.
 7. **Write sidecar** — BOM-free UTF-8, generated from manifest hash.
-8. **Verify envelope integrity** — `Test-HeliosEnvelopeIntegrity.ps1` on the target.
+8. **Verify envelope integrity** — `AkashicEnvelopeIntegrityValidation.ps1` on the target.
 9. **Create install evidence** — record what was installed, when, and by whom.
 10. **Prepare Claude settings activation plan** — generate the settings.json changes needed.
 11. **Run smoke tests** — no-gate deny, valid-gate allow.
@@ -116,16 +116,16 @@ The manifest and sidecar are generated locally on the target machine after insta
 ## Verification Flow
 
 ```
-1. Test-HeliosAdapterPackage -PackageRoot <path>
+1. AkashicPackageValidation -PackageRoot <path>
    → Confirms package contents, checksums, and required files.
 
-2. New-HeliosInstallPlan -PackageRoot <path> -HeliosTargetRoot <path>
+2. AkashicInstallPlan -PackageRoot <path> -HeliosTargetRoot <path>
    → Generates install-plan.json with copy list, verification steps, and activation plan.
 
 3. [Execute install plan]
    → Copies files, generates manifest, verifies envelope.
 
-4. Test-HeliosEnvelopeIntegrity -HeliosGateRoot <path>
+4. AkashicEnvelopeIntegrityValidation -HeliosGateRoot <path>
    → Confirms CLEAN verdict on target machine.
 
 5. [Smoke tests]
@@ -168,18 +168,18 @@ Phase 3.99 adds the Helios runtime bundle as the second installable package:
 
 | Tool | Purpose |
 |---|---|
-| `New-HeliosRuntimeBundle.ps1` | Build a distributable runtime bundle from a Helios repo checkout |
-| `Test-HeliosRuntimeBundle.ps1` | Verify runtime bundle contents, checksums, and BOM safety |
-| `New-HeliosCombinedInstallPlan.ps1` | Generate a full install plan consuming both packages |
-| `Test-HeliosEndToEndInstallPlan.ps1` | Simulate a full install in a temp directory |
+| `AkashicRuntimeBundle.ps1` | Build a distributable runtime bundle from a Helios repo checkout |
+| `AkashicRuntimeBundleValidation.ps1` | Verify runtime bundle contents, checksums, and BOM safety |
+| `AkashicCombinedInstallPlan.ps1` | Generate a full install plan consuming both packages |
+| `AkashicEndToEndInstallPlanValidation.ps1` | Simulate a full install in a temp directory |
 
 ### BOM Hardening
 
-All JSON writers in the install trust path use `[System.IO.File]::WriteAllText()` with `$Utf8NoBom`. The `Test-HeliosEnvelopeIntegrity.ps1` tool includes a BOM safety check on manifest and sidecar. Runtime bundle and adapter package verifiers check all JSON files for BOM presence.
+All JSON writers in the install trust path use `[System.IO.File]::WriteAllText()` with `$Utf8NoBom`. The `AkashicEnvelopeIntegrityValidation.ps1` tool includes a BOM safety check on manifest and sidecar. Runtime bundle and adapter package verifiers check all JSON files for BOM presence.
 
 ### End-to-End Install Simulation
 
-`Test-HeliosEndToEndInstallPlan.ps1` creates a temporary directory, runs both package verifiers, executes the combined install plan in Prepare mode, generates a local manifest and sidecar, verifies BOM absence, checks envelope integrity, and validates settings activation and rollback plans.
+`AkashicEndToEndInstallPlanValidation.ps1` creates a temporary directory, runs both package verifiers, executes the combined install plan in Prepare mode, generates a local manifest and sidecar, verifies BOM absence, checks envelope integrity, and validates settings activation and rollback plans.
 
 ## Future Packaging Options
 

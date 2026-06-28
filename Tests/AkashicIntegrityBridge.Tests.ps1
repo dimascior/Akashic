@@ -4,7 +4,7 @@ Describe "Helios Integrity Bridge" {
 
     BeforeAll {
         $AdapterRoot = Split-Path $PSScriptRoot -Parent
-        $BridgePath  = Join-Path $AdapterRoot 'HeliosIntegrityBridge.ps1'
+        $BridgePath  = Join-Path $AdapterRoot 'AkashicIntegrityBridge.ps1'
         . $BridgePath
 
         $script:TestRoot = Join-Path ([System.IO.Path]::GetTempPath()) "helios-test-$([guid]::NewGuid().ToString('N').Substring(0,8))"
@@ -243,16 +243,16 @@ Describe "Helios Adapter Tools" {
         $script:AdapterRoot = Split-Path $PSScriptRoot -Parent
         $script:ToolsRoot   = Join-Path $script:AdapterRoot 'tools'
 
-        $script:TceRoot = Join-Path ([System.IO.Path]::GetTempPath()) "tce-tool-test-$([guid]::NewGuid().ToString('N').Substring(0,8))"
+        $script:SimAdapterRoot = Join-Path ([System.IO.Path]::GetTempPath()) "akashic-tool-test-$([guid]::NewGuid().ToString('N').Substring(0,8))"
         $script:GateRoot = Join-Path ([System.IO.Path]::GetTempPath()) "gate-tool-test-$([guid]::NewGuid().ToString('N').Substring(0,8))"
 
-        New-Item -ItemType Directory -Path (Join-Path $script:TceRoot 'MyExporter\Adapters\Helios') -Force | Out-Null
+        New-Item -ItemType Directory -Path $script:SimAdapterRoot -Force | Out-Null
         foreach ($dir in @('hooks', 'hooks\lib', 'policy', 'manifest', 'pending', 'inflight', 'evidence', 'blocked')) {
             New-Item -ItemType Directory -Path (Join-Path $script:GateRoot $dir) -Force | Out-Null
         }
 
         $bridgeContent = '# test bridge content'
-        $bridgeSrc = Join-Path $script:TceRoot 'MyExporter\Adapters\Helios\HeliosIntegrityBridge.ps1'
+        $bridgeSrc = Join-Path $script:SimAdapterRoot 'AkashicIntegrityBridge.ps1'
         [System.IO.File]::WriteAllBytes($bridgeSrc, [System.Text.Encoding]::UTF8.GetBytes($bridgeContent))
 
         $testFiles = @{
@@ -270,18 +270,18 @@ Describe "Helios Adapter Tools" {
     }
 
     AfterAll {
-        if ($script:TceRoot -and (Test-Path $script:TceRoot)) {
-            Remove-Item -Recurse -Force $script:TceRoot -ErrorAction SilentlyContinue
+        if ($script:SimAdapterRoot -and (Test-Path $script:SimAdapterRoot)) {
+            Remove-Item -Recurse -Force $script:SimAdapterRoot -ErrorAction SilentlyContinue
         }
         if ($script:GateRoot -and (Test-Path $script:GateRoot)) {
             Remove-Item -Recurse -Force $script:GateRoot -ErrorAction SilentlyContinue
         }
     }
 
-    Context "Sync-HeliosBridge" {
+    Context "Sync-AkashicBridge" {
         It "copies bridge file and reports byte-identical" {
-            $syncScript = Join-Path $script:ToolsRoot 'Sync-HeliosBridge.ps1'
-            $result = & $syncScript -TceRoot $script:TceRoot -HeliosGateRoot $script:GateRoot
+            $syncScript = Join-Path $script:ToolsRoot 'Sync-AkashicBridge.ps1'
+            $result = & $syncScript -AdapterRoot $script:SimAdapterRoot -HeliosGateRoot $script:GateRoot
 
             $result.byte_identical | Should -Be $true
             $result.source_hash | Should -Be $result.dest_hash
@@ -289,9 +289,9 @@ Describe "Helios Adapter Tools" {
         }
     }
 
-    Context "New-HeliosEnvelopeManifest" {
+    Context "AkashicEnvelopeManifest" {
         It "writes manifest and sidecar with matching hash" {
-            $rebaselineScript = Join-Path $script:ToolsRoot 'New-HeliosEnvelopeManifest.ps1'
+            $rebaselineScript = Join-Path $script:ToolsRoot 'AkashicEnvelopeManifest.ps1'
             $result = & $rebaselineScript -HeliosGateRoot $script:GateRoot -RebaselinedBy 'test'
 
             $result.manifest_path | Should -Not -BeNullOrEmpty
@@ -309,11 +309,11 @@ Describe "Helios Adapter Tools" {
         }
     }
 
-    Context "Test-HeliosEnvelopeIntegrity" {
+    Context "AkashicEnvelopeIntegrityValidation" {
         It "reports CLEAN after fresh rebaseline" {
-            & (Join-Path $script:ToolsRoot 'New-HeliosEnvelopeManifest.ps1') -HeliosGateRoot $script:GateRoot -RebaselinedBy 'test' | Out-Null
+            & (Join-Path $script:ToolsRoot 'AkashicEnvelopeManifest.ps1') -HeliosGateRoot $script:GateRoot -RebaselinedBy 'test' | Out-Null
 
-            $verifyScript = Join-Path $script:ToolsRoot 'Test-HeliosEnvelopeIntegrity.ps1'
+            $verifyScript = Join-Path $script:ToolsRoot 'AkashicEnvelopeIntegrityValidation.ps1'
             $result = & $verifyScript -HeliosGateRoot $script:GateRoot
 
             $result.verdict | Should -Be 'CLEAN'
@@ -321,12 +321,12 @@ Describe "Helios Adapter Tools" {
         }
 
         It "reports DRIFT after protected file modification" {
-            & (Join-Path $script:ToolsRoot 'New-HeliosEnvelopeManifest.ps1') -HeliosGateRoot $script:GateRoot -RebaselinedBy 'test' | Out-Null
+            & (Join-Path $script:ToolsRoot 'AkashicEnvelopeManifest.ps1') -HeliosGateRoot $script:GateRoot -RebaselinedBy 'test' | Out-Null
 
             $targetPath = Join-Path $script:GateRoot 'hooks\gate_check.ps1'
             [System.IO.File]::WriteAllBytes($targetPath, [System.Text.Encoding]::UTF8.GetBytes('tampered'))
 
-            $verifyScript = Join-Path $script:ToolsRoot 'Test-HeliosEnvelopeIntegrity.ps1'
+            $verifyScript = Join-Path $script:ToolsRoot 'AkashicEnvelopeIntegrityValidation.ps1'
             $result = & $verifyScript -HeliosGateRoot $script:GateRoot
 
             $result.verdict | Should -Be 'DRIFT'

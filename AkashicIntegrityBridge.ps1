@@ -1,5 +1,5 @@
-# HeliosIntegrityBridge.ps1 — TCE adapter for Helios envelope integrity
-# Source-of-truth implementation. Vendored copy lives at .command-gate/hooks/lib/
+# AkashicIntegrityBridge.ps1 — Integrity witness bridge for the Helios envelope
+# Source-of-truth implementation. Vendored copy lives at .command-gate/hooks/lib/HeliosIntegrityBridge.ps1
 # PowerShell 5.1+ compatible. No module imports — self-contained for hook use.
 
 function Get-FileSha256 {

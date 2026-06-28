@@ -48,7 +48,7 @@ The Helios runtime bundle is a distributable snapshot of the `.command-gate/` di
 
 | Path | Generation |
 |---|---|
-| `manifest/helios-envelope.json` | Generated locally by `New-HeliosEnvelopeManifest.ps1` |
+| `manifest/helios-envelope.json` | Generated locally by `AkashicEnvelopeManifest.ps1` |
 | `manifest/helios-envelope.sha256` | Generated locally alongside manifest |
 
 The manifest and sidecar are NOT included in the runtime bundle. They are generated on the target machine after the bridge is installed and byte-identity is verified. This ensures hashes reflect actual installed bytes.
@@ -74,7 +74,7 @@ The manifest and sidecar are NOT included in the runtime bundle. They are genera
 
 After the runtime bundle is unpacked and the TCE bridge is synced into `hooks/lib/`:
 
-1. Run `New-HeliosEnvelopeManifest.ps1 -HeliosGateRoot <target> -RebaselinedBy installer`.
+1. Run `AkashicEnvelopeManifest.ps1 -HeliosGateRoot <target> -RebaselinedBy installer`.
 2. The tool hashes all 6 protected files and writes `helios-envelope.json`.
 3. The tool computes the manifest hash and writes `helios-envelope.sha256`.
 4. Both files are written as UTF-8 without BOM using `[System.IO.File]::WriteAllText()`.
@@ -114,7 +114,7 @@ Before a runtime bundle is used for installation:
 
 | Responsibility | TCE Adapter Package | Helios Runtime Bundle |
 |---|---|---|
-| Bridge source-of-truth | Owns `HeliosIntegrityBridge.ps1` | Receives vendor copy |
+| Bridge source-of-truth | Owns `AkashicIntegrityBridge.ps1` | Receives vendor copy |
 | Hook scripts | Does not include | Includes all 4 hooks |
 | Policy | Does not include | Includes `command-policy.json` |
 | Schemas | Adapter schemas | Runtime schemas |
