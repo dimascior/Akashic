@@ -5,9 +5,11 @@
 #
 # Activation boundary:
 #   Activate mode produces an activation approval plan. It does NOT
-#   modify settings.json or apply runtime locks. Those actions require
-#   future explicit switches (ApplySettingsActivation, ApplyRuntimeLocks)
-#   that are not yet implemented.
+#   modify settings.json or apply runtime locks. Use the separate tools:
+#     Apply-AkashicClaudeHooks.ps1   — activate settings hooks
+#     Remove-AkashicClaudeHooks.ps1  — deactivate/rollback hooks
+#     Install-AkashicHeliosRuntime.ps1 — unified install entrypoint
+#     Test-HeliosLiveOperational.ps1 — verify live operational state
 [CmdletBinding()]
 param(
     [Parameter(Mandatory)]

@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "helios-rollback-evidence.v1",
+  "title": "Helios Rollback Evidence",
+  "description": "Evidence produced by Remove-AkashicClaudeHooks.ps1 when deactivating Helios hooks from Claude settings.",
+  "type": "object",
+  "required": ["schema_version", "timestamp_utc", "settings_path", "method", "status"],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "helios-rollback-evidence.v1"
+    },
+    "timestamp_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "settings_path": {
+      "type": "string"
+    },
+    "method": {
+      "type": "string",
+      "enum": ["restore_from_backup", "selective_removal"],
+      "description": "restore_from_backup replaces the entire file; selective_removal removes only Helios hook entries."
+    },
+    "backup_path": {
+      "type": ["string", "null"]
+    },
+    "settings_hash_before": {
+      "type": "string"
+    },
+    "settings_hash_after": {
+      "type": "string"
+    },
+    "hooks_removed": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "status": {
+      "type": "string",
+      "enum": ["DEACTIVATED", "NO_HELIOS_HOOKS_FOUND", "NO_HOOKS_FOUND"]
+    }
+  }
+}

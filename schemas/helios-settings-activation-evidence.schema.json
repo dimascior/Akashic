@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "helios-settings-activation-evidence.v1",
+  "title": "Helios Settings Activation Evidence",
+  "description": "Evidence produced by Apply-AkashicClaudeHooks.ps1 when activating or verifying Helios hook entries in Claude settings.",
+  "type": "object",
+  "required": ["schema_version", "timestamp_utc", "settings_path", "helios_gate_root", "platform", "status"],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "helios-settings-activation-evidence.v1"
+    },
+    "timestamp_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "settings_path": {
+      "type": "string",
+      "description": "Path to the Claude settings.json that was modified."
+    },
+    "backup_path": {
+      "type": ["string", "null"],
+      "description": "Path to the pre-activation backup. Null if no backup was created."
+    },
+    "settings_hash_before": {
+      "type": ["string", "null"],
+      "description": "SHA256 of settings.json before modification."
+    },
+    "settings_hash_after": {
+      "type": "string",
+      "description": "SHA256 of settings.json after modification."
+    },
+    "helios_gate_root": {
+      "type": "string",
+      "description": "Path to the Helios .command-gate directory the hooks point to."
+    },
+    "platform": {
+      "type": "string",
+      "enum": ["Windows", "Linux", "macOS"]
+    },
+    "hook_commands": {
+      "type": "object",
+      "description": "The exact hook commands written to settings.",
+      "properties": {
+        "PreToolUse": { "type": "string" },
+        "PostToolUse": { "type": "string" },
+        "PostToolUseFailure": { "type": "string" }
+      }
+    },
+    "hooks_added": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Hook points that were newly added."
+    },
+    "hooks_already_present": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Hook points that were already configured."
+    },
+    "status": {
+      "type": "string",
+      "enum": ["ACTIVATED", "ALREADY_ACTIVE", "FAILED"],
+      "description": "ACTIVATED if hooks were written, ALREADY_ACTIVE if no changes needed."
+    }
+  }
+}

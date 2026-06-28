@@ -175,13 +175,38 @@ Does NOT:
 
 ### Activate
 
-**Current behavior:** Activate mode produces an activation approval plan. It runs all Prepare steps, then generates `APPROVAL_REQUIRED` plans for settings and lock activation. It does NOT modify `settings.json` or apply runtime locks.
+**Planner behavior:** `AkashicHeliosInstallPlan.ps1` in Activate mode produces an activation approval plan. It runs all Prepare steps, then generates `APPROVAL_REQUIRED` plans for settings and lock activation. It does NOT modify `settings.json` or apply runtime locks.
 
-**Future behavior:** Explicit switches will perform activation when implemented:
-- `-ApplySettingsActivation` — modify `settings.json` with hook entries (requires human approval)
-- `-ApplyRuntimeLocks` — apply OS-native locks to protected files (requires fixture PASS + human approval)
+**Activation tools (implemented):**
 
-Until those switches exist, Activate mode is functionally equivalent to Prepare with activation plans attached.
+| Tool | Purpose |
+|---|---|
+| `tools/Apply-AkashicClaudeHooks.ps1` | Merge Helios hooks into Claude settings. Backs up, preserves non-Helios keys, idempotent. |
+| `tools/Remove-AkashicClaudeHooks.ps1` | Remove Helios hooks from settings. Selective removal or full backup restore. |
+| `tools/Test-HeliosLiveOperational.ps1` | Automated static verification of a live runtime (hooks, manifest, hashes, structure). |
+| `tools/Install-AkashicHeliosRuntime.ps1` | Unified entrypoint: Prepare → optional `-ActivateClaudeHooks` → optional `-Verify` → optional `-LockRuntime`. |
+
+**Unified install entrypoint:**
+
+```
+.\tools\Install-AkashicHeliosRuntime.ps1 `
+  -AkashicRoot <path> `
+  -RuntimeBundleRoot <path-to-Helios-.command-gate> `
+  -HeliosGateRoot <live-target-path> `
+  -ActivateClaudeHooks `
+  -Verify
+```
+
+On Unix-like systems:
+
+```
+pwsh -NoProfile -File ./tools/Install-AkashicHeliosRuntime.ps1 \
+  -AkashicRoot "$HOME/Engineering/Akashic" \
+  -RuntimeBundleRoot "$HOME/Engineering/Helios-/.command-gate" \
+  -HeliosGateRoot "$HOME/.helios/.command-gate" \
+  -ActivateClaudeHooks \
+  -Verify
+```
 
 ## RuntimeBundleRoot
 
