@@ -29,10 +29,9 @@ Evidence files fall into three categories:
 
 | File | Platform | Contents |
 |---|---|---|
+| `windows-validation-raw-results.md` | Windows | Unabridged powershell session: preflight, fixture, PlanOnly, Prepare |
 | `void-linux-validation-raw-results.md` | Void Linux | Unabridged pwsh session: preflight, install, fixture, PlanOnly, Prepare |
 | `macos-validation-raw-results.md` | macOS | Unabridged pwsh session: preflight, install, fixture, PlanOnly, Prepare |
-
-No Windows raw validation log exists. The Windows Prepare validation was run via a disposable script in a Claude Code session; the raw command output was not captured as a standalone document.
 
 ## Wrapper Summaries (noncanonical)
 
@@ -40,7 +39,7 @@ These files use schemas invented outside the tools. They summarize results but a
 
 | File | Schema | Notes |
 |---|---|---|
-| `installer-prepare-validation.json` | `akashic-installer-prepare-validation.v1` | Windows. Wrapper assembled by validation script. Not produced by installer tool. |
+| `installer-prepare-validation.json` | `akashic-installer-prepare-validation.v1` | Windows. Wrapper assembled by validation script. Not produced by installer tool. Superseded by `windows-validation-raw-results.md`. Deleted. |
 | `installer-prepare-validation-macos.json` | `akashic-installer-prepare-validation.v1` | macOS. Wrapper assembled by validation script. Superseded by `macos-validation-raw-results.md`. |
 | `installer-contract-readiness.json` | `akashic-installer-contract-readiness.v1` | Project status summary. Not a tool schema. |
 | `os-lock-validation/summary.json` | `akashic-os-lock-summary.v1` | Cross-platform lock summary. Not a tool schema. |

@@ -266,7 +266,7 @@ Active runtime locking is a separate milestone beyond platform support. It requi
 
 | Platform | Fixture | Installer Plan | Prepare | Activate | Canonical Evidence |
 |---|---|---|---|---|---|
-| Windows | PASS | PASS | PASS | Deferred (approval plan only) | `os-lock-validation/windows.json` (tool). No raw log. |
+| Windows | PASS | PASS | PASS | Deferred (approval plan only) | `os-lock-validation/windows.json` (tool) + `windows-validation-raw-results.md` (raw log) |
 | Void Linux | PASS | PASS | PASS | Deferred | `os-lock-validation/void-linux.json` (tool) + `void-linux-validation-raw-results.md` (raw log) |
 | macOS | PASS | PASS | PASS | Deferred (approval plan only) | `os-lock-validation/macos.json` (tool) + `macos-validation-raw-results.md` (raw log) |
 

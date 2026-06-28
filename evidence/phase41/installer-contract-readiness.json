@@ -56,8 +56,8 @@
       "lock_fixture": "PASS (Void Linux)",
       "lock_backend": "chattr",
       "lock_strength": "strong_if_supported",
-      "installer_plan": "pending_validation",
-      "prepare": "pending",
+      "installer_plan": "PASS (PlanOnly validated on Void Linux)",
+      "prepare": "PASS (Prepare validated on Void Linux)",
       "activate": "deferred"
     },
     "macOS": {

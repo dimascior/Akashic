@@ -1,6 +1,6 @@
 {
     "schema_version":  "akashic-os-lock-evidence.v1",
-    "timestamp_utc":  "2026-06-28T12:30:09.1907759Z",
+    "timestamp_utc":  "2026-06-28T17:27:47.7116049Z",
     "os_name":  "Windows",
     "kernel_version":  "Microsoft Windows NT 10.0.19045.0",
     "powershell_version":  "5.1.19041.6456",
@@ -11,7 +11,7 @@
     "lock_command_used":  "icacls /deny",
     "unlock_command_used":  "icacls /remove:d",
     "status_command_used":  "icacls",
-    "test_path":  "C:\\Users\\dimas\\AppData\\Local\\Temp\\akashic-lock-fixture-444562676",
+    "test_path":  "C:\\Users\\dimas\\AppData\\Local\\Temp\\akashic-windows-fixture-71921611",
     "protected_files_tested":  [
                                    "hooks/helios_pretooluse.ps1",
                                    "hooks/gate_check.ps1",
