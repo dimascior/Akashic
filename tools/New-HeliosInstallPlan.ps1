@@ -1,4 +1,4 @@
-# New-HeliosInstallPlan.ps1 — Generate an install plan for the TCE Helios adapter
+# New-HeliosInstallPlan.ps1 — Generate an install plan for the Helios integrity adapter
 [CmdletBinding()]
 param(
     [Parameter(Mandatory)]
@@ -153,7 +153,7 @@ $InstallPlan = [ordered]@{
     steps                 = @(
         @{ order = 1;  action = 'Verify package checksum'; tool = 'Test-HeliosAdapterPackage.ps1'; blocking = $true }
         @{ order = 2;  action = 'Create target directories'; auto = $true; blocking = $false }
-        @{ order = 3;  action = 'Copy TCE bridge to vendor location'; auto = $true; blocking = $true }
+        @{ order = 3;  action = 'Copy adapter bridge to vendor location'; auto = $true; blocking = $true }
         @{ order = 4;  action = 'Verify bridge byte identity'; auto = $true; blocking = $true }
         @{ order = 5;  action = 'Copy Helios runtime files (hooks, policy, schemas)'; auto = $false; note = 'From Helios runtime bundle'; blocking = $true }
         @{ order = 6;  action = 'Generate local manifest'; tool = 'New-HeliosEnvelopeManifest.ps1'; blocking = $true }

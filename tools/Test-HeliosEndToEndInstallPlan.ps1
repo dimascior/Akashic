@@ -75,7 +75,7 @@ try {
     Add-Check -Name 'gitkeep_files_created' -Passed ($gitkeepMissing.Count -eq 0) `
         -Detail $(if ($gitkeepMissing.Count -eq 0) { "$($gitkeepDirs.Count) .gitkeep files present" } else { "Missing: $($gitkeepMissing -join ', ')" })
 
-    # 4c. Verify protected runtime files copied
+    # 4c. Verify protected runtime files copied (excludes bridge and manifest — those have separate install steps)
     $protectedFiles = @('hooks\helios_pretooluse.ps1', 'hooks\gate_check.ps1', 'hooks\evidence_capture.ps1', 'hooks\tier_classifier.ps1', 'policy\command-policy.json')
     $protMissing = @()
     foreach ($pf in $protectedFiles) {

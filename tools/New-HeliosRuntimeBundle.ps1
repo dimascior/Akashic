@@ -10,7 +10,7 @@ param(
     [Parameter(Mandatory)]
     [string]$Version,
 
-    [string]$SourceBranch = 'phase3.75-helios-integrity-boundary',
+    [string]$SourceBranch,
 
     [string]$SourceCommit
 )
@@ -21,6 +21,14 @@ $Utf8NoBom = New-Object System.Text.UTF8Encoding($false)
 $GateRoot = Join-Path $HeliosRepoRoot '.command-gate'
 if (-not (Test-Path $GateRoot)) {
     throw "Helios gate root not found: $GateRoot"
+}
+
+if (-not $SourceBranch) {
+    try {
+        $SourceBranch = (git -C $HeliosRepoRoot rev-parse --abbrev-ref HEAD 2>&1).Trim()
+    } catch {
+        $SourceBranch = 'unknown'
+    }
 }
 
 if (-not $SourceCommit) {
@@ -147,10 +155,15 @@ $Manifest = [ordered]@{
         'blocked/*.json', 'hooks/lib/HeliosIntegrityBridge.ps1',
         'manifest/helios-envelope.json', 'manifest/helios-envelope.sha256'
     )
+    adapter_source      = [ordered]@{
+        repo   = 'dimascior/helios-integrity-adapter'
+        note   = 'Bridge and adapter tools are sourced from the standalone adapter repo, not this bundle.'
+    }
     notes               = @(
-        'Bridge is installed from TCE adapter package, not bundled.',
+        'Bridge is installed from the helios-integrity-adapter package, not bundled.',
         'Manifest and sidecar are generated locally during install.',
-        'Mutable directories contain .gitkeep only.'
+        'Mutable directories contain .gitkeep only.',
+        'Runtime source is the Helios repo; adapter source is the standalone adapter repo.'
     )
 }
 

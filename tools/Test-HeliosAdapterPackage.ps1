@@ -1,4 +1,4 @@
-# Test-HeliosAdapterPackage.ps1 — Verify a TCE Helios adapter package
+# Test-HeliosAdapterPackage.ps1 — Verify a Helios integrity adapter package
 [CmdletBinding()]
 param(
     [Parameter(Mandatory)]
@@ -36,9 +36,9 @@ if (Test-Path $ManifestPath) {
     $Manifest = $null
 }
 
-if ($Manifest -and $Manifest.source_branch) {
-    $branchOk = $Manifest.source_branch -eq 'helios-integrity-adapter'
-    Add-Check -Name 'source_branch' -Passed $branchOk -Detail "branch: $($Manifest.source_branch)"
+if ($Manifest -and $Manifest.source_repo) {
+    $repoOk = $Manifest.source_repo -match 'helios-integrity-adapter'
+    Add-Check -Name 'source_repo' -Passed $repoOk -Detail "repo: $($Manifest.source_repo)"
 }
 
 $BridgePath = Join-Path $PackageRoot 'HeliosIntegrityBridge.ps1'
@@ -117,6 +117,35 @@ if (Test-Path $GapTestDir) {
 } else {
     Add-Check -Name 'gap_test_evidence' -Passed $false -Detail 'evidence/gap-tests/ not found'
 }
+
+$Phase41Dir = Join-Path $PackageRoot 'evidence\phase41'
+if (Test-Path $Phase41Dir) {
+    $p41Files = @(Get-ChildItem -Path $Phase41Dir -File)
+    $fixtureEvidence = Test-Path (Join-Path $Phase41Dir 'fixture-lock-unlock-validation.json')
+    Add-Check -Name 'phase41_evidence' -Passed ($p41Files.Count -gt 0 -and $fixtureEvidence) `
+        -Detail "$($p41Files.Count) Phase 4.1 evidence files, fixture validation $(if ($fixtureEvidence) { 'present' } else { 'MISSING' })"
+} else {
+    Add-Check -Name 'phase41_evidence' -Passed $false -Detail 'evidence/phase41/ not found'
+}
+
+$Phase41Tools = @(
+    'tools\Lock-HeliosProtectedFiles.ps1',
+    'tools\Unlock-HeliosProtectedFiles.ps1',
+    'tools\Test-HeliosLockStatus.ps1',
+    'tools\Invoke-HeliosRebaseline.ps1',
+    'tools\Move-HeliosStaleGateArtifacts.ps1',
+    'tools\Test-HeliosSettingsIntegrity.ps1'
+)
+$P41Missing = @()
+foreach ($p41 in $Phase41Tools) {
+    if (-not (Test-Path (Join-Path $PackageRoot $p41))) { $P41Missing += $p41 }
+}
+Add-Check -Name 'phase41_tools' -Passed ($P41Missing.Count -eq 0) `
+    -Detail $(if ($P41Missing.Count -eq 0) { "$($Phase41Tools.Count) Phase 4.1 tools present" } else { "Missing: $($P41Missing -join ', ')" })
+
+$RebaselineSchema = Join-Path $PackageRoot 'schemas\helios-rebaseline.schema.json'
+Add-Check -Name 'rebaseline_schema' -Passed (Test-Path $RebaselineSchema) `
+    -Detail $(if (Test-Path $RebaselineSchema) { 'helios-rebaseline.schema.json present' } else { 'MISSING' })
 
 $ChecksumsPath = Join-Path $PackageRoot 'checksums.sha256'
 if (Test-Path $ChecksumsPath) {

@@ -13,7 +13,11 @@ param(
     [string]$ClaudeSettingsPath = "$env:USERPROFILE\.claude\settings.json",
 
     [ValidateSet('PlanOnly', 'Prepare')]
-    [string]$Mode = 'PlanOnly'
+    [string]$Mode = 'PlanOnly',
+
+    [switch]$IncludeSettingsLock,
+
+    [switch]$IncludeTemplatesLock
 )
 
 $ErrorActionPreference = 'Stop'
@@ -54,10 +58,21 @@ $RuntimeDirs = @('hooks', 'hooks\lib', 'policy', 'templates', 'schemas', 'tools'
 $ProtectedFiles = @(
     'hooks\helios_pretooluse.ps1', 'hooks\gate_check.ps1',
     'hooks\evidence_capture.ps1', 'hooks\tier_classifier.ps1',
-    'policy\command-policy.json'
+    'hooks\lib\HeliosIntegrityBridge.ps1',
+    'policy\command-policy.json',
+    'manifest\helios-envelope.json', 'manifest\helios-envelope.sha256'
+)
+
+$MutableDirs = @('pending', 'inflight', 'evidence', 'blocked')
+
+$BridgeAndManifestFiles = @(
+    'hooks\lib\HeliosIntegrityBridge.ps1',
+    'manifest\helios-envelope.json',
+    'manifest\helios-envelope.sha256'
 )
 
 foreach ($rel in $ProtectedFiles) {
+    if ($BridgeAndManifestFiles -contains $rel) { continue }
     $src = Join-Path $RuntimeBundleRoot $rel
     if (Test-Path $src) {
         $RuntimeFileCopyPlan += @{
@@ -93,6 +108,19 @@ $BridgeSyncPlan = @{
     dest            = Join-Path $TargetGateRoot 'hooks\lib\HeliosIntegrityBridge.ps1'
     verify          = 'SHA-256 byte identity check after copy'
     role            = 'bridge_vendor_copy'
+    source_owner    = 'helios-integrity-adapter standalone repo'
+}
+
+$LockActivationPlan = [ordered]@{
+    protected_lock_targets = $ProtectedFiles
+    mutable_dirs           = $MutableDirs
+    include_settings_lock  = [bool]$IncludeSettingsLock
+    include_templates_lock = [bool]$IncludeTemplatesLock
+    settings_path          = $ClaudeSettingsPath
+    lock_tool              = 'tools/Lock-HeliosProtectedFiles.ps1'
+    status_tool            = 'tools/Test-HeliosLockStatus.ps1'
+    requires_approval      = $true
+    note                   = 'Lock activation is plan-first: files are not locked during package alignment unless explicitly approved.'
 }
 
 $RebaselinePlan = @{
@@ -150,7 +178,7 @@ $RollbackPlan = @{
 }
 
 $Plan = [ordered]@{
-    schema_version            = 'helios-combined-install-plan.v1'
+    schema_version            = 'helios-combined-install-plan.v2'
     timestamp_utc             = (Get-Date).ToUniversalTime().ToString('o')
     mode                      = $Mode
     adapter_package           = @{
@@ -172,6 +200,7 @@ $Plan = [ordered]@{
     bridge_sync_plan          = $BridgeSyncPlan
     rebaseline_plan           = $RebaselinePlan
     settings_activation_plan  = $SettingsActivationPlan
+    lock_activation_plan      = $LockActivationPlan
     smoke_tests               = $SmokeTestPlan
     rollback_plan             = $RollbackPlan
     steps                     = @(
@@ -180,16 +209,22 @@ $Plan = [ordered]@{
         @{ order = 3;  action = 'Create target directories'; blocking = $false }
         @{ order = 4;  action = 'Copy runtime protected files'; blocking = $true }
         @{ order = 5;  action = 'Copy runtime support files'; blocking = $false }
-        @{ order = 6;  action = 'Sync TCE bridge to hooks/lib'; blocking = $true }
+        @{ order = 6;  action = 'Sync adapter bridge to hooks/lib'; blocking = $true }
         @{ order = 7;  action = 'Verify bridge byte identity'; blocking = $true }
-        @{ order = 8;  action = 'Generate local manifest (BOM-free)'; tool = 'New-HeliosEnvelopeManifest.ps1'; blocking = $true }
+        @{ order = 8;  action = 'Generate or verify local manifest (BOM-free)'; tool = 'New-HeliosEnvelopeManifest.ps1'; blocking = $true }
         @{ order = 9;  action = 'Verify envelope integrity'; tool = 'Test-HeliosEnvelopeIntegrity.ps1'; blocking = $true }
-        @{ order = 10; action = 'Backup settings.json'; blocking = $false }
-        @{ order = 11; action = 'Review settings activation plan'; note = 'REQUIRES HUMAN APPROVAL'; blocking = $true }
-        @{ order = 12; action = 'Activate hooks'; note = 'Human applies changes'; blocking = $true }
-        @{ order = 13; action = 'Run no-gate deny smoke test'; blocking = $true }
-        @{ order = 14; action = 'Run valid-gate allow smoke test'; blocking = $true }
-        @{ order = 15; action = 'Write install evidence'; blocking = $false }
+        @{ order = 10; action = 'Verify settings hook routing'; tool = 'Test-HeliosSettingsIntegrity.ps1'; blocking = $true }
+        @{ order = 11; action = 'Backup settings.json'; blocking = $false }
+        @{ order = 12; action = 'Review settings activation plan'; note = 'REQUIRES HUMAN APPROVAL'; blocking = $true }
+        @{ order = 13; action = 'Activate hooks'; note = 'Human applies changes'; blocking = $true }
+        @{ order = 14; action = 'Apply protected-file locks'; tool = 'Lock-HeliosProtectedFiles.ps1'; note = 'REQUIRES HUMAN APPROVAL'; blocking = $true }
+        @{ order = 15; action = 'Optionally lock settings.json'; tool = 'Lock-HeliosProtectedFiles.ps1 -IncludeSettingsJson'; note = 'Optional, requires approval'; blocking = $false }
+        @{ order = 16; action = 'Optionally lock templates'; tool = 'Lock-HeliosProtectedFiles.ps1 -IncludeTemplates'; note = 'Conditional on template trust'; blocking = $false }
+        @{ order = 17; action = 'Verify lock status'; tool = 'Test-HeliosLockStatus.ps1'; blocking = $true }
+        @{ order = 18; action = 'Verify mutable dirs writable'; tool = 'Test-HeliosLockStatus.ps1 -IncludeMutableLifecycle'; blocking = $true }
+        @{ order = 19; action = 'Run no-gate deny smoke test'; blocking = $true }
+        @{ order = 20; action = 'Run valid-gate allow smoke test'; blocking = $true }
+        @{ order = 21; action = 'Write install evidence'; blocking = $false }
     )
 }
 
