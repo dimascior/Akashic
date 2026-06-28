@@ -1,10 +1,10 @@
-# Helios Integrity Adapter
+# Akashic
 
 Integrity witness adapter for the Helios command-gate system. Provides envelope verification, evidence capture, and lock/control tooling for gated command execution.
 
 ## Purpose
 
-Helios gates shell commands via PreToolUse/PostToolUse hooks but cannot prove its own enforcement files were intact when the gate decision was made. This adapter gives Helios a local integrity witness: it hashes protected files, compares them against a durable manifest and session baseline, and writes structured evidence for every command.
+Helios gates shell commands via PreToolUse/PostToolUse hooks but cannot prove its own enforcement files were intact when the gate decision was made. Akashic gives Helios a local integrity witness: it hashes protected files, compares them against a durable manifest and session baseline, and writes structured evidence for every command.
 
 ## Envelope Model
 
@@ -88,7 +88,7 @@ All functions are self-contained (no module imports). PowerShell 5.1+ compatible
 
 ## Sync Model
 
-This repo owns the source bridge at `HeliosIntegrityBridge.ps1`.
+This repo (Akashic) owns the source bridge at `HeliosIntegrityBridge.ps1`.
 Helios consumes a vendored copy at `.command-gate/hooks/lib/HeliosIntegrityBridge.ps1`.
 
 Sync process:
@@ -128,11 +128,11 @@ See `schemas/` for JSON Schema definitions of:
 
 ### Distribution
 
-This repository is the standalone home for the Helios integrity adapter, extracted from the `helios-integrity-adapter` branch of [TerminalContextExporter](https://github.com/dimascior/TerminalContextExporter).
+Akashic is the standalone adapter repo for Helios integrity enforcement, extracted from the `helios-integrity-adapter` branch of [TerminalContextExporter](https://github.com/dimascior/TerminalContextExporter).
 
 **Development:**
 ```bash
-git clone https://github.com/dimascior/helios-integrity-adapter.git
+git clone https://github.com/dimascior/Akashic.git
 ```
 
 ### Package Tools
@@ -205,7 +205,7 @@ See `docs/install-sequence.md` for the complete procedure and `docs/package-arch
 
 ### Provenance
 
-Extracted from [TerminalContextExporter](https://github.com/dimascior/TerminalContextExporter) branch `helios-integrity-adapter` at commit `d0ab1ff`. TCE main (`c594a75`) was preserved without adapter entries. See `docs/standalone-repo-transition.md` for the full branch history and extraction plan.
+Originally extracted from [TerminalContextExporter](https://github.com/dimascior/TerminalContextExporter) branch `helios-integrity-adapter` at commit `d0ab1ff`. TCE main (`c594a75`) was preserved without adapter entries. The standalone repo ([Akashic](https://github.com/dimascior/Akashic)) is the active source. See `docs/standalone-repo-transition.md` for the extraction history.
 
 ### Phase Roadmap
 

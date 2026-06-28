@@ -37,7 +37,7 @@ if (Test-Path $ManifestPath) {
 }
 
 if ($Manifest -and $Manifest.source_repo) {
-    $repoOk = $Manifest.source_repo -match 'helios-integrity-adapter'
+    $repoOk = $Manifest.source_repo -match 'Akashic'
     Add-Check -Name 'source_repo' -Passed $repoOk -Detail "repo: $($Manifest.source_repo)"
 }
 

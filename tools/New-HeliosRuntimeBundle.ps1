@@ -156,14 +156,14 @@ $Manifest = [ordered]@{
         'manifest/helios-envelope.json', 'manifest/helios-envelope.sha256'
     )
     adapter_source      = [ordered]@{
-        repo   = 'dimascior/helios-integrity-adapter'
-        note   = 'Bridge and adapter tools are sourced from the standalone adapter repo, not this bundle.'
+        repo   = 'dimascior/Akashic'
+        note   = 'Bridge and adapter tools are sourced from the Akashic repo, not this bundle.'
     }
     notes               = @(
-        'Bridge is installed from the helios-integrity-adapter package, not bundled.',
+        'Bridge is installed from the Akashic adapter package, not bundled.',
         'Manifest and sidecar are generated locally during install.',
         'Mutable directories contain .gitkeep only.',
-        'Runtime source is the Helios repo; adapter source is the standalone adapter repo.'
+        'Runtime source is the Helios repo; adapter source is the Akashic repo.'
     )
 }
 

@@ -1,26 +1,26 @@
-# Helios TCE Adapter — Install Sequence
+# Akashic — Install Sequence
 
 ## Prerequisites
 
 - PowerShell 5.1 or later.
 - Target machine has a Helios gate root (`.command-gate/` directory) or will create one.
-- TCE adapter package (from git clone, release zip, or branch download).
+- Akashic adapter package (from git clone or release artifact).
 - Claude Code installed (for hook activation).
 
 ## Install Sequence
 
-### Step 1: Pull TCE Adapter Package
+### Step 1: Pull Akashic Adapter Package
 
 **From git clone:**
 ```powershell
-git clone -b helios-integrity-adapter https://github.com/<owner>/TerminalContextExporter.git
-$PackageRoot = "TerminalContextExporter\MyExporter\Adapters\Helios"
+git clone https://github.com/dimascior/Akashic.git
+$PackageRoot = "Akashic"
 ```
 
 **From release artifact:**
 ```powershell
-gh release download v0.3.98 --repo <owner>/TerminalContextExporter --dir helios-adapter
-$PackageRoot = "helios-adapter"
+gh release download v<version> --repo dimascior/Akashic --dir akashic-adapter
+$PackageRoot = "akashic-adapter"
 ```
 
 ### Step 2: Pull or Unpack Helios Runtime Bundle
@@ -31,7 +31,7 @@ The Helios runtime bundle is the `.command-gate/` directory structure. If the ta
 $HeliosTargetRoot = "C:\path\to\target-repo\.command-gate"
 ```
 
-### Step 3: Verify TCE Adapter Package Checksum
+### Step 3: Verify Akashic Adapter Package Checksum
 
 ```powershell
 & "$PackageRoot\tools\Test-HeliosAdapterPackage.ps1" -PackageRoot $PackageRoot
@@ -51,11 +51,11 @@ If the Helios runtime bundle is a fresh download, verify its checksums. If it is
 
 Expected: CLEAN verdict (existing installation) or directory-not-found (fresh installation).
 
-### Step 5: Copy TCE Bridge into Helios
+### Step 5: Copy Akashic Bridge into Helios
 
 ```powershell
 & "$PackageRoot\tools\Sync-HeliosBridge.ps1" `
-    -TceRoot (Split-Path $PackageRoot -Parent | Split-Path -Parent | Split-Path -Parent) `
+    -AdapterRoot $PackageRoot `
     -HeliosGateRoot $HeliosTargetRoot
 ```
 
@@ -259,8 +259,8 @@ For a complete fresh installation using both packages:
 
 ```powershell
 # 1. Build or pull both packages
-$AdapterPkg = "helios-tce-adapter-v0.3.99"
-$RuntimePkg = "helios-runtime-v3.99"
+$AdapterPkg = "akashic-v0.4.1"
+$RuntimePkg = "helios-runtime-v0.4.1"
 
 # 2. Verify both packages
 & "$AdapterPkg\tools\Test-HeliosAdapterPackage.ps1" -PackageRoot $AdapterPkg

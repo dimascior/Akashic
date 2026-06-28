@@ -108,7 +108,7 @@ $BridgeSyncPlan = @{
     dest            = Join-Path $TargetGateRoot 'hooks\lib\HeliosIntegrityBridge.ps1'
     verify          = 'SHA-256 byte identity check after copy'
     role            = 'bridge_vendor_copy'
-    source_owner    = 'helios-integrity-adapter standalone repo'
+    source_owner    = 'Akashic standalone repo'
 }
 
 $LockActivationPlan = [ordered]@{

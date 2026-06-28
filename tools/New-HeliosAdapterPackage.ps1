@@ -40,7 +40,7 @@ if (-not $SourceCommit) {
     }
 }
 
-$PackageName = "helios-integrity-adapter-v$Version"
+$PackageName = "akashic-v$Version"
 $PackageDir = Join-Path $OutputDir $PackageName
 if (Test-Path $PackageDir) {
     Remove-Item $PackageDir -Recurse -Force
@@ -158,7 +158,7 @@ $Manifest = [ordered]@{
     schema_version              = 'helios-adapter-package.v2'
     package_name                = 'helios-integrity-adapter'
     package_version             = $Version
-    source_repo                 = 'dimascior/helios-integrity-adapter'
+    source_repo                 = 'dimascior/Akashic'
     source_branch               = $SourceBranch
     source_commit               = $SourceCommit
     tce_origin                  = [ordered]@{
@@ -190,7 +190,7 @@ $Manifest = [ordered]@{
         @{ name = 'valid_gate_allow'; description = 'Shell command with valid matching gate should be allowed'; expected_verdict = 'ALLOW'; expected_evidence = @('before.json', 'decision.json', 'after.json', 'compare.json') }
     )
     trust_boundaries            = [ordered]@{
-        bridge_source_of_truth = 'helios-integrity-adapter standalone repo'
+        bridge_source_of_truth = 'Akashic standalone repo'
         bridge_vendor_copy     = 'Helios hooks/lib/HeliosIntegrityBridge.ps1'
         manifest_authority     = 'Generated locally on target machine'
         settings_activation    = 'Requires explicit human approval'
