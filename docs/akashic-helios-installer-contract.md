@@ -17,6 +17,7 @@ Having a lock backend in code does not constitute platform support. Platform sup
 | Windows lock fixture | PASS |
 | Windows installer PlanOnly/Prepare | PASS |
 | Void Linux lock fixture | PASS |
+| Void Linux installer PlanOnly/Prepare | PASS |
 | macOS lock fixture | PASS |
 | macOS installer PlanOnly/Prepare | PASS |
 | Akashic installer | Validated (PlanOnly + Prepare on Windows and macOS) |
@@ -266,5 +267,5 @@ Active runtime locking is a separate milestone beyond platform support. It requi
 | Platform | Fixture | Installer Plan | Prepare | Activate |
 |---|---|---|---|---|
 | Windows | PASS | PASS | PASS | Deferred (approval plan only) |
-| Void Linux | PASS | Pending | Pending | Deferred |
+| Void Linux | PASS | PASS | PASS | Deferred |
 | macOS | PASS | PASS | PASS | Deferred (approval plan only) |

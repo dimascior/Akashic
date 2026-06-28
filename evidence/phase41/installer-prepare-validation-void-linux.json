@@ -1,0 +1,90 @@
+{
+  "schema_version": "akashic-installer-prepare-validation.v1",
+  "timestamp_utc": "2026-06-28T16:22:33Z",
+  "validated_on": {
+    "os": "Linux",
+    "distribution": "Void Linux",
+    "kernel": "6.12.65_1",
+    "libc": "glibc 2.41",
+    "architecture": "x86_64",
+    "user": "root",
+    "powershell_version": "7.6.3",
+    "chattr_path": "/usr/sbin/chattr",
+    "lsattr_path": "/usr/sbin/lsattr"
+  },
+  "parser_validation": {
+    "scripts_checked": 8,
+    "all_passed": true,
+    "files": [
+      "tools/Get-AkashicLockStrategy.ps1",
+      "tools/lib/AkashicLockTargets.ps1",
+      "tools/lib/AkashicLockBackend.ps1",
+      "tools/Lock-AkashicProtectedFiles.ps1",
+      "tools/Unlock-AkashicProtectedFiles.ps1",
+      "tools/AkashicLockStatus.ps1",
+      "tools/Test-AkashicOsLockFixture.ps1",
+      "tools/AkashicHeliosInstallPlan.ps1"
+    ]
+  },
+  "strategy_result": {
+    "platform": "Linux",
+    "backend": "chattr",
+    "implemented": true,
+    "strength": "strong_if_supported",
+    "requires_elevation": false,
+    "privilege_mode": "None",
+    "lock_command": "/usr/sbin/chattr",
+    "status_command": "/usr/sbin/lsattr",
+    "blockers": []
+  },
+  "fixture_result": {
+    "overall_result": "PASS",
+    "backend": "chattr",
+    "protected_files_tested": 8,
+    "mutable_dirs_tested": 4,
+    "negative_tests_passed": true,
+    "unlock_recovery": true,
+    "evidence_path": "evidence/phase41/os-lock-validation/void-linux.json"
+  },
+  "plan_only_validation": {
+    "schema_version": "akashic-helios-install-plan.v2",
+    "mode": "PlanOnly",
+    "platform": "Linux",
+    "overall_status": "READY",
+    "phase_count": 14,
+    "blockers": [],
+    "runtime_bundle_root": "/root/Engineering/Helios-/.command-gate",
+    "protected_files_planned": 5,
+    "side_effects": {
+      "target_dir_created": false,
+      "files_copied": false,
+      "manifest_generated": false,
+      "settings_modified": false,
+      "locks_applied": false,
+      "active_runtime_touched": false
+    }
+  },
+  "prepare_validation": {
+    "schema_version": "akashic-helios-install-plan.v2",
+    "mode": "Prepare",
+    "platform": "Linux",
+    "overall_status": "READY",
+    "phase_count": 14,
+    "manifest_status": "CLEAN",
+    "copied_file_count": {
+      "protected_runtime": 5,
+      "support": 0,
+      "bridge": 1
+    },
+    "bridge_byte_identity": true,
+    "bridge_sha256": "8008a336b8d5c35704aa677a57796807f8bb7790d3ff0a9af89767519c51e454",
+    "manifest_created": true,
+    "sidecar_created": true,
+    "envelope_status": "CLEAN",
+    "evidence_written": true,
+    "settings_touched": false,
+    "locks_applied": false,
+    "active_runtime_touched": false
+  },
+  "blockers": []
+}
