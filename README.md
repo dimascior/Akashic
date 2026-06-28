@@ -151,9 +151,10 @@ git clone https://github.com/dimascior/Akashic.git
 | `tools/AkashicPackageValidation.ps1` | Verify adapter package contents and checksums |
 | `tools/AkashicRuntimeBundle.ps1` | Build a distributable Helios runtime bundle |
 | `tools/AkashicRuntimeBundleValidation.ps1` | Verify runtime bundle contents, checksums, BOM safety |
-| `tools/AkashicCombinedInstallPlan.ps1` | Generate full install plan from both packages |
+| `tools/AkashicHeliosInstallPlan.ps1` | Unified 16-phase install planner (PlanOnly/Prepare/Activate) |
+| `tools/AkashicCombinedInstallPlan.ps1` | Legacy combined install plan |
 | `tools/AkashicEndToEndInstallPlanValidation.ps1` | Simulate install in temp directory |
-| `tools/AkashicInstallPlan.ps1` | Generate adapter-only install plan |
+| `tools/AkashicInstallPlan.ps1` | Legacy adapter-only install plan |
 
 ### Lock Tools
 
@@ -174,17 +175,17 @@ git clone https://github.com/dimascior/Akashic.git
 
 1. Pull adapter package and runtime bundle.
 2. Verify both: `AkashicPackageValidation.ps1` and `AkashicRuntimeBundleValidation.ps1`.
-3. Generate combined install plan: `AkashicCombinedInstallPlan.ps1`.
-4. Copy runtime files, sync bridge, generate BOM-free local manifest.
-5. Verify envelope: `AkashicEnvelopeIntegrityValidation.ps1 -HeliosGateRoot <path>`.
-6. Review and approve hook activation in `settings.json`.
-7. Run smoke tests.
+3. Generate unified install plan: `AkashicHeliosInstallPlan.ps1 -Mode PlanOnly`.
+4. Review plan. If ready, run with `-Mode Prepare` to copy files, sync bridge, generate manifest.
+5. Run lock fixture: `Test-AkashicOsLockFixture.ps1` — must PASS before any lock activation.
+6. Verify envelope: `AkashicEnvelopeIntegrityValidation.ps1 -HeliosGateRoot <path>`.
+7. When ready for activation: `-Mode Activate -IncludeSettingsActivation` (requires human approval).
 
-See `docs/install-sequence.md` for the complete procedure and `docs/package-architecture.md` for the two-package model.
+See `docs/install-sequence.md` for the complete procedure, `docs/package-architecture.md` for the two-package model, and `docs/akashic-helios-installer-contract.md` for the installer contract.
 
 ## Current Status
 
-**Phase:** 4.1 — cross-platform lock/unlock/rebaseline tooling (Windows fixture-validated, Linux/macOS pending physical machine test).
+**Phase:** 4.1 — cross-platform lock/unlock/rebaseline tooling. Windows fixture PASS. Linux/macOS lock backends designed but not validated on physical machines. Installer contract defined. Active Helios runtime locking deferred until fixture + installer pass per platform.
 
 | Component | Status |
 |---|---|
@@ -206,11 +207,13 @@ See `docs/install-sequence.md` for the complete procedure and `docs/package-arch
 | Package validation (3.99.1) | Complete — adapter verifier BOM checks, runtime manifest completeness, e2e execution |
 | Install sequence | Complete — `docs/install-sequence.md` |
 | Lock design (4.0) | Complete — `docs/phase40-lock-design-from-gap-evidence.md` |
-| Lock tooling (4.1) | Cross-platform — `docs/phase41-lock-implementation.md` |
+| Lock tooling (4.1) | Windows validated, Linux/macOS backends designed but not validated — `docs/phase41-lock-implementation.md` |
 | Lock strategy resolver | Complete — `Get-AkashicLockStrategy.ps1` (icacls/chattr/chflags/chmod) |
 | Lock dispatch layer | Complete — `lib/AkashicLockTargets.ps1` + `lib/AkashicLockBackend.ps1` (inventory + backend dispatch) |
-| Lock/unlock tools | Cross-platform — strategy-driven dispatch, Windows fixture PASS |
-| Lock fixture test | Complete — `Test-AkashicOsLockFixture.ps1` (Windows PASS, Linux/macOS pending) |
+| Lock/unlock tools | Windows fixture PASS. Linux/macOS backends exist in code but require physical machine fixture validation |
+| Lock fixture test | Windows PASS — `Test-AkashicOsLockFixture.ps1`. Linux/macOS NOT_TESTED (requires physical machines) |
+| Installer contract | Defined — `docs/akashic-helios-installer-contract.md` |
+| Unified installer | Created — `tools/AkashicHeliosInstallPlan.ps1` (16-phase, PlanOnly/Prepare/Activate) |
 | Rebaseline workflow | Implemented — live 7-step cycle pending |
 | Stale gate cleanup | Implemented — `tools/Move-AkashicStaleGateArtifacts.ps1` |
 | Settings integrity | Verified — `AkashicSettingsIntegrity` passes against live settings.json |

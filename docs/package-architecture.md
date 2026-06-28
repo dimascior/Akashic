@@ -71,18 +71,24 @@ The installer connects the two packages. It is a set of PowerShell tools that sh
 
 ### Installer Responsibilities
 
-1. **Verify package checksums** — confirm package contents match `checksums.sha256`.
-2. **Locate or create target Helios gate root** — find or initialize `.command-gate/` at the target path.
-3. **Copy Akashic bridge** — `AkashicIntegrityBridge.ps1` → `hooks/lib/HeliosIntegrityBridge.ps1`.
-4. **Verify byte identity** — SHA-256 match between source and vendored copy.
-5. **Create mutable runtime directories** — `pending/`, `inflight/`, `evidence/`, `blocked/`.
-6. **Write target-machine manifest** — `AkashicEnvelopeManifest.ps1` on the target machine.
-7. **Write sidecar** — BOM-free UTF-8, generated from manifest hash.
-8. **Verify envelope integrity** — `AkashicEnvelopeIntegrityValidation.ps1` on the target.
-9. **Create install evidence** — record what was installed, when, and by whom.
-10. **Prepare Claude settings activation plan** — generate the settings.json changes needed.
-11. **Run smoke tests** — no-gate deny, valid-gate allow.
-12. **Keep install separate from activation** — settings.json is NOT modified without explicit approval.
+The unified installer (`AkashicHeliosInstallPlan.ps1`) runs a 16-phase plan. See `docs/akashic-helios-installer-contract.md` for the full contract.
+
+1. **Verify Akashic identity and tool availability** — confirm package root and required tools exist.
+2. **Verify Helios target** — find or initialize `.command-gate/` at the target path.
+3. **Verify runtime directories** — create required directories in Prepare/Activate mode.
+4. **Verify protected file and mutable directory inventory** — canonical lists from `AkashicLockTargets.ps1`.
+5. **Detect OS lock strategy** — `Get-AkashicLockStrategy.ps1` resolves platform backend.
+6. **Run lock fixture** — disposable test must PASS before any active runtime locking.
+7. **Copy Akashic bridge** — `AkashicIntegrityBridge.ps1` → `hooks/lib/HeliosIntegrityBridge.ps1`.
+8. **Verify byte identity** — SHA-256 match between source and vendored copy.
+9. **Generate target-machine manifest** — BOM-free UTF-8, generated from actual file hashes.
+10. **Verify envelope integrity** — `AkashicEnvelopeIntegrityValidation.ps1` on the target.
+11. **Prepare settings activation plan** — platform-aware hook commands (powershell.exe vs pwsh).
+12. **Prepare lock activation plan** — requires fixture PASS + human approval.
+13. **Prepare rollback plan** — settings restore, unlock, verification.
+14. **Write install evidence** — mode, platform, strategy, fixture result, blockers.
+15. **Keep install separate from activation** — settings.json is NOT modified without explicit approval.
+16. **Active runtime locking deferred** — not permitted until fixture + installer pass per platform.
 
 ### Install vs Activation Boundary
 
@@ -189,6 +195,8 @@ All JSON writers in the install trust path use `[System.IO.File]::WriteAllText()
 | GitHub release artifact (zip) | 3.98 | Recommended for distribution |
 | Helios runtime bundle | 3.99 | Complete — runtime packaging tooled |
 | End-to-end install simulation | 3.99 | Complete — simulation verified |
+| Unified installer contract | 4.1 | Defined — `docs/akashic-helios-installer-contract.md` |
+| Unified install planner | 4.1 | Created — `tools/AkashicHeliosInstallPlan.ps1` |
 | PowerShell module (PSGallery) | Future | After install flow stabilizes |
 | Dedicated adapter repo | Future | If adapter grows beyond TCE scope |
 | Helios monorepo bundle | Future | If unified distribution preferred |

@@ -1,6 +1,6 @@
 # Phase 4.1 — Lock/Unlock/Rebaseline Tooling
 
-**Status: Implementation draft. All verification checklist items are pending.**
+**Status: Cross-platform lock backends implemented. Windows fixture PASS. Linux/macOS backends designed but not validated on physical machines. Installer contract defined — see `docs/akashic-helios-installer-contract.md`.**
 
 ## Scope
 
@@ -200,5 +200,6 @@ Evidence files are in `evidence/phase41/`.
 3. **Live rebaseline cycle** — Full 7-step cycle has not been executed end-to-end.
 4. ~~**Mutable directory writability after lock**~~ — Resolved: all 4 mutable dirs writable while protected files locked.
 5. **Package builder path dependency** — `AkashicPackage.ps1` standalone packaging deferred to Phase 5.
-6. **Linux fixture test** — Requires physical Void Linux machine with chattr/lsattr and privilege path validated.
-7. **macOS fixture test** — Requires physical macOS machine with chflags uchg validated.
+6. **Linux fixture test** — Requires physical Void Linux machine with chattr/lsattr and privilege path validated. Backend code exists but is NOT validated.
+7. **macOS fixture test** — Requires physical macOS machine with chflags uchg validated. Backend code exists but is NOT validated.
+8. **Installer contract validation** — `AkashicHeliosInstallPlan.ps1` PlanOnly must generate a valid plan per platform before claiming support. See `docs/akashic-helios-installer-contract.md`.

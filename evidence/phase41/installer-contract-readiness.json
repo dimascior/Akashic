@@ -1,0 +1,60 @@
+{
+  "schema_version": "akashic-installer-contract-readiness.v1",
+  "timestamp_utc": "2026-06-28T20:00:00Z",
+  "contract_document": "docs/akashic-helios-installer-contract.md",
+  "unified_installer": "tools/AkashicHeliosInstallPlan.ps1",
+  "installer_phases": 16,
+  "installer_modes": ["PlanOnly", "Prepare", "Activate"],
+  "platform_status": {
+    "Windows": {
+      "lock_fixture": "PASS",
+      "lock_backend": "icacls",
+      "lock_strength": "strong",
+      "installer_plan": "pending_validation",
+      "prepare": "pending",
+      "activate": "deferred"
+    },
+    "Linux": {
+      "lock_fixture": "NOT_TESTED",
+      "lock_backend": "chattr (designed, not validated)",
+      "lock_strength": "strong_if_supported",
+      "installer_plan": "pending_validation",
+      "prepare": "pending",
+      "activate": "deferred",
+      "blockers": ["Requires physical Void Linux machine with chattr/lsattr and privilege path"]
+    },
+    "macOS": {
+      "lock_fixture": "NOT_TESTED",
+      "lock_backend": "chflags (designed, not validated)",
+      "lock_strength": "strong_user_immutable",
+      "installer_plan": "pending_validation",
+      "prepare": "pending",
+      "activate": "deferred",
+      "blockers": ["Requires physical macOS machine with chflags uchg"]
+    }
+  },
+  "contract_sections": [
+    "Akashic source package layout",
+    "Helios runtime target layout",
+    "Platform prerequisites (Windows, Void Linux, macOS)",
+    "Install modes (PlanOnly, Prepare, Activate)",
+    "16-phase install plan",
+    "Rollback behavior",
+    "Evidence behavior",
+    "OS lock fixture prerequisite",
+    "Active runtime lock approval boundary",
+    "Claiming platform support criteria"
+  ],
+  "docs_updated": [
+    "docs/phase41-lock-implementation.md",
+    "README.md",
+    "docs/install-sequence.md",
+    "docs/package-architecture.md"
+  ],
+  "legacy_installers": [
+    "tools/AkashicInstallPlan.ps1 (adapter-only, superseded)",
+    "tools/AkashicCombinedInstallPlan.ps1 (combined, superseded)"
+  ],
+  "active_runtime_locking": "Deferred until fixture PASS + installer Prepare completes per platform",
+  "overall_readiness": "CONTRACT_DEFINED"
+}

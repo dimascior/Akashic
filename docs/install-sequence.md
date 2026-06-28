@@ -2,10 +2,43 @@
 
 ## Prerequisites
 
-- PowerShell 5.1 or later.
+- **Windows:** PowerShell 5.1 or later, icacls, NTFS filesystem.
+- **Linux:** pwsh (PowerShell 7+), chattr/lsattr, privilege path (root, sudo -n, or doas).
+- **macOS:** pwsh (PowerShell 7+), chflags, ls -lO.
 - Target machine has a Helios gate root (`.command-gate/` directory) or will create one.
 - Akashic adapter package (from git clone or release artifact).
 - Claude Code installed (for hook activation).
+- **Lock fixture must PASS before any active runtime locking.** See `docs/akashic-helios-installer-contract.md`.
+
+## Unified Installer (Recommended)
+
+The unified `AkashicHeliosInstallPlan.ps1` replaces the manual steps below with a 16-phase automated plan. Use PlanOnly first to review, then Prepare to execute non-destructive steps, then Activate (with human approval) for settings and lock activation.
+
+```powershell
+# Generate plan (no file changes)
+& "$PackageRoot\tools\AkashicHeliosInstallPlan.ps1" `
+    -AkashicRoot $PackageRoot `
+    -HeliosGateRoot $HeliosTargetRoot `
+    -RunFixtureCheck `
+    -Mode PlanOnly
+
+# Execute non-destructive steps
+& "$PackageRoot\tools\AkashicHeliosInstallPlan.ps1" `
+    -AkashicRoot $PackageRoot `
+    -HeliosGateRoot $HeliosTargetRoot `
+    -RunFixtureCheck `
+    -Mode Prepare
+
+# Full activation (requires human approval)
+& "$PackageRoot\tools\AkashicHeliosInstallPlan.ps1" `
+    -AkashicRoot $PackageRoot `
+    -HeliosGateRoot $HeliosTargetRoot `
+    -RunFixtureCheck `
+    -IncludeSettingsActivation `
+    -Mode Activate
+```
+
+## Manual Install Sequence (Reference)
 
 ## Install Sequence
 
