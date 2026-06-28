@@ -77,6 +77,58 @@ After activation, your first command will be blocked. The rejection tells you th
 
 Save it as `<your-project>/.command-gate/pending/<name>.gate.json` and retry the command.
 
+### Using the Gate Creation Tool
+
+Instead of writing JSON by hand, use the gate creation tool:
+
+```powershell
+.\tools\New-HeliosGate.ps1 `
+  -Command 'git status' `
+  -HeliosGateRoot "C:\path\to\your-project\.command-gate" `
+  -Need "Check repo state" `
+  -Expected "Clean working tree" `
+  -ActualMeans "Shows git status output" `
+  -NextLogic "Proceed with next task"
+```
+
+The tool computes the SHA256 automatically, detects chained commands, sets expiry (default 60 minutes), and writes a valid gate file.
+
+For higher-risk commands:
+
+```powershell
+.\tools\New-HeliosGate.ps1 `
+  -Command 'Remove-Item ./temp -Recurse -Force' `
+  -HeliosGateRoot "C:\path\to\.command-gate" `
+  -Shell powershell `
+  -RiskTier 3 `
+  -Writes @(".\temp") `
+  -Deletes @(".\temp") `
+  -StopConditions @("abort if temp contains uncommitted work") `
+  -ExpiresInMinutes 15
+```
+
+## Gate Management
+
+```powershell
+# List active pending gates
+.\tools\Get-HeliosPendingGates.ps1 -HeliosGateRoot "C:\path\to\.command-gate"
+
+# Include expired gates
+.\tools\Get-HeliosPendingGates.ps1 -HeliosGateRoot "C:\path\to\.command-gate" -IncludeExpired
+
+# View recent evidence records
+.\tools\Get-HeliosEvidence.ps1 -HeliosGateRoot "C:\path\to\.command-gate" -Summary
+
+# Look up a specific gate's evidence
+.\tools\Get-HeliosEvidence.ps1 -HeliosGateRoot "C:\path\to\.command-gate" -CorrelationId "my-gate-id"
+
+# Clean up expired gates (moves to evidence/stale/)
+.\tools\Clear-HeliosStaleGates.ps1 -HeliosGateRoot "C:\path\to\.command-gate"
+
+# Preview what would be cleaned
+.\tools\Clear-HeliosStaleGates.ps1 -HeliosGateRoot "C:\path\to\.command-gate" -WhatIf
+```
+
 ## Prepare Only (No Settings Changes)
 
 ```powershell
@@ -107,6 +159,29 @@ This copies files and generates the manifest but does not modify Claude settings
 ```powershell
 .\tools\Remove-AkashicClaudeHooks.ps1 -ClaudeSettingsPath "C:\path\to\settings.json"
 ```
+
+### Full rollback (hooks + unlock + remove runtime)
+
+```powershell
+.\tools\Rollback-AkashicHeliosRuntime.ps1 `
+  -HeliosGateRoot "C:\path\to\.command-gate" `
+  -RestoreFromBackup `
+  -UnlockRuntime `
+  -RemoveRuntime
+```
+
+## Maintenance Rebaseline
+
+After modifying protected runtime files (hooks, policy, bridge), rebaseline the manifest:
+
+```powershell
+.\tools\Invoke-HeliosRuntimeRebaseline.ps1 `
+  -HeliosGateRoot "C:\path\to\.command-gate" `
+  -AkashicRoot "C:\path\to\Akashic" `
+  -RelockAfter
+```
+
+This unlocks, regenerates the manifest, verifies integrity, and optionally re-locks.
 
 ## Verification
 

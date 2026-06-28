@@ -73,6 +73,23 @@ The installer verifies these tools exist in the Akashic root:
 | `tools/AkashicEnvelopeIntegrityValidation.ps1` | Envelope integrity check |
 | `tools/AkashicSettingsIntegrity.ps1` | Settings hook entry verification |
 
+### Activation and Lifecycle Tools
+
+| Tool | Purpose |
+|---|---|
+| `tools/Apply-AkashicClaudeHooks.ps1` | Merge Helios hooks into Claude settings |
+| `tools/Remove-AkashicClaudeHooks.ps1` | Remove Helios hooks (selective or backup restore) |
+| `tools/Test-HeliosLiveOperational.ps1` | Automated static verification of live runtime |
+| `tools/Install-AkashicHeliosRuntime.ps1` | Unified install: Prepare → Activate → Verify → Lock |
+| `tools/Rollback-AkashicHeliosRuntime.ps1` | Unified rollback: deactivate → unlock → optionally remove |
+| `tools/New-HeliosGate.ps1` | Create valid gate files with SHA computation |
+| `tools/Get-HeliosPendingGates.ps1` | List pending gates (active/expired) |
+| `tools/Get-HeliosEvidence.ps1` | Query evidence records |
+| `tools/Clear-HeliosStaleGates.ps1` | Move expired gates to stale archive |
+| `tools/Lock-HeliosRuntime.ps1` | Lock runtime (optional fixture pre-check) |
+| `tools/Unlock-HeliosRuntime.ps1` | Unlock runtime for maintenance |
+| `tools/Invoke-HeliosRuntimeRebaseline.ps1` | Unlock → rebaseline manifest → verify → optionally re-lock |
+
 ## Helios Runtime Target Layout
 
 The Helios runtime lives in a `.command-gate/` directory at the target repo root.
