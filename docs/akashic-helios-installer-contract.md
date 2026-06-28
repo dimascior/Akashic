@@ -168,24 +168,24 @@ Activate mode runs all Prepare steps first, then proceeds to activation with app
 
 ## Install Plan Phases
 
+Manifest generation happens AFTER all protected files and the vendored bridge are in final position.
+
 | Phase | Action | Mode | Blocking |
 |---|---|---|---|
-| 1 | Verify Akashic repo/package identity | All | Yes |
-| 2 | Verify Akashic tool availability | All | Yes |
-| 3 | Verify Helios target `.command-gate` | All | Yes (Prepare/Activate: create if absent) |
-| 4 | Verify required runtime directories | All | Yes (Prepare/Activate: create if absent) |
-| 5 | Verify protected runtime target list | All | Yes |
-| 6 | Verify mutable lifecycle directories | All | Yes |
-| 7 | Verify settings hook routing (if requested) | All | No |
-| 8 | Detect OS lock strategy | All | Yes |
-| 9 | Run disposable OS lock fixture (if requested) | Prepare/Activate | Yes |
-| 10 | Generate or verify runtime manifest | Prepare/Activate | Yes |
-| 11 | Verify envelope integrity | Prepare/Activate | Yes |
-| 12 | Prepare copy/sync plan for bridge | All | Yes |
-| 13 | Prepare settings activation plan | All (if requested) | No |
-| 14 | Prepare lock activation plan | All | No |
-| 15 | Prepare rollback plan | All | No |
-| 16 | Write install evidence | Prepare/Activate | No |
+| 1 | Verify Akashic package/root + tool availability | All | Yes |
+| 2 | Verify RuntimeBundleRoot (if provided) | All | No |
+| 3 | Create runtime directories | PlanOnly: check; Prepare/Activate: create | Yes |
+| 4 | Copy runtime protected files from RuntimeBundleRoot | PlanOnly: plan; Prepare/Activate: copy | Yes |
+| 5 | Copy runtime support files from RuntimeBundleRoot | PlanOnly: plan; Prepare/Activate: copy | No |
+| 6 | Sync Akashic bridge | PlanOnly: plan; Prepare/Activate: sync | Yes |
+| 7 | Verify bridge byte identity | Prepare/Activate | Yes |
+| 8 | Generate manifest (after all files in final position) | Prepare/Activate | Yes |
+| 9 | Verify envelope integrity | Prepare/Activate | Yes |
+| 10 | Detect lock strategy + run fixture (if requested) | All (fixture: Prepare/Activate) | Yes |
+| 11 | Prepare settings activation plan (if requested) | All | No |
+| 12 | Prepare lock activation plan | All | No |
+| 13 | Prepare rollback plan | All | No |
+| 14 | Write install evidence | Prepare/Activate | No |
 
 ## Rollback Behavior
 

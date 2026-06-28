@@ -1,6 +1,7 @@
 # AkashicHeliosInstallPlan.ps1 — Unified Akashic + Helios install planner
 # Supersedes AkashicInstallPlan.ps1 and AkashicCombinedInstallPlan.ps1
-# with platform detection, fixture support, and the full 16-phase plan.
+# with platform detection, fixture support, RuntimeBundleRoot, and
+# corrected phase ordering (manifest after all files in final position).
 [CmdletBinding()]
 param(
     [Parameter(Mandatory)]
@@ -8,6 +9,8 @@ param(
 
     [Parameter(Mandatory)]
     [string]$HeliosGateRoot,
+
+    [string]$RuntimeBundleRoot,
 
     [ValidateSet('Auto', 'Windows', 'Linux', 'macOS')]
     [string]$Platform = 'Auto',
@@ -63,6 +66,8 @@ $ClaudeSettingsPath = switch ($Platform) {
 
 $phases = [System.Collections.Generic.List[object]]::new()
 $blockers = [System.Collections.Generic.List[string]]::new()
+$isPlanOnly = ($Mode -eq 'PlanOnly')
+$isActivate = ($Mode -eq 'Activate')
 
 function Add-Phase {
     param(
@@ -70,8 +75,7 @@ function Add-Phase {
         [string]$Name,
         [string]$Status,
         [bool]$Blocking = $true,
-        [string]$Detail = '',
-        [string]$Mode = 'All'
+        [string]$Detail = ''
     )
     $phases.Add([ordered]@{
         phase    = $Order
@@ -79,12 +83,11 @@ function Add-Phase {
         status   = $Status
         blocking = $Blocking
         detail   = $Detail
-        mode     = $Mode
     })
 }
 
 # ============================================================
-# Phase 1: Verify Akashic repo/package identity
+# Phase 1: Verify Akashic package/root + tool availability
 # ============================================================
 $phase1Status = 'PASS'
 $phase1Detail = ''
@@ -99,62 +102,109 @@ if (-not (Test-Path $AkashicRoot)) {
         $phase1Detail = "Bridge source not found: $bridgePath"
         $blockers.Add("Phase 1: $phase1Detail")
     } else {
-        $phase1Detail = "Akashic root verified: $AkashicRoot"
+        $requiredTools = @(
+            'tools/Get-AkashicLockStrategy.ps1',
+            'tools/lib/AkashicLockTargets.ps1',
+            'tools/lib/AkashicLockBackend.ps1',
+            'tools/Lock-AkashicProtectedFiles.ps1',
+            'tools/Unlock-AkashicProtectedFiles.ps1',
+            'tools/AkashicLockStatus.ps1',
+            'tools/Test-AkashicOsLockFixture.ps1',
+            'tools/Sync-AkashicBridge.ps1',
+            'tools/AkashicEnvelopeManifest.ps1',
+            'tools/AkashicEnvelopeIntegrityValidation.ps1',
+            'tools/AkashicSettingsIntegrity.ps1'
+        )
+        $missingTools = @()
+        foreach ($tool in $requiredTools) {
+            $sep = [System.IO.Path]::DirectorySeparatorChar
+            $toolPath = Join-Path $AkashicRoot ($tool.Replace('/', $sep))
+            if (-not (Test-Path $toolPath)) { $missingTools += $tool }
+        }
+        if ($missingTools.Count -gt 0) {
+            $phase1Status = 'FAIL'
+            $phase1Detail = "Missing tools: $($missingTools -join ', ')"
+            $blockers.Add("Phase 1: $phase1Detail")
+        } else {
+            $phase1Detail = "Akashic root verified ($($requiredTools.Count) tools present): $AkashicRoot"
+        }
     }
 }
-Add-Phase -Order 1 -Name 'Verify Akashic repo/package identity' -Status $phase1Status -Detail $phase1Detail
+Add-Phase -Order 1 -Name 'Verify Akashic package/root' -Status $phase1Status -Detail $phase1Detail
 
 # ============================================================
-# Phase 2: Verify Akashic tool availability
+# Phase 2: Verify RuntimeBundleRoot
 # ============================================================
-$requiredTools = @(
-    'tools/Get-AkashicLockStrategy.ps1',
-    'tools/lib/AkashicLockTargets.ps1',
-    'tools/lib/AkashicLockBackend.ps1',
-    'tools/Lock-AkashicProtectedFiles.ps1',
-    'tools/Unlock-AkashicProtectedFiles.ps1',
-    'tools/AkashicLockStatus.ps1',
-    'tools/Test-AkashicOsLockFixture.ps1',
-    'tools/Sync-AkashicBridge.ps1',
-    'tools/AkashicEnvelopeManifest.ps1',
-    'tools/AkashicEnvelopeIntegrityValidation.ps1',
-    'tools/AkashicSettingsIntegrity.ps1'
-)
-$missingTools = @()
-foreach ($tool in $requiredTools) {
-    $sep = [System.IO.Path]::DirectorySeparatorChar
-    $normalized = $tool.Replace('/', $sep)
-    $toolPath = Join-Path $AkashicRoot $normalized
-    if (-not (Test-Path $toolPath)) { $missingTools += $tool }
+$hasRuntimeBundle = $false
+$runtimeProtectedCopyPlan = @()
+$runtimeSupportCopyPlan = @()
+
+$phase2Status = 'SKIP'
+$phase2Detail = 'RuntimeBundleRoot not provided'
+if ($RuntimeBundleRoot) {
+    if (-not (Test-Path $RuntimeBundleRoot)) {
+        $phase2Status = 'FAIL'
+        $phase2Detail = "RuntimeBundleRoot not found: $RuntimeBundleRoot"
+        $blockers.Add("Phase 2: $phase2Detail")
+    } else {
+        $hasRuntimeBundle = $true
+        $runtimeProtectedSources = @(
+            'hooks/helios_pretooluse.ps1',
+            'hooks/gate_check.ps1',
+            'hooks/evidence_capture.ps1',
+            'hooks/tier_classifier.ps1',
+            'policy/command-policy.json'
+        )
+        $missingRuntime = @()
+        foreach ($rel in $runtimeProtectedSources) {
+            $sep = [System.IO.Path]::DirectorySeparatorChar
+            $src = Join-Path $RuntimeBundleRoot ($rel.Replace('/', $sep))
+            if (Test-Path $src) {
+                $runtimeProtectedCopyPlan += [ordered]@{
+                    relative = $rel
+                    source   = $src
+                    dest     = Join-Path $HeliosGateRoot ($rel.Replace('/', $sep))
+                    role     = 'protected_runtime'
+                }
+            } else {
+                $missingRuntime += $rel
+            }
+        }
+
+        $supportPatterns = @(
+            @{ Dir = 'schemas'; Filter = '*.json' }
+            @{ Dir = 'tools'; Filter = '*.ps1' }
+            @{ Dir = 'docs'; Filter = '*.md' }
+            @{ Dir = 'tests'; Filter = '*.ps1' }
+        )
+        foreach ($sp in $supportPatterns) {
+            $srcDir = Join-Path $RuntimeBundleRoot $sp.Dir
+            if (Test-Path $srcDir) {
+                $files = @(Get-ChildItem -Path $srcDir -Filter $sp.Filter -File -ErrorAction SilentlyContinue)
+                foreach ($f in $files) {
+                    $runtimeSupportCopyPlan += [ordered]@{
+                        relative = "$($sp.Dir)/$($f.Name)"
+                        source   = $f.FullName
+                        dest     = Join-Path $HeliosGateRoot "$($sp.Dir)\$($f.Name)"
+                        role     = 'support'
+                    }
+                }
+            }
+        }
+
+        if ($missingRuntime.Count -gt 0) {
+            $phase2Status = 'WARN'
+            $phase2Detail = "RuntimeBundleRoot verified but missing: $($missingRuntime -join ', ')"
+        } else {
+            $phase2Status = 'PASS'
+            $phase2Detail = "RuntimeBundleRoot verified: $RuntimeBundleRoot ($($runtimeProtectedCopyPlan.Count) protected, $($runtimeSupportCopyPlan.Count) support files)"
+        }
+    }
 }
-$phase2Status = if ($missingTools.Count -eq 0) { 'PASS' } else { 'FAIL' }
-$phase2Detail = if ($missingTools.Count -eq 0) {
-    "$($requiredTools.Count) required tools verified"
-} else {
-    "Missing: $($missingTools -join ', ')"
-}
-if ($phase2Status -eq 'FAIL') { $blockers.Add("Phase 2: $phase2Detail") }
-Add-Phase -Order 2 -Name 'Verify Akashic tool availability' -Status $phase2Status -Detail $phase2Detail
+Add-Phase -Order 2 -Name 'Verify RuntimeBundleRoot' -Status $phase2Status -Detail $phase2Detail
 
 # ============================================================
-# Phase 3: Verify Helios target .command-gate
-# ============================================================
-$targetExists = Test-Path $HeliosGateRoot
-$phase3Status = 'PASS'
-$phase3Detail = ''
-if ($targetExists) {
-    $phase3Detail = "Target exists: $HeliosGateRoot"
-} elseif ($Mode -eq 'PlanOnly') {
-    $phase3Status = 'WARN'
-    $phase3Detail = "Target does not exist (will be created in Prepare/Activate): $HeliosGateRoot"
-} else {
-    New-Item -ItemType Directory -Path $HeliosGateRoot -Force | Out-Null
-    $phase3Detail = "Target created: $HeliosGateRoot"
-}
-Add-Phase -Order 3 -Name 'Verify Helios target .command-gate' -Status $phase3Status -Detail $phase3Detail
-
-# ============================================================
-# Phase 4: Verify required runtime directories
+# Phase 3: Create runtime directories
 # ============================================================
 $runtimeDirs = @(
     'hooks', 'hooks/lib', 'policy', 'templates', 'schemas',
@@ -162,44 +212,295 @@ $runtimeDirs = @(
     'maintenance', 'evidence/integrity', 'evidence/integrity/sessions',
     'evidence/stale', 'evidence/maintenance'
 )
+$targetExists = Test-Path $HeliosGateRoot
 $missingDirs = @()
-foreach ($d in $runtimeDirs) {
-    $sep = [System.IO.Path]::DirectorySeparatorChar
-    $dirPath = Join-Path $HeliosGateRoot ($d.Replace('/', $sep))
-    if (-not (Test-Path $dirPath)) { $missingDirs += $d }
+if ($targetExists) {
+    foreach ($d in $runtimeDirs) {
+        $sep = [System.IO.Path]::DirectorySeparatorChar
+        $dirPath = Join-Path $HeliosGateRoot ($d.Replace('/', $sep))
+        if (-not (Test-Path $dirPath)) { $missingDirs += $d }
+    }
 }
 
-$phase4Status = 'PASS'
-$phase4Detail = ''
-if ($missingDirs.Count -eq 0) {
-    $phase4Detail = "$($runtimeDirs.Count) directories verified"
-} elseif ($Mode -eq 'PlanOnly') {
-    $phase4Status = 'PLAN'
-    $phase4Detail = "$($missingDirs.Count) directories to create: $($missingDirs -join ', ')"
+$phase3Status = 'PASS'
+$phase3Detail = ''
+if (-not $targetExists) {
+    if ($isPlanOnly) {
+        $phase3Status = 'PLAN'
+        $phase3Detail = "Target does not exist (will be created in Prepare/Activate): $HeliosGateRoot"
+    } else {
+        New-Item -ItemType Directory -Path $HeliosGateRoot -Force | Out-Null
+        foreach ($d in $runtimeDirs) {
+            $sep = [System.IO.Path]::DirectorySeparatorChar
+            $dirPath = Join-Path $HeliosGateRoot ($d.Replace('/', $sep))
+            if (-not (Test-Path $dirPath)) {
+                New-Item -ItemType Directory -Path $dirPath -Force | Out-Null
+            }
+        }
+        $phase3Detail = "Target + $($runtimeDirs.Count) directories created: $HeliosGateRoot"
+    }
+} elseif ($missingDirs.Count -eq 0) {
+    $phase3Detail = "Target exists, $($runtimeDirs.Count) directories verified"
+} elseif ($isPlanOnly) {
+    $phase3Status = 'PLAN'
+    $phase3Detail = "$($missingDirs.Count) directories to create: $($missingDirs -join ', ')"
 } else {
     foreach ($d in $missingDirs) {
         $sep = [System.IO.Path]::DirectorySeparatorChar
         $dirPath = Join-Path $HeliosGateRoot ($d.Replace('/', $sep))
         New-Item -ItemType Directory -Path $dirPath -Force | Out-Null
     }
-    $phase4Detail = "$($missingDirs.Count) directories created"
+    $phase3Detail = "$($missingDirs.Count) directories created"
 }
-Add-Phase -Order 4 -Name 'Verify required runtime directories' -Status $phase4Status -Detail $phase4Detail
+Add-Phase -Order 3 -Name 'Create runtime directories' -Status $phase3Status -Detail $phase3Detail
 
 # ============================================================
-# Phase 5: Verify protected runtime target list
+# Phase 4: Copy Helios runtime protected files from RuntimeBundleRoot
 # ============================================================
-$phase5Detail = "$($script:AkashicProtectedFiles.Count) protected files defined"
-Add-Phase -Order 5 -Name 'Verify protected runtime target list' -Status 'PASS' -Detail $phase5Detail
+$phase4Status = 'SKIP'
+$phase4Detail = 'RuntimeBundleRoot not provided'
+if ($hasRuntimeBundle) {
+    if ($isPlanOnly) {
+        $phase4Status = 'PLAN'
+        $phase4Detail = "$($runtimeProtectedCopyPlan.Count) protected files to copy from RuntimeBundleRoot"
+    } else {
+        $copied = 0
+        foreach ($copy in $runtimeProtectedCopyPlan) {
+            $destDir = Split-Path $copy.dest -Parent
+            if (-not (Test-Path $destDir)) {
+                New-Item -ItemType Directory -Path $destDir -Force | Out-Null
+            }
+            Copy-Item -LiteralPath $copy.source -Destination $copy.dest -Force
+            $copied++
+        }
+        $phase4Status = 'PASS'
+        $phase4Detail = "$copied protected runtime files copied"
+    }
+}
+Add-Phase -Order 4 -Name 'Copy runtime protected files' -Status $phase4Status -Detail $phase4Detail
 
 # ============================================================
-# Phase 6: Verify mutable lifecycle directories
+# Phase 5: Copy runtime support files from RuntimeBundleRoot
 # ============================================================
-$phase6Detail = "$($script:AkashicMutableDirs.Count) mutable directories defined: $($script:AkashicMutableDirs -join ', ')"
-Add-Phase -Order 6 -Name 'Verify mutable lifecycle directories' -Status 'PASS' -Detail $phase6Detail
+$phase5Status = 'SKIP'
+$phase5Detail = 'RuntimeBundleRoot not provided or no support files'
+if ($hasRuntimeBundle -and $runtimeSupportCopyPlan.Count -gt 0) {
+    if ($isPlanOnly) {
+        $phase5Status = 'PLAN'
+        $phase5Detail = "$($runtimeSupportCopyPlan.Count) support files to copy from RuntimeBundleRoot"
+    } else {
+        $copied = 0
+        foreach ($copy in $runtimeSupportCopyPlan) {
+            $destDir = Split-Path $copy.dest -Parent
+            if (-not (Test-Path $destDir)) {
+                New-Item -ItemType Directory -Path $destDir -Force | Out-Null
+            }
+            Copy-Item -LiteralPath $copy.source -Destination $copy.dest -Force
+            $copied++
+        }
+        $phase5Status = 'PASS'
+        $phase5Detail = "$copied support files copied"
+    }
+} elseif ($hasRuntimeBundle) {
+    $phase5Detail = 'No support files found in RuntimeBundleRoot'
+}
+Add-Phase -Order 5 -Name 'Copy runtime support files' -Status $phase5Status -Blocking $false -Detail $phase5Detail
 
 # ============================================================
-# Phase 7: Verify settings hook routing (if requested)
+# Phase 6: Sync Akashic bridge
+# ============================================================
+$bridgeSource = Join-Path $AkashicRoot 'AkashicIntegrityBridge.ps1'
+$bridgeDest = Join-Path $HeliosGateRoot 'hooks\lib\HeliosIntegrityBridge.ps1'
+$bridgeSyncPlan = [ordered]@{
+    source        = $bridgeSource
+    dest          = $bridgeDest
+    source_exists = (Test-Path $bridgeSource)
+    role          = 'bridge_vendor_copy'
+    verify        = 'SHA-256 byte identity check after copy'
+}
+
+$phase6Status = 'PLAN'
+$phase6Detail = ''
+if (-not $bridgeSyncPlan.source_exists) {
+    $phase6Status = 'FAIL'
+    $phase6Detail = "Bridge source missing: $bridgeSource"
+    $blockers.Add("Phase 6: $phase6Detail")
+} elseif ($isPlanOnly) {
+    $phase6Detail = "Bridge sync planned: $bridgeSource -> $bridgeDest"
+} else {
+    $syncScript = Join-Path $AkashicRoot 'tools\Sync-AkashicBridge.ps1'
+    if (Test-Path $syncScript) {
+        try {
+            & $syncScript -AdapterRoot $AkashicRoot -HeliosGateRoot $HeliosGateRoot
+            $phase6Status = 'PASS'
+            $phase6Detail = "Bridge synced: $bridgeDest"
+        } catch {
+            $phase6Status = 'FAIL'
+            $phase6Detail = "Bridge sync failed: $_"
+            $blockers.Add("Phase 6: $phase6Detail")
+        }
+    } else {
+        $phase6Status = 'FAIL'
+        $phase6Detail = "Sync script not found: $syncScript"
+        $blockers.Add("Phase 6: $phase6Detail")
+    }
+}
+Add-Phase -Order 6 -Name 'Sync Akashic bridge' -Status $phase6Status -Detail $phase6Detail
+
+# ============================================================
+# Phase 7: Verify bridge byte identity
+# ============================================================
+$phase7Status = 'SKIP'
+$phase7Detail = 'Bridge byte identity verified after sync in Prepare/Activate'
+if (-not $isPlanOnly -and $phase6Status -eq 'PASS') {
+    if ((Test-Path $bridgeSource) -and (Test-Path $bridgeDest)) {
+        $sha = [System.Security.Cryptography.SHA256]::Create()
+        $srcHash = ($sha.ComputeHash([System.IO.File]::ReadAllBytes($bridgeSource)) | ForEach-Object { $_.ToString('x2') }) -join ''
+        $dstHash = ($sha.ComputeHash([System.IO.File]::ReadAllBytes($bridgeDest)) | ForEach-Object { $_.ToString('x2') }) -join ''
+        if ($srcHash -eq $dstHash) {
+            $phase7Status = 'PASS'
+            $phase7Detail = "Byte identical: $srcHash"
+        } else {
+            $phase7Status = 'FAIL'
+            $phase7Detail = "Hash mismatch: source=$srcHash dest=$dstHash"
+            $blockers.Add("Phase 7: $phase7Detail")
+        }
+    } else {
+        $phase7Status = 'SKIP'
+        $phase7Detail = 'Bridge files not both present'
+    }
+} elseif ($isPlanOnly) {
+    $phase7Detail = 'Byte identity check deferred to Prepare/Activate'
+}
+Add-Phase -Order 7 -Name 'Verify bridge byte identity' -Status $phase7Status -Detail $phase7Detail
+
+# ============================================================
+# Phase 8: Generate manifest (after all files in final position)
+# ============================================================
+$manifestStatus = 'NOT_GENERATED'
+$phase8Status = 'SKIP'
+$phase8Detail = 'Manifest generation deferred to Prepare/Activate'
+if (-not $isPlanOnly) {
+    $manifestScript = Join-Path $AkashicRoot 'tools\AkashicEnvelopeManifest.ps1'
+    if (Test-Path $manifestScript) {
+        try {
+            & $manifestScript -HeliosGateRoot $HeliosGateRoot -RebaselinedBy 'installer' -Note 'Unified install plan'
+            $manifestStatus = 'GENERATED'
+            $phase8Status = 'PASS'
+            $phase8Detail = 'Manifest generated from files in final position'
+        } catch {
+            $manifestStatus = 'FAIL'
+            $phase8Status = 'FAIL'
+            $phase8Detail = "Manifest generation failed: $_"
+            $blockers.Add("Phase 8: $phase8Detail")
+        }
+    } else {
+        $phase8Status = 'FAIL'
+        $phase8Detail = "Manifest script not found: $manifestScript"
+        $blockers.Add("Phase 8: $phase8Detail")
+    }
+}
+Add-Phase -Order 8 -Name 'Generate manifest' -Status $phase8Status -Detail $phase8Detail
+
+# ============================================================
+# Phase 9: Verify envelope integrity
+# ============================================================
+$phase9Status = 'SKIP'
+$phase9Detail = 'Envelope verification deferred to Prepare/Activate'
+if (-not $isPlanOnly -and $manifestStatus -eq 'GENERATED') {
+    $verifyScript = Join-Path $AkashicRoot 'tools\AkashicEnvelopeIntegrityValidation.ps1'
+    if (Test-Path $verifyScript) {
+        try {
+            $verifyResult = & $verifyScript -HeliosGateRoot $HeliosGateRoot
+            if ($verifyResult -and $verifyResult.verdict -eq 'CLEAN') {
+                $manifestStatus = 'CLEAN'
+                $phase9Status = 'PASS'
+                $phase9Detail = 'Envelope integrity: CLEAN'
+            } else {
+                $manifestStatus = 'DRIFT'
+                $phase9Status = 'FAIL'
+                $verdict = if ($verifyResult) { $verifyResult.verdict } else { 'unknown' }
+                $phase9Detail = "Envelope integrity: $verdict"
+                $blockers.Add("Phase 9: $phase9Detail")
+            }
+        } catch {
+            $phase9Status = 'FAIL'
+            $phase9Detail = "Envelope verification failed: $_"
+            $blockers.Add("Phase 9: $phase9Detail")
+        }
+    } else {
+        $phase9Status = 'WARN'
+        $phase9Detail = 'Verification script not found'
+    }
+}
+Add-Phase -Order 9 -Name 'Verify envelope integrity' -Status $phase9Status -Detail $phase9Detail
+
+# ============================================================
+# Phase 10: Detect lock strategy + run OS lock fixture
+# ============================================================
+$strategyScript = Join-Path $AkashicRoot 'tools\Get-AkashicLockStrategy.ps1'
+$strategyArgs = @{}
+if ($RequireStrongLock) { $strategyArgs['RequireStrongLock'] = $true }
+if ($AllowWeakFallback) { $strategyArgs['AllowWeakFallback'] = $true }
+
+$lockStrategy = $null
+$fixtureResult = 'NOT_RUN'
+$phase10Status = 'FAIL'
+$phase10Detail = ''
+if (Test-Path $strategyScript) {
+    try {
+        $lockStrategy = & $strategyScript @strategyArgs
+        if ($lockStrategy.implemented) {
+            $phase10Status = 'PASS'
+            $phase10Detail = "Backend: $($lockStrategy.backend), Strength: $($lockStrategy.strength), Privilege: $($lockStrategy.privilege_mode)"
+        } else {
+            $phase10Detail = "Lock backend not available: $($lockStrategy.blockers -join ', ')"
+            $blockers.Add("Phase 10: $phase10Detail")
+        }
+    } catch {
+        $phase10Detail = "Lock strategy detection failed: $_"
+        $blockers.Add("Phase 10: $phase10Detail")
+    }
+} else {
+    $phase10Detail = "Strategy script not found: $strategyScript"
+    $blockers.Add("Phase 10: $phase10Detail")
+}
+
+if ($RunFixtureCheck -and -not $isPlanOnly -and $lockStrategy -and $lockStrategy.implemented) {
+    $fixtureScript = Join-Path $AkashicRoot 'tools\Test-AkashicOsLockFixture.ps1'
+    $fixtureArgs = @{}
+    if ($RequireStrongLock) { $fixtureArgs['RequireStrongLock'] = $true }
+    if ($AllowWeakFallback) { $fixtureArgs['AllowWeakFallback'] = $true }
+    if (Test-Path $fixtureScript) {
+        try {
+            $fixtureOutput = & $fixtureScript @fixtureArgs
+            if ($fixtureOutput -and $fixtureOutput.overall_result) {
+                $fixtureResult = $fixtureOutput.overall_result
+                if ($fixtureResult -ne 'PASS') {
+                    $phase10Status = 'FAIL'
+                    $phase10Detail += " | Fixture: $fixtureResult"
+                    $blockers.Add("Phase 10: Fixture $fixtureResult")
+                } else {
+                    $phase10Detail += " | Fixture: PASS"
+                }
+            }
+        } catch {
+            $fixtureResult = 'FAIL'
+            $phase10Status = 'FAIL'
+            $phase10Detail += " | Fixture error: $_"
+            $blockers.Add("Phase 10: Fixture failed: $_")
+        }
+    }
+} elseif ($RunFixtureCheck -and $isPlanOnly) {
+    $phase10Detail += ' | Fixture deferred to Prepare/Activate'
+} elseif ($RunFixtureCheck -and $lockStrategy -and -not $lockStrategy.implemented) {
+    $fixtureResult = 'BLOCKED'
+    $phase10Detail += ' | Fixture blocked: lock strategy not available'
+}
+Add-Phase -Order 10 -Name 'Detect lock strategy + run fixture' -Status $phase10Status -Detail $phase10Detail
+
+# ============================================================
+# Phase 11: Prepare settings activation plan
 # ============================================================
 $settingsExists = Test-Path $ClaudeSettingsPath
 $hooksAlreadyConfigured = $false
@@ -209,209 +510,11 @@ if ($settingsExists) {
         if ($settings.hooks -and $settings.hooks.PreToolUse) { $hooksAlreadyConfigured = $true }
     } catch {}
 }
-$phase7Status = 'SKIP'
-$phase7Detail = 'Settings activation not requested'
-if ($IncludeSettingsActivation) {
-    if ($hooksAlreadyConfigured) {
-        $phase7Status = 'PASS'
-        $phase7Detail = 'Settings hooks already configured'
-    } elseif ($settingsExists) {
-        $phase7Status = 'PLAN'
-        $phase7Detail = "Settings exist but hooks not configured: $ClaudeSettingsPath"
-    } else {
-        $phase7Status = 'WARN'
-        $phase7Detail = "Settings file not found: $ClaudeSettingsPath"
-    }
-}
-Add-Phase -Order 7 -Name 'Verify settings hook routing' -Status $phase7Status -Blocking $false -Detail $phase7Detail
 
-# ============================================================
-# Phase 8: Detect OS lock strategy
-# ============================================================
-$strategyScript = Join-Path $AkashicRoot 'tools/Get-AkashicLockStrategy.ps1'
-$strategyArgs = @{}
-if ($RequireStrongLock) { $strategyArgs['RequireStrongLock'] = $true }
-if ($AllowWeakFallback) { $strategyArgs['AllowWeakFallback'] = $true }
-
-$lockStrategy = $null
-$phase8Status = 'FAIL'
-$phase8Detail = ''
-if (Test-Path $strategyScript) {
-    try {
-        $lockStrategy = & $strategyScript @strategyArgs
-        if ($lockStrategy.implemented) {
-            $phase8Status = 'PASS'
-            $phase8Detail = "Backend: $($lockStrategy.backend), Strength: $($lockStrategy.strength), Privilege: $($lockStrategy.privilege_mode)"
-        } else {
-            $phase8Detail = "Lock backend not available: $($lockStrategy.blockers -join ', ')"
-            $blockers.Add("Phase 8: $phase8Detail")
-        }
-    } catch {
-        $phase8Detail = "Lock strategy detection failed: $_"
-        $blockers.Add("Phase 8: $phase8Detail")
-    }
-} else {
-    $phase8Detail = "Strategy script not found: $strategyScript"
-    $blockers.Add("Phase 8: $phase8Detail")
-}
-Add-Phase -Order 8 -Name 'Detect OS lock strategy' -Status $phase8Status -Detail $phase8Detail
-
-# ============================================================
-# Phase 9: Run disposable OS lock fixture (if requested)
-# ============================================================
-$fixtureResult = 'NOT_RUN'
-$phase9Status = 'SKIP'
-$phase9Detail = 'Fixture check not requested'
-if ($RunFixtureCheck) {
-    if ($Mode -eq 'PlanOnly') {
-        $phase9Status = 'SKIP'
-        $phase9Detail = 'Fixture only runs in Prepare/Activate mode'
-    } elseif ($lockStrategy -and $lockStrategy.implemented) {
-        $fixtureScript = Join-Path $AkashicRoot 'tools/Test-AkashicOsLockFixture.ps1'
-        if (Test-Path $fixtureScript) {
-            try {
-                $fixtureOutput = & $fixtureScript
-                if ($fixtureOutput -and $fixtureOutput.overall_result) {
-                    $fixtureResult = $fixtureOutput.overall_result
-                    $phase9Status = if ($fixtureResult -eq 'PASS') { 'PASS' } else { 'FAIL' }
-                    $phase9Detail = "Fixture result: $fixtureResult"
-                } else {
-                    $fixtureResult = 'FAIL'
-                    $phase9Status = 'FAIL'
-                    $phase9Detail = 'Fixture returned no result'
-                }
-            } catch {
-                $fixtureResult = 'FAIL'
-                $phase9Status = 'FAIL'
-                $phase9Detail = "Fixture failed: $_"
-            }
-        } else {
-            $phase9Status = 'FAIL'
-            $phase9Detail = "Fixture script not found: $fixtureScript"
-        }
-        if ($phase9Status -eq 'FAIL') { $blockers.Add("Phase 9: $phase9Detail") }
-    } else {
-        $phase9Status = 'BLOCKED'
-        $phase9Detail = 'Lock strategy not available; cannot run fixture'
-        $fixtureResult = 'BLOCKED'
-    }
-}
-Add-Phase -Order 9 -Name 'Run disposable OS lock fixture' -Status $phase9Status -Detail $phase9Detail -Mode 'Prepare/Activate'
-
-# ============================================================
-# Phase 10: Generate or verify runtime manifest
-# ============================================================
-$manifestStatus = 'NOT_GENERATED'
-$phase10Status = 'SKIP'
-$phase10Detail = 'Manifest generation deferred to Prepare/Activate'
-if ($Mode -ne 'PlanOnly') {
-    $manifestScript = Join-Path $AkashicRoot 'tools/AkashicEnvelopeManifest.ps1'
-    if (Test-Path $manifestScript) {
-        try {
-            & $manifestScript -HeliosGateRoot $HeliosGateRoot -RebaselinedBy 'installer' -Note 'Unified install plan'
-            $manifestStatus = 'GENERATED'
-            $phase10Status = 'PASS'
-            $phase10Detail = 'Manifest generated'
-        } catch {
-            $manifestStatus = 'FAIL'
-            $phase10Status = 'FAIL'
-            $phase10Detail = "Manifest generation failed: $_"
-            $blockers.Add("Phase 10: $phase10Detail")
-        }
-    } else {
-        $phase10Status = 'FAIL'
-        $phase10Detail = "Manifest script not found: $manifestScript"
-        $blockers.Add("Phase 10: $phase10Detail")
-    }
-}
-Add-Phase -Order 10 -Name 'Generate or verify runtime manifest' -Status $phase10Status -Detail $phase10Detail -Mode 'Prepare/Activate'
-
-# ============================================================
-# Phase 11: Verify envelope integrity
-# ============================================================
-$phase11Status = 'SKIP'
-$phase11Detail = 'Envelope verification deferred to Prepare/Activate'
-if ($Mode -ne 'PlanOnly' -and $manifestStatus -eq 'GENERATED') {
-    $verifyScript = Join-Path $AkashicRoot 'tools/AkashicEnvelopeIntegrityValidation.ps1'
-    if (Test-Path $verifyScript) {
-        try {
-            $verifyResult = & $verifyScript -HeliosGateRoot $HeliosGateRoot
-            if ($verifyResult -and $verifyResult.verdict -eq 'CLEAN') {
-                $manifestStatus = 'CLEAN'
-                $phase11Status = 'PASS'
-                $phase11Detail = 'Envelope integrity: CLEAN'
-            } else {
-                $manifestStatus = 'DRIFT'
-                $phase11Status = 'FAIL'
-                $verdict = if ($verifyResult) { $verifyResult.verdict } else { 'unknown' }
-                $phase11Detail = "Envelope integrity: $verdict"
-                $blockers.Add("Phase 11: $phase11Detail")
-            }
-        } catch {
-            $phase11Status = 'FAIL'
-            $phase11Detail = "Envelope verification failed: $_"
-            $blockers.Add("Phase 11: $phase11Detail")
-        }
-    } else {
-        $phase11Status = 'WARN'
-        $phase11Detail = "Verification script not found"
-    }
-}
-Add-Phase -Order 11 -Name 'Verify envelope integrity' -Status $phase11Status -Detail $phase11Detail -Mode 'Prepare/Activate'
-
-# ============================================================
-# Phase 12: Prepare copy/sync plan for bridge
-# ============================================================
-$bridgeSource = Join-Path $AkashicRoot 'AkashicIntegrityBridge.ps1'
-$bridgeDest = Join-Path $HeliosGateRoot 'hooks/lib/HeliosIntegrityBridge.ps1'
-$bridgeSyncPlan = [ordered]@{
-    source       = $bridgeSource
-    dest         = $bridgeDest
-    source_exists = (Test-Path $bridgeSource)
-    role         = 'bridge_vendor_copy'
-    verify       = 'SHA-256 byte identity check after copy'
-}
-
-$fileCopyPlan = @()
-foreach ($rel in $script:AkashicProtectedFiles) {
-    if ($rel -eq 'hooks/lib/HeliosIntegrityBridge.ps1') { continue }
-    if ($rel -eq 'manifest/helios-envelope.json') { continue }
-    if ($rel -eq 'manifest/helios-envelope.sha256') { continue }
-    $fileCopyPlan += [ordered]@{
-        relative = $rel
-        role     = 'protected_runtime'
-    }
-}
-
-$phase12Status = if ($bridgeSyncPlan.source_exists) { 'PASS' } else { 'FAIL' }
-$phase12Detail = if ($bridgeSyncPlan.source_exists) {
-    "Bridge sync plan ready: $bridgeSource -> $bridgeDest"
-} else {
-    "Bridge source missing: $bridgeSource"
-}
-if ($phase12Status -eq 'FAIL') { $blockers.Add("Phase 12: $phase12Detail") }
-
-if ($Mode -ne 'PlanOnly' -and $bridgeSyncPlan.source_exists) {
-    $syncScript = Join-Path $AkashicRoot 'tools/Sync-AkashicBridge.ps1'
-    if (Test-Path $syncScript) {
-        try {
-            & $syncScript -AkashicRoot $AkashicRoot -HeliosGateRoot $HeliosGateRoot
-            $phase12Detail = "Bridge synced: $bridgeDest"
-        } catch {
-            $phase12Status = 'FAIL'
-            $phase12Detail = "Bridge sync failed: $_"
-            $blockers.Add("Phase 12: $phase12Detail")
-        }
-    }
-}
-Add-Phase -Order 12 -Name 'Prepare copy/sync plan for bridge' -Status $phase12Status -Detail $phase12Detail
-
-# ============================================================
-# Phase 13: Prepare settings activation plan
-# ============================================================
 $settingsActivationPlan = $null
-$phase13Status = 'SKIP'
-$phase13Detail = 'Settings activation not requested'
+$settingsActivationStatus = 'skipped'
+$phase11Status = 'SKIP'
+$phase11Detail = 'Settings activation not requested'
 if ($IncludeSettingsActivation) {
     $hookCommand = switch ($Platform) {
         'Windows' { "powershell.exe -ExecutionPolicy Bypass -File `"$HeliosGateRoot\hooks\helios_pretooluse.ps1`"" }
@@ -441,19 +544,27 @@ if ($IncludeSettingsActivation) {
             })
         }
     }
-    $phase13Status = 'PLAN'
-    $phase13Detail = if ($hooksAlreadyConfigured) { 'Hooks already configured; plan generated for verification' } else { 'Settings activation plan generated (requires approval)' }
 
-    if ($Mode -eq 'Activate' -and -not $hooksAlreadyConfigured) {
-        $phase13Status = 'APPROVAL_REQUIRED'
-        $phase13Detail = 'Settings activation requires human approval in Activate mode'
+    if ($hooksAlreadyConfigured) {
+        $phase11Status = 'PASS'
+        $phase11Detail = 'Settings hooks already configured'
+        $settingsActivationStatus = 'already_configured'
+    } elseif ($isActivate) {
+        $phase11Status = 'APPROVAL_REQUIRED'
+        $phase11Detail = 'Settings activation requires human approval'
+        $settingsActivationStatus = 'APPROVAL_REQUIRED'
+    } else {
+        $phase11Status = 'PLAN'
+        $phase11Detail = 'Settings activation plan generated'
+        $settingsActivationStatus = 'plan_only'
     }
 }
-Add-Phase -Order 13 -Name 'Prepare settings activation plan' -Status $phase13Status -Blocking $false -Detail $phase13Detail
+Add-Phase -Order 11 -Name 'Prepare settings activation plan' -Status $phase11Status -Blocking $false -Detail $phase11Detail
 
 # ============================================================
-# Phase 14: Prepare lock activation plan
+# Phase 12: Prepare lock activation plan
 # ============================================================
+$lockActivationStatus = 'skipped'
 $lockActivationPlan = [ordered]@{
     protected_lock_targets = [string[]]$script:AkashicProtectedFiles
     mutable_dirs           = [string[]]$script:AkashicMutableDirs
@@ -472,27 +583,31 @@ $lockActivationPlan = [ordered]@{
     fixture_prerequisite   = $fixtureResult
 }
 
-$phase14Status = 'PLAN'
-$phase14Detail = ''
+$phase12Status = 'PLAN'
+$phase12Detail = ''
 if (-not $lockStrategy -or -not $lockStrategy.implemented) {
-    $phase14Status = 'BLOCKED'
-    $phase14Detail = 'Lock strategy not available'
+    $phase12Status = 'BLOCKED'
+    $phase12Detail = 'Lock strategy not available'
+    $lockActivationStatus = 'blocked'
+} elseif ($isActivate -and $fixtureResult -eq 'PASS') {
+    $phase12Status = 'APPROVAL_REQUIRED'
+    $phase12Detail = "Lock activation requires human approval (fixture PASS, backend: $($lockStrategy.backend))"
+    $lockActivationStatus = 'APPROVAL_REQUIRED'
+} elseif ($isActivate -and $fixtureResult -ne 'PASS') {
+    $phase12Status = 'BLOCKED'
+    $phase12Detail = "Lock activation blocked: fixture did not pass ($fixtureResult)"
+    $lockActivationStatus = 'blocked'
 } elseif ($fixtureResult -eq 'PASS') {
-    $phase14Detail = "Lock plan ready (fixture PASS, backend: $($lockStrategy.backend))"
-    if ($Mode -eq 'Activate') {
-        $phase14Status = 'APPROVAL_REQUIRED'
-        $phase14Detail += ' — requires human approval'
-    }
-} elseif ($RunFixtureCheck -and $fixtureResult -ne 'PASS') {
-    $phase14Status = 'BLOCKED'
-    $phase14Detail = "Lock plan blocked: fixture did not pass ($fixtureResult)"
+    $phase12Detail = "Lock plan ready (fixture PASS, backend: $($lockStrategy.backend))"
+    $lockActivationStatus = 'plan_only'
 } else {
-    $phase14Detail = "Lock plan generated (fixture not run, backend: $($lockStrategy.backend))"
+    $phase12Detail = "Lock plan generated (fixture: $fixtureResult, backend: $($lockStrategy.backend))"
+    $lockActivationStatus = 'plan_only'
 }
-Add-Phase -Order 14 -Name 'Prepare lock activation plan' -Status $phase14Status -Blocking $false -Detail $phase14Detail
+Add-Phase -Order 12 -Name 'Prepare lock activation plan' -Status $phase12Status -Blocking $false -Detail $phase12Detail
 
 # ============================================================
-# Phase 15: Prepare rollback plan
+# Phase 13: Prepare rollback plan
 # ============================================================
 $rollbackPlan = [ordered]@{
     steps = @(
@@ -503,21 +618,22 @@ $rollbackPlan = [ordered]@{
     )
     risk = 'Low — restoring settings.json disables hooks immediately'
 }
-Add-Phase -Order 15 -Name 'Prepare rollback plan' -Status 'PASS' -Blocking $false -Detail 'Rollback plan generated'
+Add-Phase -Order 13 -Name 'Prepare rollback plan' -Status 'PASS' -Blocking $false -Detail 'Rollback plan generated'
 
 # ============================================================
-# Phase 16: Write install evidence
+# Phase 14: Write install evidence
 # ============================================================
-$phase16Status = 'SKIP'
-$phase16Detail = 'Evidence deferred to Prepare/Activate'
+$phase14Status = 'SKIP'
+$phase14Detail = 'Evidence deferred to Prepare/Activate'
 $installEvidence = $null
-if ($Mode -ne 'PlanOnly') {
+if (-not $isPlanOnly) {
     $installEvidence = [ordered]@{
         schema_version       = 'akashic-install-evidence.v1'
         timestamp_utc        = (Get-Date).ToUniversalTime().ToString('o')
         mode                 = $Mode
         platform             = $Platform
         akashic_root         = $AkashicRoot
+        runtime_bundle_root  = $RuntimeBundleRoot
         helios_gate_root     = $HeliosGateRoot
         lock_strategy        = if ($lockStrategy) {
             [ordered]@{
@@ -528,8 +644,8 @@ if ($Mode -ne 'PlanOnly') {
         } else { $null }
         fixture_result       = $fixtureResult
         manifest_status      = $manifestStatus
-        settings_activation  = if ($IncludeSettingsActivation -and $Mode -eq 'Activate') { 'activated' } elseif ($IncludeSettingsActivation) { 'plan_only' } else { 'skipped' }
-        lock_activation      = if ($Mode -eq 'Activate' -and $fixtureResult -eq 'PASS') { 'activated' } elseif ($lockStrategy -and $lockStrategy.implemented) { 'plan_only' } else { 'skipped' }
+        settings_activation  = $settingsActivationStatus
+        lock_activation      = $lockActivationStatus
         blockers             = [string[]]$blockers
     }
 
@@ -539,23 +655,24 @@ if ($Mode -ne 'PlanOnly') {
     $evidencePath = Join-Path $EvidenceOutputDir 'install-evidence.json'
     $evidenceJson = $installEvidence | ConvertTo-Json -Depth 10
     [System.IO.File]::WriteAllText($evidencePath, $evidenceJson, $Utf8NoBom)
-    $phase16Status = 'PASS'
-    $phase16Detail = "Evidence written: $evidencePath"
+    $phase14Status = 'PASS'
+    $phase14Detail = "Evidence written: $evidencePath"
 }
-Add-Phase -Order 16 -Name 'Write install evidence' -Status $phase16Status -Blocking $false -Detail $phase16Detail -Mode 'Prepare/Activate'
+Add-Phase -Order 14 -Name 'Write install evidence' -Status $phase14Status -Blocking $false -Detail $phase14Detail
 
 # ============================================================
 # Assemble the install plan
 # ============================================================
 $plan = [ordered]@{
-    schema_version          = 'akashic-helios-install-plan.v1'
-    timestamp_utc           = (Get-Date).ToUniversalTime().ToString('o')
-    mode                    = $Mode
-    platform                = $Platform
-    akashic_root            = $AkashicRoot
-    helios_gate_root        = $HeliosGateRoot
-    claude_settings_path    = $ClaudeSettingsPath
-    lock_strategy           = if ($lockStrategy) {
+    schema_version            = 'akashic-helios-install-plan.v2'
+    timestamp_utc             = (Get-Date).ToUniversalTime().ToString('o')
+    mode                      = $Mode
+    platform                  = $Platform
+    akashic_root              = $AkashicRoot
+    runtime_bundle_root       = $RuntimeBundleRoot
+    helios_gate_root          = $HeliosGateRoot
+    claude_settings_path      = $ClaudeSettingsPath
+    lock_strategy             = if ($lockStrategy) {
         [ordered]@{
             backend            = $lockStrategy.backend
             implemented        = $lockStrategy.implemented
@@ -566,17 +683,18 @@ $plan = [ordered]@{
             notes              = $lockStrategy.notes
         }
     } else { $null }
-    fixture_result          = $fixtureResult
-    manifest_status         = $manifestStatus
-    phases                  = [object[]]$phases
-    bridge_sync_plan        = $bridgeSyncPlan
-    file_copy_plan          = $fileCopyPlan
-    settings_activation_plan = $settingsActivationPlan
-    lock_activation_plan    = $lockActivationPlan
-    rollback_plan           = $rollbackPlan
-    install_evidence        = $installEvidence
-    blockers                = [string[]]$blockers
-    overall_status          = if ($blockers.Count -eq 0) { 'READY' } else { 'BLOCKED' }
+    fixture_result            = $fixtureResult
+    manifest_status           = $manifestStatus
+    phases                    = [object[]]$phases
+    bridge_sync_plan          = $bridgeSyncPlan
+    runtime_protected_copy_plan = $runtimeProtectedCopyPlan
+    runtime_support_copy_plan   = $runtimeSupportCopyPlan
+    settings_activation_plan  = $settingsActivationPlan
+    lock_activation_plan      = $lockActivationPlan
+    rollback_plan             = $rollbackPlan
+    install_evidence          = $installEvidence
+    blockers                  = [string[]]$blockers
+    overall_status            = if ($blockers.Count -eq 0) { 'READY' } else { 'BLOCKED' }
 }
 
 $planPath = Join-Path $AkashicRoot 'install-plan.json'

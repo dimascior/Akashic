@@ -1,16 +1,56 @@
 {
   "schema_version": "akashic-installer-contract-readiness.v1",
-  "timestamp_utc": "2026-06-28T20:00:00Z",
+  "timestamp_utc": "2026-06-28T21:00:00Z",
   "contract_document": "docs/akashic-helios-installer-contract.md",
   "unified_installer": "tools/AkashicHeliosInstallPlan.ps1",
-  "installer_phases": 16,
+  "installer_schema_version": "akashic-helios-install-plan.v2",
+  "installer_phases": 14,
   "installer_modes": ["PlanOnly", "Prepare", "Activate"],
+  "installer_parameters": [
+    "AkashicRoot (mandatory)",
+    "HeliosGateRoot (mandatory)",
+    "RuntimeBundleRoot (optional, for Helios runtime files)",
+    "Platform (Auto|Windows|Linux|macOS)",
+    "Mode (PlanOnly|Prepare|Activate)",
+    "RunFixtureCheck",
+    "RequireStrongLock",
+    "AllowWeakFallback",
+    "IncludeSettingsActivation",
+    "IncludeSettingsLock",
+    "IncludeTemplatesLock",
+    "EvidenceOutputDir"
+  ],
+  "phase_order": [
+    "1. Verify Akashic package/root + tool availability",
+    "2. Verify RuntimeBundleRoot (if provided)",
+    "3. Create runtime directories",
+    "4. Copy runtime protected files from RuntimeBundleRoot",
+    "5. Copy runtime support files from RuntimeBundleRoot",
+    "6. Sync Akashic bridge",
+    "7. Verify bridge byte identity",
+    "8. Generate manifest (after all files in final position)",
+    "9. Verify envelope integrity",
+    "10. Detect lock strategy + run fixture",
+    "11. Prepare settings activation plan",
+    "12. Prepare lock activation plan",
+    "13. Prepare rollback plan",
+    "14. Write install evidence"
+  ],
+  "fixes_applied": [
+    "Added RuntimeBundleRoot parameter with source paths for runtime file copy",
+    "Fixed bridge sync: -AdapterRoot (not -AkashicRoot)",
+    "Fixed phase order: manifest generated after bridge sync and file copy",
+    "PlanOnly fully dry: no directory creation, no file copy, no sync",
+    "Prepare non-activating: no settings.json changes, no locks",
+    "Activate honest: APPROVAL_REQUIRED status, not activated unless performed",
+    "Fixture parameter threading: RequireStrongLock/AllowWeakFallback passed through"
+  ],
   "platform_status": {
     "Windows": {
       "lock_fixture": "PASS",
       "lock_backend": "icacls",
       "lock_strength": "strong",
-      "installer_plan": "pending_validation",
+      "installer_plan": "PASS (PlanOnly validated)",
       "prepare": "pending",
       "activate": "deferred"
     },
@@ -33,28 +73,10 @@
       "blockers": ["Requires physical macOS machine with chflags uchg"]
     }
   },
-  "contract_sections": [
-    "Akashic source package layout",
-    "Helios runtime target layout",
-    "Platform prerequisites (Windows, Void Linux, macOS)",
-    "Install modes (PlanOnly, Prepare, Activate)",
-    "16-phase install plan",
-    "Rollback behavior",
-    "Evidence behavior",
-    "OS lock fixture prerequisite",
-    "Active runtime lock approval boundary",
-    "Claiming platform support criteria"
-  ],
-  "docs_updated": [
-    "docs/phase41-lock-implementation.md",
-    "README.md",
-    "docs/install-sequence.md",
-    "docs/package-architecture.md"
-  ],
   "legacy_installers": [
     "tools/AkashicInstallPlan.ps1 (adapter-only, superseded)",
     "tools/AkashicCombinedInstallPlan.ps1 (combined, superseded)"
   ],
   "active_runtime_locking": "Deferred until fixture PASS + installer Prepare completes per platform",
-  "overall_readiness": "CONTRACT_DEFINED"
+  "overall_readiness": "INSTALLER_FIXED"
 }
