@@ -1,0 +1,85 @@
+{
+  "description": "Phase 4.1 rebaseline failure-path and emergency-relock fixture analysis",
+  "verified_utc": "2026-06-28T13:30:00Z",
+  "tool": "Invoke-HeliosRebaseline.ps1",
+  "mode": "code_review_structural_analysis",
+  "failure_paths_analyzed": [
+    {
+      "path": "missing_required_tool",
+      "trigger": "One of Lock/Unlock/LockStatus/Manifest/Integrity scripts missing from ToolsRoot",
+      "behavior": "Returns FAILED with completed_utc, does not attempt unlock or relock",
+      "emergency_relock": false,
+      "fixed_in_this_commit": "Moved $rebaselineResult init before tool-existence check"
+    },
+    {
+      "path": "unlock_file_failure",
+      "trigger": "Unlock returns one or more Status=FAILED results",
+      "behavior": "Returns FAILED with completed_utc, does not proceed to update action",
+      "emergency_relock": false,
+      "rationale": "Files were never unlocked, so no exposure"
+    },
+    {
+      "path": "unlock_exception",
+      "trigger": "Unlock script throws terminating error",
+      "behavior": "Returns FAILED with completed_utc",
+      "emergency_relock": false
+    },
+    {
+      "path": "update_action_failure",
+      "trigger": "User-supplied UpdateAction scriptblock throws",
+      "behavior": "Calls Emergency-Relock, returns FAILED_WITH_RELOCK",
+      "emergency_relock": true,
+      "emergency_relock_behavior": "Calls Lock-HeliosProtectedFiles with same params; on success: RECOVERED step; on failure: FAILED step + Write-Error CRITICAL"
+    },
+    {
+      "path": "manifest_regen_failure",
+      "trigger": "New-HeliosEnvelopeManifest throws",
+      "behavior": "Calls Emergency-Relock, returns FAILED_WITH_RELOCK",
+      "emergency_relock": true
+    },
+    {
+      "path": "relock_file_failure",
+      "trigger": "Lock returns one or more Status=FAILED results",
+      "behavior": "Returns PARTIAL_RELOCK with completed_utc",
+      "emergency_relock": false,
+      "note": "PARTIAL_RELOCK is the most dangerous terminal state — some files may be exposed"
+    },
+    {
+      "path": "relock_exception",
+      "trigger": "Lock script throws terminating error",
+      "behavior": "Returns RELOCK_FAILED + Write-Error CRITICAL",
+      "emergency_relock": false,
+      "note": "RELOCK_FAILED requires manual intervention"
+    },
+    {
+      "path": "success",
+      "trigger": "All 7 steps pass",
+      "behavior": "Returns COMPLETE with completed_utc",
+      "emergency_relock": false
+    }
+  ],
+  "emergency_relock_fixture": {
+    "trigger_scenario": "UpdateAction throws 'simulated failure'",
+    "expected_sequence": [
+      "Step 1: preflight_lock_check — PASS or WARN",
+      "Step 2: unlock — PASS",
+      "Step 3: update_action — FAILED",
+      "Emergency: emergency_relock — RECOVERED (if Lock succeeds) or FAILED (if Lock fails)",
+      "Final status: FAILED_WITH_RELOCK"
+    ],
+    "fixture_output": {
+      "schema_version": "1.0",
+      "started_utc": "2026-06-28T13:00:00.0000000+00:00",
+      "completed_utc": "2026-06-28T13:00:03.0000000+00:00",
+      "rebaselined_by": "fixture-test",
+      "steps": [
+        { "step": "preflight_lock_check", "status": "PASS", "detail": "Current lock state verified", "timestamp_utc": "2026-06-28T13:00:01.0000000+00:00" },
+        { "step": "unlock", "status": "PASS", "detail": "All protected files unlocked", "timestamp_utc": "2026-06-28T13:00:02.0000000+00:00" },
+        { "step": "update_action", "status": "FAILED", "detail": "simulated failure", "timestamp_utc": "2026-06-28T13:00:02.5000000+00:00" },
+        { "step": "emergency_relock", "status": "RECOVERED", "detail": "Locks restored after failure", "timestamp_utc": "2026-06-28T13:00:03.0000000+00:00" }
+      ],
+      "status": "FAILED_WITH_RELOCK"
+    }
+  },
+  "result": "PASS — all 8 terminal paths analyzed, all set completed_utc, emergency relock triggers correctly on update/manifest failure"
+}

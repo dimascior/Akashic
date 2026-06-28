@@ -1,0 +1,49 @@
+{
+  "description": "Phase 4.1 settings.json integrity verification — Test-HeliosSettingsIntegrity.ps1 behavior and live settings state",
+  "verified_utc": "2026-06-28T13:30:00Z",
+  "tool": "Test-HeliosSettingsIntegrity.ps1",
+  "mode": "manual_verification_via_read_tool",
+  "settings_path": "C:\\Users\\dimas\\.claude\\settings.json",
+  "settings_state": {
+    "file_exists": true,
+    "valid_json": true,
+    "hooks": {
+      "PreToolUse": {
+        "present": true,
+        "matcher": "Bash|PowerShell",
+        "command_contains": "gate_check.ps1",
+        "expected_hook": "gate_check.ps1",
+        "match": true
+      },
+      "PostToolUse": {
+        "present": true,
+        "matcher": "Bash|PowerShell",
+        "command_contains": "evidence_capture.ps1",
+        "expected_hook": "evidence_capture.ps1",
+        "match": true
+      },
+      "PostToolUseFailure": {
+        "present": true,
+        "matcher": "Bash|PowerShell",
+        "command_contains": "evidence_capture.ps1",
+        "expected_hook": "evidence_capture.ps1",
+        "match": true
+      }
+    }
+  },
+  "tool_code_review": [
+    "Reads and parses settings.json without modification",
+    "Checks file_exists, valid_json, pretooluse_hook, posttooluse_hook, posttoolusefailure_hook",
+    "Matches hook commands against configurable expected patterns",
+    "Returns structured result with per-check pass/fail and detail",
+    "Reports INACTIVE when hook entries are missing (Phase 4.0 test #11 bypass detection)"
+  ],
+  "checks_performed": [
+    { "check": "file_exists", "passed": true },
+    { "check": "valid_json", "passed": true },
+    { "check": "pretooluse_hook", "passed": true, "detail": "Found hook matching gate_check.ps1" },
+    { "check": "posttooluse_hook", "passed": true, "detail": "Found hook matching evidence_capture.ps1" },
+    { "check": "posttoolusefailure_hook", "passed": true, "detail": "Found hook matching evidence_capture.ps1" }
+  ],
+  "result": "PASS — all 5 settings integrity checks pass against live settings.json"
+}

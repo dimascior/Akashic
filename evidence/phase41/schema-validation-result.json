@@ -1,0 +1,49 @@
+{
+  "description": "Phase 4.1 rebaseline schema validation — verify Invoke-HeliosRebaseline output matches helios-rebaseline.schema.json",
+  "verified_utc": "2026-06-28T13:30:00Z",
+  "schema_path": "schemas/helios-rebaseline.schema.json",
+  "tool_path": "tools/Invoke-HeliosRebaseline.ps1",
+  "mode": "code_review_structural_validation",
+  "schema_required_fields": ["schema_version", "started_utc", "completed_utc", "rebaselined_by", "steps", "status"],
+  "tool_emits": {
+    "schema_version": { "present": true, "value": "1.0", "matches_schema_const": true },
+    "started_utc": { "present": true, "format": "ISO 8601 via PowerShell .ToString('o')" },
+    "completed_utc": { "present": true, "all_terminal_paths_set_it": true },
+    "rebaselined_by": { "present": true, "source": "-RebaselinedBy parameter" },
+    "steps": { "present": true, "type": "array", "item_fields": ["step", "status", "detail", "timestamp_utc"] },
+    "status": { "present": true, "possible_values": ["IN_PROGRESS", "COMPLETE", "FAILED", "FAILED_WITH_RELOCK", "PARTIAL_RELOCK", "RELOCK_FAILED"] }
+  },
+  "terminal_path_analysis": [
+    { "path": "missing_tool_early_return", "sets_completed_utc": true, "sets_status": "FAILED", "fixed_in": "this_commit" },
+    { "path": "unlock_failure_count", "sets_completed_utc": true, "sets_status": "FAILED" },
+    { "path": "unlock_exception", "sets_completed_utc": true, "sets_status": "FAILED" },
+    { "path": "update_action_failure", "sets_completed_utc": true, "sets_status": "FAILED_WITH_RELOCK" },
+    { "path": "manifest_regen_failure", "sets_completed_utc": true, "sets_status": "FAILED_WITH_RELOCK" },
+    { "path": "relock_failure_count", "sets_completed_utc": true, "sets_status": "PARTIAL_RELOCK" },
+    { "path": "relock_exception", "sets_completed_utc": true, "sets_status": "RELOCK_FAILED" },
+    { "path": "success", "sets_completed_utc": true, "sets_status": "COMPLETE" }
+  ],
+  "fixture_record": {
+    "schema_version": "1.0",
+    "started_utc": "2026-06-28T13:00:00.0000000+00:00",
+    "completed_utc": "2026-06-28T13:00:05.0000000+00:00",
+    "rebaselined_by": "fixture-test",
+    "steps": [
+      { "step": "preflight_lock_check", "status": "PASS", "detail": "Current lock state verified", "timestamp_utc": "2026-06-28T13:00:01.0000000+00:00" },
+      { "step": "unlock", "status": "PASS", "detail": "All protected files unlocked", "timestamp_utc": "2026-06-28T13:00:02.0000000+00:00" },
+      { "step": "update_action", "status": "PASS", "detail": "Update completed", "timestamp_utc": "2026-06-28T13:00:03.0000000+00:00" },
+      { "step": "regenerate_manifest", "status": "PASS", "detail": "Manifest regenerated", "timestamp_utc": "2026-06-28T13:00:03.5000000+00:00" },
+      { "step": "relock", "status": "PASS", "detail": "All protected files relocked", "timestamp_utc": "2026-06-28T13:00:04.0000000+00:00" },
+      { "step": "postflight_lock_check", "status": "PASS", "detail": "Locks verified after rebaseline", "timestamp_utc": "2026-06-28T13:00:04.5000000+00:00" },
+      { "step": "envelope_integrity", "status": "PASS", "detail": "Envelope integrity verified after rebaseline", "timestamp_utc": "2026-06-28T13:00:05.0000000+00:00" }
+    ],
+    "status": "COMPLETE"
+  },
+  "fixture_validates": true,
+  "bugs_fixed": [
+    "schema_version was missing from $rebaselineResult (fixed in cdc70ef)",
+    "$rebaselineResult initialized after tool-existence check — early return used undefined variable (fixed in this commit)",
+    "All 8 terminal paths now set completed_utc"
+  ],
+  "result": "PASS — fixture record satisfies all schema required fields; all terminal paths produce valid output"
+}

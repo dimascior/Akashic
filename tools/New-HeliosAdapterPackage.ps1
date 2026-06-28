@@ -50,9 +50,14 @@ $AdapterFiles = @(
     @{ Source = 'docs\phase398-packaging-decision.md'; Role = 'doc'; Required = $false }
     @{ Source = 'docs\helios-runtime-bundle-contract.md'; Role = 'doc'; Required = $false }
     @{ Source = 'docs\phase399-operational-enforcement-observations.md'; Role = 'doc'; Required = $false }
+    @{ Source = 'docs\phase3991-package-validation-results.md'; Role = 'doc'; Required = $false }
+    @{ Source = 'docs\phase40-lock-design-from-gap-evidence.md'; Role = 'doc'; Required = $false }
+    @{ Source = 'docs\phase41-lock-implementation.md'; Role = 'doc'; Required = $false }
+    @{ Source = 'docs\standalone-repo-transition.md'; Role = 'doc'; Required = $false }
     @{ Source = 'schemas\helios-envelope.schema.json'; Role = 'schema'; Required = $true }
     @{ Source = 'schemas\helios-baseline.schema.json'; Role = 'schema'; Required = $true }
     @{ Source = 'schemas\helios-command-evidence.schema.json'; Role = 'schema'; Required = $true }
+    @{ Source = 'schemas\helios-rebaseline.schema.json'; Role = 'schema'; Required = $false }
     @{ Source = 'tools\Sync-HeliosBridge.ps1'; Role = 'tool'; Required = $true }
     @{ Source = 'tools\New-HeliosEnvelopeManifest.ps1'; Role = 'tool'; Required = $true }
     @{ Source = 'tools\Test-HeliosEnvelopeIntegrity.ps1'; Role = 'tool'; Required = $true }
@@ -66,6 +71,12 @@ $AdapterFiles = @(
     @{ Source = 'tools\Test-HeliosRuntimeBundle.ps1'; Role = 'tool'; Required = $true }
     @{ Source = 'tools\New-HeliosCombinedInstallPlan.ps1'; Role = 'tool'; Required = $true }
     @{ Source = 'tools\Test-HeliosEndToEndInstallPlan.ps1'; Role = 'tool'; Required = $true }
+    @{ Source = 'tools\Lock-HeliosProtectedFiles.ps1'; Role = 'tool'; Required = $false }
+    @{ Source = 'tools\Unlock-HeliosProtectedFiles.ps1'; Role = 'tool'; Required = $false }
+    @{ Source = 'tools\Test-HeliosLockStatus.ps1'; Role = 'tool'; Required = $false }
+    @{ Source = 'tools\Invoke-HeliosRebaseline.ps1'; Role = 'tool'; Required = $false }
+    @{ Source = 'tools\Move-HeliosStaleGateArtifacts.ps1'; Role = 'tool'; Required = $false }
+    @{ Source = 'tools\Test-HeliosSettingsIntegrity.ps1'; Role = 'tool'; Required = $false }
     @{ Source = 'Tests\HeliosIntegrityBridge.Tests.ps1'; Role = 'test'; Required = $false }
 )
 

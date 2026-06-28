@@ -1,0 +1,26 @@
+{
+  "description": "Phase 4.1 lock-status unlocked baseline — all protected files exist but no deny ACLs applied yet",
+  "verified_utc": "2026-06-28T13:30:00Z",
+  "tool": "Test-HeliosLockStatus.ps1",
+  "mode": "code_review_with_file_existence_check",
+  "helios_gate_root": "C:\\Users\\dimas\\Desktop\\MythosJustAFable\\.command-gate",
+  "note": "No locks have been applied to the Helios runtime. This is the expected pre-lock baseline.",
+  "expected_baseline_status": [
+    { "label": "hooks\\helios_pretooluse.ps1", "expected": "UNLOCKED", "file_exists": true },
+    { "label": "hooks\\gate_check.ps1", "expected": "UNLOCKED", "file_exists": true },
+    { "label": "hooks\\evidence_capture.ps1", "expected": "UNLOCKED", "file_exists": true },
+    { "label": "hooks\\tier_classifier.ps1", "expected": "UNLOCKED", "file_exists": true },
+    { "label": "hooks\\lib\\HeliosIntegrityBridge.ps1", "expected": "UNLOCKED", "file_exists": true },
+    { "label": "policy\\command-policy.json", "expected": "UNLOCKED", "file_exists": true },
+    { "label": "manifest\\helios-envelope.json", "expected": "UNLOCKED", "file_exists": true },
+    { "label": "manifest\\helios-envelope.sha256", "expected": "UNLOCKED", "file_exists": true }
+  ],
+  "detection_method": {
+    "description": "Test-HeliosLockStatus parses icacls output per-line, matching (S-1-1-0|Everyone) + (DENY) + rights containing W or D",
+    "handles_sid_output": true,
+    "handles_localized_name": true,
+    "checks_specific_rights": true,
+    "false_positive_mitigation": "Only matches deny ACEs with W or D rights on the Everyone principal"
+  },
+  "result": "BASELINE_RECORDED — all 8 files exist, no locks applied, ready for lock/unlock verification"
+}

@@ -58,13 +58,27 @@ function Test-FileLockStatus {
 
     $aclOutput = & icacls $FilePath 2>&1 | Out-String
 
-    # icacls may render the account as the SID (*S-1-1-0) or as the
-    # localized display name (Everyone / Tout le monde / Jeder / …).
-    # Match either form, case-insensitive, looking for a DENY ACE.
-    $hasDenyAce = [regex]::IsMatch($aclOutput, '(?i)\*S-1-1-0.*DENY') -or
-                  [regex]::IsMatch($aclOutput, '(?i)Everyone.*DENY')
+    # icacls renders the account as the SID (*S-1-1-0) or the localized
+    # display name (Everyone, Tout le monde, Jeder, etc.).  We look for
+    # a DENY ACE on either form that specifically includes write (W) or
+    # delete (D) rights.  This avoids false positives from deny entries
+    # that restrict other operations or target a different principal.
+    #
+    # Typical icacls output line:
+    #   *S-1-1-0:(DENY)(W,D)
+    #   Everyone:(DENY)(W,D)
+    $lines = $aclOutput -split "`n"
+    $hasDenyWD = $false
+    foreach ($line in $lines) {
+        if ($line -match '(?i)(\*S-1-1-0|Everyone)') {
+            if ($line -match '\(DENY\)' -and $line -match '\([^)]*[WD][^)]*\)') {
+                $hasDenyWD = $true
+                break
+            }
+        }
+    }
 
-    if ($hasDenyAce) {
+    if ($hasDenyWD) {
         return @{ Path = $FilePath; Label = $Label; Status = 'LOCKED'; Locked = $true }
     } else {
         return @{ Path = $FilePath; Label = $Label; Status = 'UNLOCKED'; Locked = $false }

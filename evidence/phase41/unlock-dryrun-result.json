@@ -1,0 +1,30 @@
+{
+  "description": "Phase 4.1 unlock dry-run — Unlock-HeliosProtectedFiles.ps1 -WhatIf analysis",
+  "verified_utc": "2026-06-28T13:30:00Z",
+  "tool": "Unlock-HeliosProtectedFiles.ps1",
+  "mode": "code_review",
+  "note": "Same constraints as lock dry-run. Code review only.",
+  "unlock_mechanism": {
+    "command": "icacls <file> /remove:d \"*S-1-1-0\"",
+    "effect": "Remove all deny ACEs for Everyone (SID S-1-1-0)",
+    "reversible": true,
+    "reverse_command": "icacls <file> /deny \"*S-1-1-0:(W,D)\""
+  },
+  "whatif_projected_results": [
+    { "label": "hooks\\helios_pretooluse.ps1", "projected_status": "UNLOCKED" },
+    { "label": "hooks\\gate_check.ps1", "projected_status": "UNLOCKED" },
+    { "label": "hooks\\evidence_capture.ps1", "projected_status": "UNLOCKED" },
+    { "label": "hooks\\tier_classifier.ps1", "projected_status": "UNLOCKED" },
+    { "label": "hooks\\lib\\HeliosIntegrityBridge.ps1", "projected_status": "UNLOCKED" },
+    { "label": "policy\\command-policy.json", "projected_status": "UNLOCKED" },
+    { "label": "manifest\\helios-envelope.json", "projected_status": "UNLOCKED" },
+    { "label": "manifest\\helios-envelope.sha256", "projected_status": "UNLOCKED" }
+  ],
+  "code_review_findings": [
+    "Unlock-SingleFile correctly checks Test-Path before applying icacls /remove:d",
+    "ShouldProcess integration enables -WhatIf",
+    "Symmetric structure with Lock-HeliosProtectedFiles",
+    "Returns structured result per file"
+  ],
+  "result": "PROJECTED_PASS — code review confirms unlock mechanism is correct"
+}

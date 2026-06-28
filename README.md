@@ -172,7 +172,7 @@ See `docs/install-sequence.md` for the complete procedure and `docs/package-arch
 
 ## Current Status
 
-**Phase:** 4.1 — lock/unlock/rebaseline tooling (Windows, unverified draft).
+**Phase:** 4.1 — lock/unlock/rebaseline tooling (Windows, implementation in progress — verification pending).
 
 | Component | Status |
 |---|---|
@@ -194,12 +194,13 @@ See `docs/install-sequence.md` for the complete procedure and `docs/package-arch
 | Package validation (3.99.1) | Complete — adapter verifier BOM checks, runtime manifest completeness, e2e execution |
 | Install sequence | Complete — `docs/install-sequence.md` |
 | Lock design (4.0) | Complete — `docs/phase40-lock-design-from-gap-evidence.md` |
-| Lock tooling (4.1) | Draft — `docs/phase41-lock-implementation.md` (verification pending) |
-| Lock/unlock tools | Implemented, unverified — `Lock-HeliosProtectedFiles`, `Unlock-HeliosProtectedFiles`, `Test-HeliosLockStatus` |
-| Rebaseline workflow | Implemented, unverified — `tools/Invoke-HeliosRebaseline.ps1` (7-step cycle) |
-| Stale gate cleanup | Implemented, unverified — `tools/Move-HeliosStaleGateArtifacts.ps1` |
-| Settings integrity | Implemented, unverified — `tools/Test-HeliosSettingsIntegrity.ps1` |
-| Rebaseline schema | Implemented — `schemas/helios-rebaseline.schema.json` |
+| Lock tooling (4.1) | In progress — `docs/phase41-lock-implementation.md` (live verification pending) |
+| Lock/unlock tools | Implemented, code-reviewed — live lock/unlock execution pending |
+| Rebaseline workflow | Implemented, code-reviewed — live 7-step cycle pending |
+| Stale gate cleanup | Implemented, code-reviewed — `tools/Move-HeliosStaleGateArtifacts.ps1` |
+| Settings integrity | Verified — `Test-HeliosSettingsIntegrity` passes against live settings.json |
+| Rebaseline schema | Validated — fixture record matches `schemas/helios-rebaseline.schema.json` |
+| Phase 4.1 evidence | Partial — `evidence/phase41/` (7 evidence files, live execution deferred) |
 | TCE main preservation | Verified — TCE main preserved at `c594a75` with no adapter entries |
 
 ### Provenance
@@ -217,7 +218,7 @@ Extracted from [TerminalContextExporter](https://github.com/dimascior/TerminalCo
 | Phase 3.99.1 | Complete (package validation + manifest hardening + execution proof) |
 | Phase 3.99.2 | Complete (final readback audit) |
 | Phase 4.0 | Complete (lock design from gap evidence) |
-| Phase 4.1 | Draft (lock/unlock/rebaseline tooling — Windows, verification pending) |
+| Phase 4.1 | In progress (lock/unlock/rebaseline tooling — Windows, live verification pending) |
 | Phase 4.2 | Future — live lock verification evidence |
 | Phase 5 | Future — lock system packaging |
 | Phase 6 | Future — long-term lock verification + audit strategy |

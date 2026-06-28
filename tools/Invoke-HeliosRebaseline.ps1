@@ -56,10 +56,20 @@ $lockStatusScript = Join-Path $ToolsRoot 'Test-HeliosLockStatus.ps1'
 $manifestScript = Join-Path $ToolsRoot 'New-HeliosEnvelopeManifest.ps1'
 $integrityScript = Join-Path $ToolsRoot 'Test-HeliosEnvelopeIntegrity.ps1'
 
+$rebaselineResult = @{
+    schema_version = '1.0'
+    started_utc = (Get-Date).ToUniversalTime().ToString('o')
+    rebaselined_by = $RebaselinedBy
+    steps = @()
+    status = 'IN_PROGRESS'
+}
+
 foreach ($script in @($lockScript, $unlockScript, $lockStatusScript, $manifestScript, $integrityScript)) {
     if (-not (Test-Path $script)) {
+        $rebaselineResult.status = 'FAILED'
+        $rebaselineResult.completed_utc = (Get-Date).ToUniversalTime().ToString('o')
         Write-Error "Required tool not found: $script"
-        return
+        return $rebaselineResult
     }
 }
 
@@ -70,14 +80,6 @@ if ($IncludeSettingsJson) {
 }
 if ($IncludeTemplates) {
     $commonParams['IncludeTemplates'] = $true
-}
-
-$rebaselineResult = @{
-    schema_version = '1.0'
-    started_utc = (Get-Date).ToUniversalTime().ToString('o')
-    rebaselined_by = $RebaselinedBy
-    steps = @()
-    status = 'IN_PROGRESS'
 }
 
 function Add-Step {

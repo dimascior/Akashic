@@ -1,0 +1,41 @@
+{
+  "description": "Phase 4.1 package/installer tool coverage — confirms Phase 4.1 tools are included in adapter package file list",
+  "verified_utc": "2026-06-28T13:30:00Z",
+  "tool": "New-HeliosAdapterPackage.ps1",
+  "mode": "code_review_file_list_verification",
+  "phase41_tools_in_adapter_files_list": [
+    { "source": "tools\\Lock-HeliosProtectedFiles.ps1", "role": "tool", "required": false, "in_list": true },
+    { "source": "tools\\Unlock-HeliosProtectedFiles.ps1", "role": "tool", "required": false, "in_list": true },
+    { "source": "tools\\Test-HeliosLockStatus.ps1", "role": "tool", "required": false, "in_list": true },
+    { "source": "tools\\Invoke-HeliosRebaseline.ps1", "role": "tool", "required": false, "in_list": true },
+    { "source": "tools\\Move-HeliosStaleGateArtifacts.ps1", "role": "tool", "required": false, "in_list": true },
+    { "source": "tools\\Test-HeliosSettingsIntegrity.ps1", "role": "tool", "required": false, "in_list": true }
+  ],
+  "phase41_schema_in_adapter_files_list": [
+    { "source": "schemas\\helios-rebaseline.schema.json", "role": "schema", "required": false, "in_list": true }
+  ],
+  "phase41_docs_in_adapter_files_list": [
+    { "source": "docs\\phase40-lock-design-from-gap-evidence.md", "role": "doc", "required": false, "in_list": true },
+    { "source": "docs\\phase41-lock-implementation.md", "role": "doc", "required": false, "in_list": true }
+  ],
+  "required_false_rationale": "Phase 4.1 tools are marked required=false because the adapter package can function without them (pre-4.1 installs still work). Lock tooling is optional but recommended.",
+  "package_builder_path_dependency": {
+    "issue": "New-HeliosAdapterPackage.ps1 still uses $TceRoot + 'MyExporter\\Adapters\\Helios' as AdapterRoot",
+    "impact": "Package builder must be pointed at TCE repo, not standalone repo, to build a package",
+    "fix_needed": "Accept standalone repo root as alternative to TCE nested path",
+    "severity": "medium — does not block Phase 4.1 verification but blocks standalone packaging",
+    "deferred_to": "Phase 5 (lock system packaging)"
+  },
+  "runtime_bundle_impact": {
+    "note": "New-HeliosRuntimeBundle.ps1 builds the Helios runtime bundle from the same source tree",
+    "lock_tools_in_runtime_bundle": false,
+    "rationale": "Lock tools belong in the adapter package (source-of-truth), not the runtime bundle (vendored copy). The runtime bundle contains hooks, policy, and bridge — not tooling.",
+    "install_plan_awareness": "New-HeliosCombinedInstallPlan.ps1 generates plans from both packages. Lock tools would be installed from the adapter package side."
+  },
+  "test_execution_status": {
+    "Test-HeliosAdapterPackage": "not_executed — requires built package from TCE path (package builder path dependency)",
+    "Test-HeliosRuntimeBundle": "not_executed — same dependency",
+    "Test-HeliosEndToEndInstallPlan": "not_executed — same dependency"
+  },
+  "result": "PARTIAL_PASS — all 6 Phase 4.1 tools + 1 schema + 2 docs added to package file list; package builder path dependency deferred to Phase 5"
+}

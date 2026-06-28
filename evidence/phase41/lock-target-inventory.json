@@ -1,0 +1,35 @@
+{
+  "description": "Phase 4.1 lock target inventory — confirms all 8 protected files exist in the live Helios runtime",
+  "verified_utc": "2026-06-28T13:30:00Z",
+  "helios_gate_root": "C:\\Users\\dimas\\Desktop\\MythosJustAFable\\.command-gate",
+  "verification_method": "Glob/Read tool inspection (ungated, read-only)",
+  "protected_files": [
+    { "relative_path": "hooks/helios_pretooluse.ps1", "exists": true, "gap_tests": ["#2", "#3"] },
+    { "relative_path": "hooks/gate_check.ps1", "exists": true, "gap_tests": ["#2", "#3", "#7", "#10"] },
+    { "relative_path": "hooks/evidence_capture.ps1", "exists": true, "gap_tests": ["#2", "#3", "#9"] },
+    { "relative_path": "hooks/tier_classifier.ps1", "exists": true, "gap_tests": ["#2", "#3"] },
+    { "relative_path": "hooks/lib/HeliosIntegrityBridge.ps1", "exists": true, "gap_tests": ["#2", "#3"] },
+    { "relative_path": "policy/command-policy.json", "exists": true, "gap_tests": ["#1", "#6"] },
+    { "relative_path": "manifest/helios-envelope.json", "exists": true, "gap_tests": ["manifest_trust"] },
+    { "relative_path": "manifest/helios-envelope.sha256", "exists": true, "gap_tests": ["sidecar_trust"] }
+  ],
+  "external_control_plane": {
+    "path": "C:\\Users\\dimas\\.claude\\settings.json",
+    "exists": true,
+    "gap_tests": ["#11"]
+  },
+  "conditional_targets": {
+    "templates_dir": "C:\\Users\\dimas\\Desktop\\MythosJustAFable\\.command-gate\\templates",
+    "exists": true,
+    "contents": [".gitkeep"],
+    "gap_tests": ["#12"],
+    "note": "Conditional — lock only when templates participate in gate trust"
+  },
+  "mutable_lifecycle_dirs": {
+    "pending": { "must_remain_writable": true, "gap_test": "#5" },
+    "inflight": { "must_remain_writable": true },
+    "evidence": { "must_remain_writable": true, "gap_test": "#8" },
+    "blocked": { "must_remain_writable": true }
+  },
+  "result": "PASS — all 8 protected files exist, external control-plane exists, mutable dirs identified"
+}

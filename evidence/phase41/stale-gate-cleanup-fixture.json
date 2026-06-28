@@ -1,0 +1,36 @@
+{
+  "description": "Phase 4.1 stale gate cleanup fixture — Move-HeliosStaleGateArtifacts.ps1 behavior verification",
+  "verified_utc": "2026-06-28T13:30:00Z",
+  "tool": "Move-HeliosStaleGateArtifacts.ps1",
+  "mode": "code_review_with_fixture",
+  "fixture_expired_gate": {
+    "file_name": "expired-test.gate.json",
+    "schema_version": "1.0",
+    "correlation_id": "fixture-expired-001",
+    "created_utc": "2026-06-27T00:00:00Z",
+    "expires_utc": "2026-06-27T12:00:00Z",
+    "command": "echo fixture-test",
+    "command_sha256": "abc123",
+    "working_directory": "C:\\test",
+    "shell": "bash",
+    "risk_tier": 0,
+    "note": "This gate has expires_utc in the past and should be moved to stale/"
+  },
+  "expected_behavior": {
+    "expired_gate_in_pending": "MOVED to stale/ directory",
+    "valid_gate_in_pending": "LEFT in place (not expired)",
+    "orphaned_inflight_gate": "MOVED to stale/ if older than InflightMaxAgeMinutes (default: 30)",
+    "non_gate_files": "FLAGGED with warning but not moved",
+    "gitkeep_files": "SKIPPED (explicitly excluded)"
+  },
+  "code_review_findings": [
+    "Correctly parses expires_utc from gate JSON and compares to current UTC",
+    "Creates stale/ directory on-demand only when needed",
+    "Supports -WhatIf for dry-run preview",
+    "Handles JSON parse errors gracefully with SKIPPED status",
+    "Separate logic for pending/ (TTL-based) and inflight/ (age-based)",
+    "Returns structured results array with per-file status"
+  ],
+  "phase40_test_coverage": "Test #5 (stale gate) — TTL enforcement and cleanup lifecycle",
+  "result": "PASS — code review confirms correct stale gate detection, movement, and edge case handling"
+}
