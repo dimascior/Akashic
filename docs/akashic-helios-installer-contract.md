@@ -12,6 +12,8 @@ Having a lock backend in code does not constitute platform support. Platform sup
 
 ## Current Verified State
 
+### Phase 4.1 — Akashic Cross-Platform Framework Validation: PASS
+
 | Component | Status |
 |---|---|
 | Windows lock fixture | PASS |
@@ -20,9 +22,21 @@ Having a lock backend in code does not constitute platform support. Platform sup
 | Void Linux installer PlanOnly/Prepare | PASS |
 | macOS lock fixture | PASS |
 | macOS installer PlanOnly/Prepare | PASS |
-| Akashic installer | Validated (PlanOnly + Prepare on Windows and macOS) |
+| Akashic installer | Validated (PlanOnly + Prepare on all three platforms) |
 | Helios runtime install contract | Defined here |
-| Active Helios runtime locking | Deferred until fixture + install pass + explicit Activate approval |
+| Raw validation logs | All three platforms |
+
+Phase 4.1 proves that Akashic can safely prepare a Helios runtime on Windows, Void Linux, and macOS. It does not prove Helios is actively running.
+
+### Phase 4.2 — Helios Live Operational Verification: PENDING
+
+| Platform | Live Status |
+|---|---|
+| Windows | Partial — MythosJustAFable `.command-gate` is active in Claude settings (PreToolUse, PostToolUse, PostToolUseFailure). Gate enforcement proven during Phase 4.1 validation. Not a fresh Akashic-installer-driven install. |
+| Void Linux | Ready for live install/activation. Not yet operational. |
+| macOS | Ready for live install/activation. Not yet operational. |
+
+Active runtime locking deferred until live operational proof passes per platform.
 
 ## Akashic Source Package Layout
 
@@ -254,20 +268,54 @@ The installer never applies locks to active runtime files in PlanOnly or Prepare
 
 ## Claiming Platform Support
 
-A platform is supported when all three layers pass:
+Platform support has two milestones:
+
+### Milestone 1: Akashic Framework Validation (Phase 4.1)
+
+Proves the lock backend, installer, and Prepare workflow function correctly on disposable fixtures.
 
 1. Lock fixture PASS on that OS (evidence in `evidence/phase41/os-lock-validation/<platform>.json`, schema `akashic-os-lock-evidence.v1`).
 2. Installer PlanOnly generates a valid plan for that OS (no blockers, schema `akashic-helios-install-plan.v2`).
 3. Installer Prepare completes on that OS (bridge synced, manifest CLEAN, evidence schema `akashic-install-evidence.v1`).
 
-Active runtime locking is a separate milestone beyond platform support. It requires fixture PASS + Prepare + explicit Activate approval.
+### Milestone 2: Helios Live Operational Verification (Phase 4.2)
+
+Proves Helios is actively installed, hooked into Claude settings, enforcing gates, and capturing evidence as a live system.
+
+1. Install or select the live `.command-gate` path.
+2. Run Akashic Prepare against that target (or confirm prepared target already exists).
+3. Generate a CLEAN manifest and sidecar in the live target.
+4. Activate Claude settings: `PreToolUse` → `hooks/helios_pretooluse.ps1`, `PostToolUse`/`PostToolUseFailure` → `hooks/evidence_capture.ps1`.
+5. Run a harmless command and prove it is intercepted by Helios.
+6. Create a valid pending gate and prove the same command is allowed.
+7. Prove evidence is captured after success (`PostToolUse`).
+8. Run a controlled failure and prove `PostToolUseFailure` evidence is captured.
+9. Test integrity behavior: manifest exists, protected hashes checked, drift denied or handled through maintenance corridor.
+10. Apply live runtime locks with explicit approval (only after steps 1–9 pass).
+
+Active runtime locking is not permitted until live operational verification passes. It requires fixture PASS + Prepare + live operational proof + explicit Activate approval.
 
 ## Status Summary
 
-| Platform | Fixture | Installer Plan | Prepare | Activate | Canonical Evidence |
-|---|---|---|---|---|---|
-| Windows | PASS | PASS | PASS | Deferred (approval plan only) | `os-lock-validation/windows.json` (tool) + `windows-validation-raw-results.md` (raw log) |
-| Void Linux | PASS | PASS | PASS | Deferred | `os-lock-validation/void-linux.json` (tool) + `void-linux-validation-raw-results.md` (raw log) |
-| macOS | PASS | PASS | PASS | Deferred (approval plan only) | `os-lock-validation/macos.json` (tool) + `macos-validation-raw-results.md` (raw log) |
+### Phase 4.1 — Akashic Framework Validation
+
+| Platform | Fixture | Installer Plan | Prepare | Canonical Evidence |
+|---|---|---|---|---|
+| Windows | PASS | PASS | PASS | `os-lock-validation/windows.json` (tool) + `windows-validation-raw-results.md` (raw log) |
+| Void Linux | PASS | PASS | PASS | `os-lock-validation/void-linux.json` (tool) + `void-linux-validation-raw-results.md` (raw log) |
+| macOS | PASS | PASS | PASS | `os-lock-validation/macos.json` (tool) + `macos-validation-raw-results.md` (raw log) |
 
 Evidence classification: see `evidence/phase41/EVIDENCE-INDEX.md`.
+
+### Phase 4.2 — Helios Live Operational Verification
+
+| Platform | Live Helios | Evidence |
+|---|---|---|
+| Windows | Active runtime exists (MythosJustAFable). Formal verification pending. | `evidence/phase42/` (pending) |
+| Void Linux | Ready for live install/activation. Not yet operational. | `evidence/phase42/` (pending) |
+| macOS | Ready for live install/activation. Not yet operational. | `evidence/phase42/` (pending) |
+
+Expected evidence artifacts:
+- `evidence/phase42/windows-helios-live-operational-raw-results.md`
+- `evidence/phase42/void-linux-helios-live-operational-raw-results.md`
+- `evidence/phase42/macos-helios-live-operational-raw-results.md`

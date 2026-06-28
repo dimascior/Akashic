@@ -1,4 +1,4 @@
-# Phase 4.1 Evidence Index
+# Phase 4.1 Evidence Index — COMPLETE
 
 ## Evidence Classification
 
@@ -39,7 +39,7 @@ These files use schemas invented outside the tools. They summarize results but a
 
 | File | Schema | Notes |
 |---|---|---|
-| `installer-prepare-validation.json` | `akashic-installer-prepare-validation.v1` | Windows. Wrapper assembled by validation script. Not produced by installer tool. Superseded by `windows-validation-raw-results.md`. Deleted. |
+| ~~`installer-prepare-validation.json`~~ | `akashic-installer-prepare-validation.v1` | Windows. Deleted. Superseded by `windows-validation-raw-results.md`. |
 | `installer-prepare-validation-macos.json` | `akashic-installer-prepare-validation.v1` | macOS. Wrapper assembled by validation script. Superseded by `macos-validation-raw-results.md`. |
 | `installer-contract-readiness.json` | `akashic-installer-contract-readiness.v1` | Project status summary. Not a tool schema. |
 | `os-lock-validation/summary.json` | `akashic-os-lock-summary.v1` | Cross-platform lock summary. Not a tool schema. |
@@ -61,3 +61,7 @@ Pre-existing evidence from gap tests, fixture dry runs, and tool coverage checks
 | `settings-integrity-result.json` | Settings integrity check |
 | `stale-gate-cleanup-fixture.json` | Stale gate cleanup test |
 | `unlock-dryrun-result.json` | Unlock dry run output |
+
+## Phase 4.2 — Helios Live Operational Verification
+
+Phase 4.1 proves Akashic can safely prepare Helios. Phase 4.2 proves Helios is actively running and enforcing commands. Evidence will be in `evidence/phase42/`.

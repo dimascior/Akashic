@@ -109,6 +109,11 @@
     "tools/AkashicInstallPlan.ps1 (adapter-only, superseded)",
     "tools/AkashicCombinedInstallPlan.ps1 (combined, superseded)"
   ],
-  "active_runtime_locking": "Deferred until fixture PASS + installer Prepare completes per platform + explicit Activate approval",
-  "overall_readiness": "PREPARE_VALIDATED"
+  "active_runtime_locking": "Deferred until live operational proof passes per platform + explicit Activate approval",
+  "overall_readiness": "PHASE_4_1_COMPLETE",
+  "phase_boundary": {
+    "phase_4_1": "Akashic cross-platform framework validation: PASS. All three platforms have raw validation logs.",
+    "phase_4_2": "Helios live operational verification: Windows partial (active MythosJustAFable runtime exists); Void Linux pending; macOS pending.",
+    "next": "Phase 4.2 — live Helios install, hook activation, gate enforcement proof, evidence capture proof, integrity verification, then runtime locking with explicit approval."
+  }
 }
