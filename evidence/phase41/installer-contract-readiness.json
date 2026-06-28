@@ -1,6 +1,6 @@
 {
   "schema_version": "akashic-installer-contract-readiness.v1",
-  "timestamp_utc": "2026-06-28T21:00:00Z",
+  "timestamp_utc": "2026-06-28T21:30:00Z",
   "contract_document": "docs/akashic-helios-installer-contract.md",
   "unified_installer": "tools/AkashicHeliosInstallPlan.ps1",
   "installer_schema_version": "akashic-helios-install-plan.v2",
@@ -9,7 +9,7 @@
   "installer_parameters": [
     "AkashicRoot (mandatory)",
     "HeliosGateRoot (mandatory)",
-    "RuntimeBundleRoot (optional, for Helios runtime files)",
+    "RuntimeBundleRoot (optional in PlanOnly, required in Prepare/Activate)",
     "Platform (Auto|Windows|Linux|macOS)",
     "Mode (PlanOnly|Prepare|Activate)",
     "RunFixtureCheck",
@@ -36,23 +36,19 @@
     "13. Prepare rollback plan",
     "14. Write install evidence"
   ],
-  "fixes_applied": [
-    "Added RuntimeBundleRoot parameter with source paths for runtime file copy",
-    "Fixed bridge sync: -AdapterRoot (not -AkashicRoot)",
-    "Fixed phase order: manifest generated after bridge sync and file copy",
-    "PlanOnly fully dry: no directory creation, no file copy, no sync",
-    "Prepare non-activating: no settings.json changes, no locks",
-    "Activate honest: APPROVAL_REQUIRED status, not activated unless performed",
-    "Fixture parameter threading: RequireStrongLock/AllowWeakFallback passed through"
-  ],
+  "activation_boundary": {
+    "current": "Activate mode produces APPROVAL_REQUIRED plans. It does NOT modify settings.json or apply locks.",
+    "future_switches": ["ApplySettingsActivation", "ApplyRuntimeLocks"],
+    "note": "Activate is currently equivalent to Prepare with activation plans attached"
+  },
   "platform_status": {
     "Windows": {
       "lock_fixture": "PASS",
       "lock_backend": "icacls",
       "lock_strength": "strong",
       "installer_plan": "PASS (PlanOnly validated)",
-      "prepare": "pending",
-      "activate": "deferred"
+      "prepare": "PASS (disposable fixture validated)",
+      "activate": "deferred (approval plan only)"
     },
     "Linux": {
       "lock_fixture": "NOT_TESTED",
@@ -73,10 +69,24 @@
       "blockers": ["Requires physical macOS machine with chflags uchg"]
     }
   },
+  "prepare_validation": {
+    "evidence": "evidence/phase41/installer-prepare-validation.json",
+    "runtime_bundle_root_enforcement": "Prepare blocks without RuntimeBundleRoot",
+    "plan_only_dry": true,
+    "prepare_results": {
+      "protected_files_copied": "5/5",
+      "support_files_copied": 4,
+      "bridge_byte_identical": true,
+      "manifest_status": "CLEAN",
+      "settings_touched": false,
+      "locks_applied": false,
+      "active_runtime_touched": false
+    }
+  },
   "legacy_installers": [
     "tools/AkashicInstallPlan.ps1 (adapter-only, superseded)",
     "tools/AkashicCombinedInstallPlan.ps1 (combined, superseded)"
   ],
   "active_runtime_locking": "Deferred until fixture PASS + installer Prepare completes per platform",
-  "overall_readiness": "INSTALLER_FIXED"
+  "overall_readiness": "PREPARE_VALIDATED"
 }

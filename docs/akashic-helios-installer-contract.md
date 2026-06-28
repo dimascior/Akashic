@@ -158,13 +158,13 @@ Does NOT:
 
 ### Activate
 
-Requires explicit `-Mode Activate` and human approval at each activation step:
-- Settings hook activation
-- Protected file lock activation
-- Optional settings.json lock
-- Optional templates lock
+**Current behavior:** Activate mode produces an activation approval plan. It runs all Prepare steps, then generates `APPROVAL_REQUIRED` plans for settings and lock activation. It does NOT modify `settings.json` or apply runtime locks.
 
-Activate mode runs all Prepare steps first, then proceeds to activation with approval gates.
+**Future behavior:** Explicit switches will perform activation when implemented:
+- `-ApplySettingsActivation` — modify `settings.json` with hook entries (requires human approval)
+- `-ApplyRuntimeLocks` — apply OS-native locks to protected files (requires fixture PASS + human approval)
+
+Until those switches exist, Activate mode is functionally equivalent to Prepare with activation plans attached.
 
 ## Install Plan Phases
 
@@ -255,6 +255,6 @@ Active runtime locking is a separate milestone beyond platform support. It requi
 
 | Platform | Fixture | Installer Plan | Prepare | Activate |
 |---|---|---|---|---|
-| Windows | PASS | Pending | Pending | Deferred |
+| Windows | PASS | PASS | PASS | Deferred (approval plan only) |
 | Void Linux | NOT_TESTED | Pending | Pending | Deferred |
 | macOS | NOT_TESTED | Pending | Pending | Deferred |

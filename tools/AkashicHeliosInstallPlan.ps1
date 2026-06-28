@@ -2,6 +2,12 @@
 # Supersedes AkashicInstallPlan.ps1 and AkashicCombinedInstallPlan.ps1
 # with platform detection, fixture support, RuntimeBundleRoot, and
 # corrected phase ordering (manifest after all files in final position).
+#
+# Activation boundary:
+#   Activate mode produces an activation approval plan. It does NOT
+#   modify settings.json or apply runtime locks. Those actions require
+#   future explicit switches (ApplySettingsActivation, ApplyRuntimeLocks)
+#   that are not yet implemented.
 [CmdletBinding()]
 param(
     [Parameter(Mandatory)]
@@ -68,6 +74,10 @@ $phases = [System.Collections.Generic.List[object]]::new()
 $blockers = [System.Collections.Generic.List[string]]::new()
 $isPlanOnly = ($Mode -eq 'PlanOnly')
 $isActivate = ($Mode -eq 'Activate')
+
+if (-not $isPlanOnly -and -not $RuntimeBundleRoot) {
+    throw "RuntimeBundleRoot is required for $Mode mode. PlanOnly may omit it for planning discovery."
+}
 
 function Add-Phase {
     param(
@@ -140,7 +150,7 @@ $runtimeProtectedCopyPlan = @()
 $runtimeSupportCopyPlan = @()
 
 $phase2Status = 'SKIP'
-$phase2Detail = 'RuntimeBundleRoot not provided'
+$phase2Detail = 'RuntimeBundleRoot not provided (required for Prepare/Activate)'
 if ($RuntimeBundleRoot) {
     if (-not (Test-Path $RuntimeBundleRoot)) {
         $phase2Status = 'FAIL'
