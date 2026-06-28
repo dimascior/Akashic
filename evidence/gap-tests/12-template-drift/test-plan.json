@@ -1,0 +1,24 @@
+{
+    "test_name":  "12-template-drift",
+    "test_id":  "12-template-drift-20260627-193255",
+    "setup":  "Verify templates/ directory state. Check whether templates/ files are in manifest hashes.",
+    "execution_status":  "ready_for_live_execution",
+    "rational_insight":  "Templates influence gate creation behavior. If trusted as operational policy, they should be locked or monitored. TCE must clarify whether templates are truly protected.",
+    "trigger_method":  "Run the next shell action or TCE comparison.",
+    "helios_evidence_refs":  [
+                                 "bypass-surface.md vector 9 â€” templates manipulation gap documented"
+                             ],
+    "mode":  "LiveControlled",
+    "phase4_lock_requirement":  "template lock or monitored-template classification",
+    "restoration_steps":  [
+                              "Remove created template file",
+                              "Verify templates/ contains only .gitkeep",
+                              "Verify envelope is CLEAN (template not in manifest, so envelope should remain clean)"
+                          ],
+    "expected_helios_behavior":  "If templates are in manifest: drift detected. If not in manifest (current state): NOT detected. tier_classifier.ps1 loads the template on next command.",
+    "pass_fail":  "pending",
+    "controlled_mutation":  "Create or modify a template file under templates/ (e.g., operating-catalog.json).",
+    "observed_helios_behavior":  "Pending execution",
+    "tce_classification":  "template_unprotected_gap",
+    "timestamp_utc":  "2026-06-27T23:32:55.3651568Z"
+}

@@ -1,0 +1,22 @@
+{
+    "test_name":  "04-cwd-shift",
+    "test_id":  "04-cwd-shift-20260627-193255",
+    "setup":  "Create a valid gate for a specific working_directory.",
+    "execution_status":  "ready_for_live_execution",
+    "rational_insight":  "Cwd mismatch is an identity and execution-context problem, not a protected-file mutation. Should not become a filesystem lock requirement.",
+    "trigger_method":  "Run the command from the mismatched cwd.",
+    "helios_evidence_refs":  [
+                                 "This session produced multiple cwd_mismatch rejections during gate file creation"
+                             ],
+    "mode":  "LiveControlled",
+    "phase4_lock_requirement":  "gate identity enforcement (not filesystem locking)",
+    "restoration_steps":  [
+                              "No mutation to restore â€” gate file is consumed or remains in pending/"
+                          ],
+    "expected_helios_behavior":  "Gate validation rejects due to working_directory mismatch.",
+    "pass_fail":  "pending",
+    "controlled_mutation":  "Execute the same command from a different cwd than declared in the gate.",
+    "observed_helios_behavior":  "Pending execution",
+    "tce_classification":  "cwd_mismatch",
+    "timestamp_utc":  "2026-06-27T23:32:55.3651568Z"
+}

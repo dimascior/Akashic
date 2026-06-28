@@ -1,0 +1,22 @@
+{
+    "controlled_mutation":  "No live mutation â€” use prepared fixture data.",
+    "phase4_lock_requirement":  "post-hook robustness requirements and evidence schema coverage",
+    "test_id":  "09-failed-missing-tool-response-20260627-193255",
+    "observed_helios_behavior":  "Pending execution",
+    "execution_status":  "fixture_ready",
+    "restoration_steps":  [
+                              "No mutation to restore â€” fixture-based test"
+                          ],
+    "tce_classification":  "failed_missing_tool_response",
+    "pass_fail":  "pending",
+    "expected_helios_behavior":  "PostToolUseFailure evidence records fields_found and fields_missing identifying tool_response absence. Hook remains robust.",
+    "setup":  "Create synthetic fixture representing a PostToolUseFailure where tool_response is missing from the payload.",
+    "helios_evidence_refs":  [
+
+                             ],
+    "mode":  "FixtureOnly",
+    "rational_insight":  "Tests evidence completeness under failure, not filesystem locking. TCE normalizes partial failure evidence and distinguishes hook robustness from protected-envelope drift.",
+    "timestamp_utc":  "2026-06-27T23:32:55.3651568Z",
+    "test_name":  "09-failed-missing-tool-response",
+    "trigger_method":  "Process fixture through ConvertFrom-HeliosEvidence."
+}

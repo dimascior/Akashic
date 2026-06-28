@@ -1,0 +1,78 @@
+{
+  "schema_version": "helios-package-validation.v1",
+  "phase": "3.99.1",
+  "timestamp_utc": "2026-06-28T01:07:09Z",
+  "validation_chain": [
+    {
+      "step": 1,
+      "tool": "New-HeliosAdapterPackage.ps1",
+      "action": "Build adapter package",
+      "result": "SUCCESS",
+      "detail": "53 files, 0 skipped, version 0.3.991, source c81eab9"
+    },
+    {
+      "step": 2,
+      "tool": "Test-HeliosAdapterPackage.ps1",
+      "action": "Verify adapter package",
+      "result": "PASS",
+      "detail": "13/13 checks passed, all BOM checks clean, 35 JSON files BOM-free"
+    },
+    {
+      "step": 3,
+      "tool": "New-HeliosRuntimeBundle.ps1",
+      "action": "Build runtime bundle",
+      "result": "SUCCESS",
+      "detail": "19 files copied, version 3.991, source 4fdacfe"
+    },
+    {
+      "step": 4,
+      "tool": "Test-HeliosRuntimeBundle.ps1",
+      "action": "Verify runtime bundle",
+      "result": "PASS",
+      "detail": "17/17 checks passed, 24 files[] entries verified against file_hashes and checksums"
+    },
+    {
+      "step": 5,
+      "tool": "New-HeliosCombinedInstallPlan.ps1",
+      "action": "Generate combined install plan (PlanOnly)",
+      "result": "SUCCESS",
+      "detail": "15 steps, settings activation requires approval, rollback plan present"
+    },
+    {
+      "step": 6,
+      "tool": "Test-HeliosEndToEndInstallPlan.ps1",
+      "action": "End-to-end install simulation",
+      "result": "PASS",
+      "detail": "16/16 checks passed"
+    }
+  ],
+  "e2e_checks": {
+    "adapter_package_verifies": true,
+    "runtime_bundle_verifies": true,
+    "install_plan_generated": true,
+    "prepare_completed": true,
+    "target_scaffold_created": true,
+    "gitkeep_files_created": true,
+    "protected_files_copied": true,
+    "bridge_copied": true,
+    "bridge_byte_identity": true,
+    "manifest_generated": true,
+    "sidecar_generated": true,
+    "manifest_bom_free": true,
+    "sidecar_bom_free": true,
+    "envelope_integrity": "CLEAN",
+    "settings_plan_requires_approval": true,
+    "rollback_plan_exists": true
+  },
+  "fixes_applied": [
+    "Added BOM checks to Test-HeliosAdapterPackage.ps1 (package-manifest.json, checksums.sha256, all JSON)",
+    "Fixed New-HeliosRuntimeBundle.ps1 manifest completeness (.gitkeep files now tracked in file_hashes and checksums)",
+    "Added Add-TrackedFile helper for consistent file hashing",
+    "Strengthened Test-HeliosRuntimeBundle.ps1 with files[]/file_hashes/checksums cross-checks and BOM checks",
+    "Strengthened New-HeliosCombinedInstallPlan.ps1 Prepare mode to create .gitkeep files",
+    "Strengthened Test-HeliosEndToEndInstallPlan.ps1 with .gitkeep and protected file copy checks",
+    "Added Phase 3.99 tools and docs to adapter package builder file list",
+    "Added Phase 3.99 tools to adapter package verifier required files list"
+  ],
+  "verdict": "PASS"
+}

@@ -1,0 +1,22 @@
+{
+    "controlled_mutation":  "No live mutation â€” gate file is the test fixture with mismatched wrapper fields.",
+    "phase4_lock_requirement":  "wrapper identity enforcement and policy/gate-level validation",
+    "test_id":  "10-wrapper-required-failure-20260627-193255",
+    "observed_helios_behavior":  "Pending execution",
+    "execution_status":  "fixture_ready",
+    "restoration_steps":  [
+                              "No mutation to restore â€” fixture-based test"
+                          ],
+    "tce_classification":  "wrapper_validation_failure",
+    "pass_fail":  "pending",
+    "expected_helios_behavior":  "Gate validation rejects due to wrapper validation failure.",
+    "setup":  "Create a gate with exit_capture=wrapper_required and intentionally mismatch wrapper fields.",
+    "helios_evidence_refs":  [
+
+                             ],
+    "mode":  "FixtureOnly",
+    "rational_insight":  "Wrapper-required validation is command identity hardening. The lock implication is indirect: Phase 4 protects the hook that enforces wrapper requirements.",
+    "timestamp_utc":  "2026-06-27T23:32:55.3651568Z",
+    "test_name":  "10-wrapper-required-failure",
+    "trigger_method":  "Process through ConvertFrom-HeliosEvidence or reference known gate rejection."
+}

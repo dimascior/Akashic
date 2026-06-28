@@ -1,0 +1,12 @@
+{
+    "evidence_confidence":  "high",
+    "test_name":  "01-direct-policy-edit",
+    "affected_envelope":  "protected",
+    "detection_status":  "Detected by witness on next shell action (Phase 3 test 3 proved this)",
+    "classification":  "protected_drift",
+    "prevention_need":  "Prevent write mutation of policy files through OS-native lock",
+    "phase4_recommendation":  "Lock policy/command-policy.json with icacls/chattr/chflags/chmod",
+    "timestamp_utc":  "2026-06-27T23:32:55.3651568Z",
+    "lock_target_candidate":  "policy/command-policy.json",
+    "platform_notes":  "Windows: icacls deny W,D; Linux: chattr +i; macOS: chflags uchg; POSIX: chmod a-w"
+}

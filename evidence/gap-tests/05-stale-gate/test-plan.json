@@ -1,0 +1,23 @@
+{
+    "controlled_mutation":  "The gate itself is the mutation â€” an expired gate in pending/.",
+    "phase4_lock_requirement":  "cleanup and TTL enforcement (not protected lock protection)",
+    "test_id":  "05-stale-gate-20260627-193255",
+    "observed_helios_behavior":  "Pending execution",
+    "execution_status":  "ready_for_live_execution",
+    "restoration_steps":  [
+                              "Remove expired gate file from pending/",
+                              "Or let Move-HeliosStaleGateArtifacts handle cleanup"
+                          ],
+    "tce_classification":  "stale_gate",
+    "pass_fail":  "pending",
+    "expected_helios_behavior":  "Gate validation rejects due to expiry.",
+    "setup":  "Create a pending gate with expires_utc set to a past time.",
+    "helios_evidence_refs":  [
+
+                             ],
+    "mode":  "LiveControlled",
+    "rational_insight":  "An expired gate is a mutable runtime lifecycle problem. pending/ must stay writable for the gate lifecycle. Phase 4 should not lock pending/ as protected runtime.",
+    "timestamp_utc":  "2026-06-27T23:32:55.3651568Z",
+    "test_name":  "05-stale-gate",
+    "trigger_method":  "Attempt the matching command."
+}

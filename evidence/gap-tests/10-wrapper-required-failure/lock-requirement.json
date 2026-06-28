@@ -1,0 +1,12 @@
+{
+    "evidence_confidence":  "medium",
+    "test_name":  "10-wrapper-required-failure",
+    "affected_envelope":  "none",
+    "detection_status":  "Detected by gate validation â€” wrapper field matching in gate_check.ps1",
+    "classification":  "wrapper_validation_failure",
+    "prevention_need":  "Protect the hook and policy logic that enforce wrapper requirements",
+    "phase4_recommendation":  "Lock hooks/gate_check.ps1. Wrapper enforcement is semantic gate validation.",
+    "timestamp_utc":  "2026-06-27T23:32:55.3651568Z",
+    "lock_target_candidate":  "hooks/gate_check.ps1 (protects wrapper validation logic)",
+    "platform_notes":  "N/A â€” wrapper identity is code logic"
+}

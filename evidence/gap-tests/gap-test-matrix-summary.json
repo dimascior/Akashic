@@ -1,0 +1,107 @@
+{
+    "timestamp_utc":  "2026-06-27T23:32:55.3651568Z",
+    "tests":  [
+                  {
+                      "phase4_mapping":  "policy lock requirement",
+                      "name":  "01-direct-policy-edit",
+                      "classification":  "protected_drift",
+                      "evidence_confidence":  "high",
+                      "mode":  "LiveControlled",
+                      "status":  "ready_for_live_execution"
+                  },
+                  {
+                      "phase4_mapping":  "hook write lock requirement",
+                      "name":  "02-hook-self-drift",
+                      "classification":  "protected_drift",
+                      "evidence_confidence":  "high",
+                      "mode":  "LiveControlled",
+                      "status":  "ready_for_live_execution"
+                  },
+                  {
+                      "phase4_mapping":  "hook delete and rename lock requirement",
+                      "name":  "03-hook-delete",
+                      "classification":  "missing_protected_file",
+                      "evidence_confidence":  "high",
+                      "mode":  "LiveControlled",
+                      "status":  "ready_for_live_execution"
+                  },
+                  {
+                      "phase4_mapping":  "gate identity enforcement (not filesystem locking)",
+                      "name":  "04-cwd-shift",
+                      "classification":  "cwd_mismatch",
+                      "evidence_confidence":  "high",
+                      "mode":  "LiveControlled",
+                      "status":  "ready_for_live_execution"
+                  },
+                  {
+                      "phase4_mapping":  "cleanup and TTL enforcement (not protected lock protection)",
+                      "name":  "05-stale-gate",
+                      "classification":  "stale_gate",
+                      "evidence_confidence":  "high",
+                      "mode":  "LiveControlled",
+                      "status":  "ready_for_live_execution"
+                  },
+                  {
+                      "phase4_mapping":  "schema enforcement and gate policy enforcement",
+                      "name":  "06-write-indicator-denial",
+                      "classification":  "write_indicator_missing_impact",
+                      "evidence_confidence":  "high",
+                      "mode":  "LiveControlled",
+                      "status":  "ready_for_live_execution"
+                  },
+                  {
+                      "phase4_mapping":  "command identity and segment enforcement",
+                      "name":  "07-undeclared-chain",
+                      "classification":  "undeclared_chain",
+                      "evidence_confidence":  "medium",
+                      "mode":  "LiveControlled",
+                      "status":  "ready_for_live_execution"
+                  },
+                  {
+                      "phase4_mapping":  "evidence classification, audit marking, optional signing, append-only strategy",
+                      "name":  "08-evidence-tamper",
+                      "classification":  "mutable_evidence_tamper",
+                      "evidence_confidence":  "medium",
+                      "mode":  "LiveControlled",
+                      "status":  "ready_for_live_execution"
+                  },
+                  {
+                      "phase4_mapping":  "post-hook robustness requirements and evidence schema coverage",
+                      "name":  "09-failed-missing-tool-response",
+                      "classification":  "failed_missing_tool_response",
+                      "evidence_confidence":  "medium",
+                      "mode":  "FixtureOnly",
+                      "status":  "fixture_ready"
+                  },
+                  {
+                      "phase4_mapping":  "wrapper identity enforcement and policy/gate-level validation",
+                      "name":  "10-wrapper-required-failure",
+                      "classification":  "wrapper_validation_failure",
+                      "evidence_confidence":  "medium",
+                      "mode":  "FixtureOnly",
+                      "status":  "fixture_ready"
+                  },
+                  {
+                      "phase4_mapping":  "settings.json control-plane protection requirement",
+                      "name":  "11-settings-json-control-plane",
+                      "classification":  "external_control_plane_risk",
+                      "evidence_confidence":  "high",
+                      "mode":  "PlanOnly",
+                      "status":  "documented_only"
+                  },
+                  {
+                      "phase4_mapping":  "template lock or monitored-template classification",
+                      "name":  "12-template-drift",
+                      "classification":  "template_unprotected_gap",
+                      "evidence_confidence":  "high",
+                      "mode":  "LiveControlled",
+                      "status":  "ready_for_live_execution"
+                  }
+              ],
+    "total_tests":  12,
+    "mode_counts":  {
+                        "PlanOnly":  1,
+                        "LiveControlled":  9,
+                        "FixtureOnly":  2
+                    }
+}

@@ -1,0 +1,12 @@
+{
+    "evidence_confidence":  "high",
+    "test_name":  "06-write-indicator-denial",
+    "affected_envelope":  "none",
+    "detection_status":  "Detected by gate validation â€” HasWriteIndicator check against read_write_impact.writes",
+    "classification":  "write_indicator_missing_impact",
+    "prevention_need":  "Protect the policy file that defines write-indicator rules",
+    "phase4_recommendation":  "Lock policy/command-policy.json. The denial itself is gate-level semantic validation.",
+    "timestamp_utc":  "2026-06-27T23:32:55.3651568Z",
+    "lock_target_candidate":  "policy/command-policy.json (protects the rule that enforces this)",
+    "platform_notes":  "N/A â€” write indicator detection is code logic in gate_check.ps1, not filesystem"
+}

@@ -1,0 +1,12 @@
+{
+    "evidence_confidence":  "high",
+    "test_name":  "04-cwd-shift",
+    "affected_envelope":  "none",
+    "detection_status":  "Detected by gate validation â€” working_directory field checked against $Payload.cwd",
+    "classification":  "cwd_mismatch",
+    "prevention_need":  "Cwd remains evidence context and gate identity context, not a lock target",
+    "phase4_recommendation":  "No filesystem lock needed. Gate identity enforcement is sufficient.",
+    "timestamp_utc":  "2026-06-27T23:32:55.3651568Z",
+    "lock_target_candidate":  "N/A â€” gate identity, not filesystem",
+    "platform_notes":  "N/A â€” this is a semantic gate validation, not a filesystem concern"
+}

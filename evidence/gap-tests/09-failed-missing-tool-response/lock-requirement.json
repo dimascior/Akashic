@@ -1,0 +1,12 @@
+{
+    "evidence_confidence":  "medium",
+    "test_name":  "09-failed-missing-tool-response",
+    "affected_envelope":  "none",
+    "detection_status":  "Detected by evidence_capture.ps1 â€” fields_found/fields_missing recorded in result.json",
+    "classification":  "failed_missing_tool_response",
+    "prevention_need":  "Protect evidence_capture.ps1 so failure handling remains robust",
+    "phase4_recommendation":  "Lock hooks/evidence_capture.ps1. Failure handling robustness is code quality, not filesystem.",
+    "timestamp_utc":  "2026-06-27T23:32:55.3651568Z",
+    "lock_target_candidate":  "hooks/evidence_capture.ps1 (protects the robustness logic)",
+    "platform_notes":  "N/A â€” hook robustness is code behavior"
+}

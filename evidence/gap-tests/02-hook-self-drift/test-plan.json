@@ -1,0 +1,23 @@
+{
+    "test_name":  "02-hook-self-drift",
+    "test_id":  "02-hook-self-drift-20260627-193255",
+    "setup":  "Verify envelope is CLEAN. Record hash of target hook file from manifest.",
+    "execution_status":  "ready_for_live_execution",
+    "rational_insight":  "Hash-mismatch path for hooks is different from deletion. Phase 4 must prevent write mutation, not only deletion.",
+    "trigger_method":  "Run the next shell action through Helios gate system.",
+    "helios_evidence_refs":  [
+                                 "Phase 3 test 4 â€” helios_pretooluse self-drift DENY verified"
+                             ],
+    "mode":  "LiveControlled",
+    "phase4_lock_requirement":  "hook write lock requirement",
+    "restoration_steps":  [
+                              "Restore original hook file from backup",
+                              "Verify envelope is CLEAN"
+                          ],
+    "expected_helios_behavior":  "Protected drift detected. PreToolUse produces INTEGRITY_FAILURE. Triggering command denied.",
+    "pass_fail":  "pending",
+    "controlled_mutation":  "Modify a protected hook file (e.g., hooks/gate_check.ps1) without deleting it â€” append a comment line.",
+    "observed_helios_behavior":  "Pending execution",
+    "tce_classification":  "protected_drift",
+    "timestamp_utc":  "2026-06-27T23:32:55.3651568Z"
+}

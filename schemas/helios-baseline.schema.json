@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "helios-baseline.v1",
+  "title": "Helios Session Baseline",
+  "description": "Snapshot of the protected envelope at session start, created only after verifying against the durable manifest. Provides session continuity evidence.",
+  "type": "object",
+  "required": ["schema_version", "session_id", "created_utc", "anchor_tool_use_id", "protected_hashes", "mutable_state", "context"],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "helios-baseline.v1"
+    },
+    "session_id": {
+      "type": "string",
+      "description": "Claude Code session identifier (UUID)."
+    },
+    "created_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "anchor_tool_use_id": {
+      "type": "string",
+      "description": "tool_use_id of the first gated command that triggered baseline creation."
+    },
+    "anchor_command_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "protected_hashes": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{64}$"
+      },
+      "description": "SHA256 hashes of all protected files at baseline creation time."
+    },
+    "mutable_state": {
+      "type": "object",
+      "description": "Snapshot of mutable directory state (file counts and names) at baseline creation.",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "count": { "type": "integer" },
+          "files": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "context": {
+      "$ref": "#/$defs/execution_context"
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "execution_context": {
+      "type": "object",
+      "properties": {
+        "cwd": { "type": "string" },
+        "shell": { "type": "string" },
+        "user": { "type": "string" },
+        "platform": { "type": "string", "enum": ["Windows", "Linux", "macOS", "Unknown"] },
+        "hostname": { "type": "string" }
+      }
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+    "test_name":  "06-write-indicator-denial",
+    "test_id":  "06-write-indicator-denial-20260627-193255",
+    "setup":  "Create a gate for a command containing write indicators (e.g., git push) with missing or empty read_write_impact.",
+    "execution_status":  "ready_for_live_execution",
+    "rational_insight":  "Write-indicator denial is not a filesystem protection requirement by itself. It proves command risk classification and gate schema enforcement need to remain strict.",
+    "trigger_method":  "Attempt the command through Helios.",
+    "helios_evidence_refs":  [
+                                 "This session produced write_indicator_missing_impact rejections during git checkout gate creation"
+                             ],
+    "mode":  "LiveControlled",
+    "phase4_lock_requirement":  "schema enforcement and gate policy enforcement",
+    "restoration_steps":  [
+                              "No protected file mutation to restore â€” gate file is the test fixture"
+                          ],
+    "expected_helios_behavior":  "Gate validation rejects because write-impact justification is missing.",
+    "pass_fail":  "pending",
+    "controlled_mutation":  "The gate has missing write-impact justification.",
+    "observed_helios_behavior":  "Pending execution",
+    "tce_classification":  "write_indicator_missing_impact",
+    "timestamp_utc":  "2026-06-27T23:32:55.3651568Z"
+}

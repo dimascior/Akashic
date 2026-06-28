@@ -1,0 +1,22 @@
+{
+    "controlled_mutation":  "The gate declares single command but the actual command is chained.",
+    "phase4_lock_requirement":  "command identity and segment enforcement",
+    "test_id":  "07-undeclared-chain-20260627-193255",
+    "observed_helios_behavior":  "Pending execution",
+    "execution_status":  "ready_for_live_execution",
+    "restoration_steps":  [
+                              "No protected file mutation to restore"
+                          ],
+    "tce_classification":  "undeclared_chain",
+    "pass_fail":  "pending",
+    "expected_helios_behavior":  "Gate validation rejects for undeclared chain or segment mismatch.",
+    "setup":  "Create a gate for a chained command (containing \u0026\u0026 or ;) with multi_command set to false or missing segments.",
+    "helios_evidence_refs":  [
+
+                             ],
+    "mode":  "LiveControlled",
+    "rational_insight":  "Chained commands are command-identity expansion risks. Should be classified as gate-semantic failures, not filesystem drift.",
+    "timestamp_utc":  "2026-06-27T23:32:55.3651568Z",
+    "test_name":  "07-undeclared-chain",
+    "trigger_method":  "Attempt the chained command through Helios."
+}

@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "helios-envelope.v1",
+  "title": "Helios Envelope Manifest",
+  "description": "Durable manifest defining the protected and mutable envelopes for Helios command-gate integrity verification. The sidecar file helios-envelope.sha256 contains the SHA256 of this JSON file.",
+  "type": "object",
+  "required": ["schema_version", "created_utc", "rebaselined_by", "protected", "mutable"],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "helios-envelope.v1"
+    },
+    "created_utc": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 UTC timestamp of manifest creation or last rebaseline."
+    },
+    "rebaselined_by": {
+      "type": "string",
+      "description": "Identity of the rebaseline actor. Must be 'human' for trusted rebaselines."
+    },
+    "note": {
+      "type": "string",
+      "description": "Optional human-readable note about the rebaseline."
+    },
+    "protected": {
+      "type": "object",
+      "required": ["description", "paths", "hashes"],
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "paths": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "All protected paths including manifest/helios-envelope.json and manifest/helios-envelope.sha256. Paths are relative to the gate root."
+        },
+        "hashes": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "description": "SHA256 hashes of protected files. Keys are relative paths. The manifest and sidecar are listed in paths but NOT in hashes (avoids self-referential hashing)."
+        }
+      }
+    },
+    "mutable": {
+      "type": "object",
+      "required": ["description", "dirs"],
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "dirs": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Mutable runtime directories: pending/, inflight/, evidence/, blocked/."
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

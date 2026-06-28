@@ -1,0 +1,24 @@
+{
+    "controlled_mutation":  "Delete or temporarily move one protected hook file (e.g., hooks/tier_classifier.ps1).",
+    "phase4_lock_requirement":  "hook delete and rename lock requirement",
+    "test_id":  "03-hook-delete-20260627-193255",
+    "observed_helios_behavior":  "Pending execution",
+    "execution_status":  "ready_for_live_execution",
+    "restoration_steps":  [
+                              "Copy backup file back to original location",
+                              "Verify file hash matches manifest",
+                              "Verify envelope is CLEAN"
+                          ],
+    "tce_classification":  "missing_protected_file",
+    "pass_fail":  "pending",
+    "expected_helios_behavior":  "Missing protected file detected. PreToolUse produces INTEGRITY_FAILURE. Triggering command denied.",
+    "setup":  "Verify envelope is CLEAN. Copy target hook file to a backup location outside .command-gate/.",
+    "helios_evidence_refs":  [
+
+                             ],
+    "mode":  "LiveControlled",
+    "rational_insight":  "A missing file is not just altered content. Hash verification detects absence, but prevention must block removal. Must test separately from hash mismatch.",
+    "timestamp_utc":  "2026-06-27T23:32:55.3651568Z",
+    "test_name":  "03-hook-delete",
+    "trigger_method":  "Run the next shell action through Helios gate system."
+}

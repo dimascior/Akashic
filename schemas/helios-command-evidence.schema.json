@@ -1,0 +1,181 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "helios-command-evidence.v1",
+  "title": "Helios Per-Command Evidence",
+  "description": "Evidence files produced for each gated command. Four types: before (pre-command snapshot), decision (allow/deny verdict), after (post-command snapshot), compare (protected + runtime comparison).",
+  "oneOf": [
+    { "$ref": "#/$defs/before_evidence" },
+    { "$ref": "#/$defs/decision_evidence" },
+    { "$ref": "#/$defs/after_evidence" },
+    { "$ref": "#/$defs/compare_evidence" }
+  ],
+  "$defs": {
+    "protected_file_snapshot": {
+      "type": "object",
+      "properties": {
+        "path": { "type": "string" },
+        "exists": { "type": "boolean" },
+        "hash": { "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$" }
+      },
+      "required": ["path", "exists", "hash"]
+    },
+    "mutable_dir_snapshot": {
+      "type": "object",
+      "properties": {
+        "count": { "type": "integer" },
+        "files": { "type": "array", "items": { "type": "string" } }
+      },
+      "required": ["count", "files"]
+    },
+    "execution_context": {
+      "type": "object",
+      "properties": {
+        "cwd": { "type": "string" },
+        "shell": { "type": "string" },
+        "user": { "type": "string" },
+        "platform": { "type": "string" },
+        "hostname": { "type": "string" }
+      }
+    },
+    "before_evidence": {
+      "type": "object",
+      "description": "Pre-command snapshot of protected and mutable envelope state. Written by helios_pretooluse.ps1 before the command executes.",
+      "required": ["tool_use_id", "session_id", "timestamp_utc", "protected", "mutable"],
+      "properties": {
+        "tool_use_id": { "type": "string" },
+        "session_id": { "type": "string" },
+        "command_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "correlation_id": { "type": ["string", "null"] },
+        "timestamp_utc": { "type": "string", "format": "date-time" },
+        "protected": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/protected_file_snapshot" }
+        },
+        "mutable": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/mutable_dir_snapshot" }
+        },
+        "context": { "$ref": "#/$defs/execution_context" }
+      }
+    },
+    "decision_evidence": {
+      "type": "object",
+      "description": "Gate decision record. Written by helios_pretooluse.ps1 for every command (allowed, denied, or integrity failure).",
+      "required": ["tool_use_id", "session_id", "timestamp_utc", "verdict"],
+      "properties": {
+        "tool_use_id": { "type": "string" },
+        "session_id": { "type": "string" },
+        "command_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "correlation_id": { "type": ["string", "null"] },
+        "timestamp_utc": { "type": "string", "format": "date-time" },
+        "verdict": {
+          "type": "string",
+          "enum": ["ALLOW", "DENY", "INTEGRITY_FAILURE"]
+        },
+        "integrity_status": {
+          "type": "string",
+          "enum": ["CLEAN", "DRIFT"]
+        },
+        "tier": { "type": "integer" },
+        "reason": { "type": ["string", "null"] },
+        "drifted_files": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "path": { "type": "string" },
+              "expected": { "type": "string" },
+              "actual": { "type": "string" },
+              "reason": { "type": "string", "enum": ["HASH_MISMATCH", "MISSING"] }
+            }
+          }
+        }
+      }
+    },
+    "after_evidence": {
+      "type": "object",
+      "description": "Post-command snapshot. Written by evidence_capture.ps1 after command execution (PostToolUse or PostToolUseFailure).",
+      "required": ["tool_use_id", "session_id", "timestamp_utc", "protected", "mutable"],
+      "properties": {
+        "tool_use_id": { "type": "string" },
+        "session_id": { "type": "string" },
+        "command_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "correlation_id": { "type": ["string", "null"] },
+        "timestamp_utc": { "type": "string", "format": "date-time" },
+        "hook_event": {
+          "type": "string",
+          "enum": ["PostToolUse", "PostToolUseFailure"]
+        },
+        "protected": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/protected_file_snapshot" }
+        },
+        "mutable": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/mutable_dir_snapshot" }
+        },
+        "context": { "$ref": "#/$defs/execution_context" }
+      }
+    },
+    "compare_evidence": {
+      "type": "object",
+      "description": "Comparison of before and after snapshots. Written by evidence_capture.ps1. Includes protected envelope verdict and runtime transition analysis.",
+      "required": ["tool_use_id", "session_id", "timestamp_utc", "protected_verdict", "runtime_verdict"],
+      "properties": {
+        "tool_use_id": { "type": "string" },
+        "session_id": { "type": "string" },
+        "command_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "correlation_id": { "type": ["string", "null"] },
+        "timestamp_utc": { "type": "string", "format": "date-time" },
+        "hook_event": {
+          "type": "string",
+          "enum": ["PostToolUse", "PostToolUseFailure"]
+        },
+        "protected_verdict": {
+          "type": "string",
+          "enum": ["CLEAN", "DRIFT"]
+        },
+        "protected_details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "path": { "type": "string" },
+              "expected_manifest": { "type": "string" },
+              "expected_baseline": { "type": ["string", "null"] },
+              "actual": { "type": "string" },
+              "exists": { "type": "boolean" },
+              "drift_source": {
+                "type": "array",
+                "items": { "type": "string", "enum": ["MANIFEST", "BASELINE", "MISSING"] }
+              }
+            }
+          }
+        },
+        "runtime_verdict": {
+          "type": "string",
+          "enum": ["EXPECTED", "UNEXPECTED"]
+        },
+        "runtime_profile": {
+          "type": "string",
+          "enum": ["ALLOW_PRETOOL", "ALLOW_POSTTOOL", "DENY_PRETOOL", "INTEGRITY_FAILURE"]
+        },
+        "runtime_details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "directory": { "type": "string" },
+              "before_count": { "type": "integer" },
+              "after_count": { "type": "integer" },
+              "added": { "type": "array", "items": { "type": "string" } },
+              "removed": { "type": "array", "items": { "type": "string" } },
+              "net_change": { "type": "integer" },
+              "note": { "type": ["string", "null"] }
+            }
+          }
+        }
+      }
+    }
+  }
+}

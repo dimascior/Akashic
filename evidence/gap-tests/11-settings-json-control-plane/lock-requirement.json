@@ -1,0 +1,12 @@
+{
+    "evidence_confidence":  "high",
+    "test_name":  "11-settings-json-control-plane",
+    "affected_envelope":  "external",
+    "detection_status":  "NOT DETECTED by current system. No integrity check covers settings.json.",
+    "classification":  "external_control_plane_risk",
+    "prevention_need":  "Prevent unauthorized modification of hook activation â€” highest severity bypass",
+    "phase4_recommendation":  "Lock settings.json with OS-native protection. Consider secondary integrity check that verifies hook configuration.",
+    "timestamp_utc":  "2026-06-27T23:32:55.3651568Z",
+    "lock_target_candidate":  "C:\\Users\\dimas\\.claude\\settings.json",
+    "platform_notes":  "Windows: icacls deny W,D on settings.json; must unlock for legitimate Claude Code config changes"
+}

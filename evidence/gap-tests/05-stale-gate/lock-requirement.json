@@ -1,0 +1,12 @@
+{
+    "evidence_confidence":  "high",
+    "test_name":  "05-stale-gate",
+    "affected_envelope":  "mutable",
+    "detection_status":  "Detected by gate validation â€” expires_utc checked against current UTC time",
+    "classification":  "stale_gate",
+    "prevention_need":  "TTL enforcement, cleanup policy, and lifecycle hygiene",
+    "phase4_recommendation":  "No filesystem lock on pending/. Implement TTL enforcement and stale gate cleanup.",
+    "timestamp_utc":  "2026-06-27T23:32:55.3651568Z",
+    "lock_target_candidate":  "N/A â€” pending/ must remain writable",
+    "platform_notes":  "N/A â€” mutable runtime directory, not a lock target"
+}

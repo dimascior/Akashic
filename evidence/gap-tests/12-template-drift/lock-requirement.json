@@ -1,0 +1,12 @@
+{
+    "evidence_confidence":  "high",
+    "test_name":  "12-template-drift",
+    "affected_envelope":  "conditional",
+    "detection_status":  "NOT DETECTED â€” templates/operating-catalog.json is not currently in manifest hashes. Directory exists but contains only .gitkeep.",
+    "classification":  "template_unprotected_gap",
+    "prevention_need":  "Prevent unauthorized template creation or modification that could override tier classification",
+    "phase4_recommendation":  "Lock templates/ directory. When operating-catalog.json is created, add to manifest and rebaseline.",
+    "timestamp_utc":  "2026-06-27T23:32:55.3651568Z",
+    "lock_target_candidate":  "templates/ directory",
+    "platform_notes":  "Windows: icacls deny W on templates/ dir; Linux: chattr +i on dir; macOS: chflags uchg on dir"
+}

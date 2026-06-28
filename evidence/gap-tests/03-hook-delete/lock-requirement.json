@@ -1,0 +1,12 @@
+{
+    "evidence_confidence":  "high",
+    "test_name":  "03-hook-delete",
+    "affected_envelope":  "protected",
+    "detection_status":  "Detected by witness â€” file shows exists=false in snapshot, MISSING in drift_source",
+    "classification":  "missing_protected_file",
+    "prevention_need":  "Prevent delete, rename, and move operations on protected hook files",
+    "phase4_recommendation":  "Lock hook files with OS-native delete protection (icacls deny D, chattr +i includes delete prevention)",
+    "timestamp_utc":  "2026-06-27T23:32:55.3651568Z",
+    "lock_target_candidate":  "hooks/*.ps1, hooks/lib/*.ps1",
+    "platform_notes":  "Windows: icacls deny D prevents delete/rename; Linux: chattr +i on file AND parent dir; macOS: chflags uchg; POSIX: chmod a-w on parent dir"
+}

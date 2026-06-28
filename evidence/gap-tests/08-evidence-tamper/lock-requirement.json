@@ -1,0 +1,12 @@
+{
+    "evidence_confidence":  "medium",
+    "test_name":  "08-evidence-tamper",
+    "affected_envelope":  "mutable",
+    "detection_status":  "Not detected by manifest â€” evidence/ is mutable runtime. TCE comparison can detect hash change.",
+    "classification":  "mutable_evidence_tamper",
+    "prevention_need":  "Evidence integrity through audit/signing/append-only, not the same lock as hooks/policy",
+    "phase4_recommendation":  "Do not lock evidence/ like hooks/policy. Consider append-only, content hashing, or signing for evidence integrity.",
+    "timestamp_utc":  "2026-06-27T23:32:55.3651568Z",
+    "lock_target_candidate":  "evidence/ (different treatment than hooks/policy)",
+    "platform_notes":  "Append-only could use chattr +a on Linux; Windows has no direct equivalent â€” use ACLs or audit logging"
+}

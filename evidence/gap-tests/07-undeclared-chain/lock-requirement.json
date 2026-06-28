@@ -1,0 +1,12 @@
+{
+    "evidence_confidence":  "medium",
+    "test_name":  "07-undeclared-chain",
+    "affected_envelope":  "none",
+    "detection_status":  "Detected by gate validation â€” multi_command and segments fields checked",
+    "classification":  "undeclared_chain",
+    "prevention_need":  "Protect the hook logic that enforces chain/segment validation",
+    "phase4_recommendation":  "Lock hooks/gate_check.ps1. Chain detection is semantic gate validation.",
+    "timestamp_utc":  "2026-06-27T23:32:55.3651568Z",
+    "lock_target_candidate":  "hooks/gate_check.ps1 (protects the enforcement logic)",
+    "platform_notes":  "N/A â€” command identity is code logic, not filesystem"
+}

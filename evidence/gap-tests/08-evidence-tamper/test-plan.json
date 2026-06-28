@@ -1,0 +1,23 @@
+{
+    "controlled_mutation":  "Modify the evidence artifact after creation (e.g., change a verdict field).",
+    "phase4_lock_requirement":  "evidence classification, audit marking, optional signing, append-only strategy",
+    "test_id":  "08-evidence-tamper-20260627-193255",
+    "observed_helios_behavior":  "Pending execution",
+    "execution_status":  "ready_for_live_execution",
+    "restoration_steps":  [
+                              "Restore original evidence file from backup or re-capture",
+                              "Verify evidence hash matches expected"
+                          ],
+    "tce_classification":  "mutable_evidence_tamper",
+    "pass_fail":  "pending",
+    "expected_helios_behavior":  "Evidence is mutable by design. May not produce protected-envelope drift.",
+    "setup":  "Identify a recent evidence artifact. Record its hash.",
+    "helios_evidence_refs":  [
+
+                             ],
+    "mode":  "LiveControlled",
+    "rational_insight":  "This is the most important distinction. evidence/ is mutable runtime â€” tamper matters but belongs to evidence integrity, not protected-runtime lock treatment.",
+    "timestamp_utc":  "2026-06-27T23:32:55.3651568Z",
+    "test_name":  "08-evidence-tamper",
+    "trigger_method":  "Run TCE comparison or inspect the modified evidence."
+}
