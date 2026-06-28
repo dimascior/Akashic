@@ -73,6 +73,7 @@ if ($IncludeTemplates) {
 }
 
 $rebaselineResult = @{
+    schema_version = '1.0'
     started_utc = (Get-Date).ToUniversalTime().ToString('o')
     rebaselined_by = $RebaselinedBy
     steps = @()

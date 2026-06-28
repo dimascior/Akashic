@@ -1,8 +1,10 @@
 # Phase 4.1 — Lock/Unlock/Rebaseline Tooling
 
+**Status: Implementation draft. All verification checklist items are pending.**
+
 ## Scope
 
-Phase 4.1 implements the lock/control tooling justified by Phase 4.0 gap evidence. Every tool traces to a Phase 4.0 decision table entry.
+Phase 4.1 implements the lock/control tooling justified by Phase 4.0 gap evidence. Every tool traces to a Phase 4.0 decision table entry. No tool has been validated against a live Helios runtime yet.
 
 ## Platform Strategy
 
@@ -133,14 +135,17 @@ From Phase 4.0 Section 13:
 
 From Phase 4.0 Section 14:
 
-Phase 4.1 implements the minimum viable set:
-- **Content hashing at creation:** Already implemented in `Write-HeliosIntegrityEvidence` (bridge function).
-- **Tamper marking:** Detection via `Compare-HeliosProtectedEnvelope` against baseline.
+Phase 4.1 relies on pre-existing bridge capabilities. No new evidence-integrity tooling was added in this phase:
+- **Content hashing at creation:** Pre-existing in `Write-HeliosIntegrityEvidence` (bridge function). Not newly implemented or verified by Phase 4.1.
+- **Tamper marking:** Pre-existing detection via `Compare-HeliosProtectedEnvelope` against baseline. Not newly implemented or verified by Phase 4.1.
+
+Neither capability has been tested against evidence tamper scenarios (Phase 4.0 test #8). Verification belongs in Phase 4.2.
 
 Deferred to Phase 4.2+:
 - Per-artifact signing
 - Append-only archival (platform-dependent: Linux `chattr +a`)
 - Archive strategy with time-stamped directories
+- Verification that existing bridge capabilities actually detect evidence tamper
 
 ## Phase 4.0 Open Questions — Resolved
 
