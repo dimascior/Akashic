@@ -126,7 +126,8 @@ foreach ($hookName in @('PreToolUse', 'PostToolUse', 'PostToolUseFailure')) {
 }
 
 # Remove empty hooks object
-if ($settings.hooks.PSObject.Properties.Count -eq 0) {
+$remainingHookProps = @($settings.hooks | Get-Member -MemberType NoteProperty)
+if ($remainingHookProps.Count -eq 0) {
     $settings.PSObject.Properties.Remove('hooks')
 }
 

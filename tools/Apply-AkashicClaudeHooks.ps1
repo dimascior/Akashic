@@ -202,7 +202,7 @@ if (-not $NoBackup -and (Test-Path $ClaudeSettingsPath)) {
 
 # --- Merge hooks ---
 if (-not $existingSettings.hooks) {
-    $existingSettings | Add-Member -NotePropertyName 'hooks' -NotePropertyValue @{} -Force
+    $existingSettings | Add-Member -NotePropertyName 'hooks' -NotePropertyValue ([PSCustomObject]@{}) -Force
 }
 $hooks = $existingSettings.hooks
 
