@@ -32,7 +32,7 @@ Phase 4.1 proves that Akashic can safely prepare a Helios runtime on Windows, Vo
 
 | Platform | Live Status |
 |---|---|
-| Windows | Partial — MythosJustAFable `.command-gate` is active in Claude settings (PreToolUse, PostToolUse, PostToolUseFailure). Gate enforcement proven during Phase 4.1 validation. Not a fresh Akashic-installer-driven install. |
+| Windows | PASS (steps 1–9) — MythosJustAFable `.command-gate` active. Interception, gate approval, success/failure evidence capture, manifest integrity all verified. Locking deferred (step 10). |
 | Void Linux | Ready for live install/activation. Not yet operational. |
 | macOS | Ready for live install/activation. Not yet operational. |
 
@@ -311,11 +311,10 @@ Evidence classification: see `evidence/phase41/EVIDENCE-INDEX.md`.
 
 | Platform | Live Helios | Evidence |
 |---|---|---|
-| Windows | Active runtime exists (MythosJustAFable). Formal verification pending. | `evidence/phase42/` (pending) |
+| Windows | PASS (steps 1–9). Active MythosJustAFable runtime. Locking deferred. | `evidence/phase42/windows-helios-live-operational-raw-results.md` |
 | Void Linux | Ready for live install/activation. Not yet operational. | `evidence/phase42/` (pending) |
 | macOS | Ready for live install/activation. Not yet operational. | `evidence/phase42/` (pending) |
 
-Expected evidence artifacts:
-- `evidence/phase42/windows-helios-live-operational-raw-results.md`
+Remaining evidence artifacts:
 - `evidence/phase42/void-linux-helios-live-operational-raw-results.md`
 - `evidence/phase42/macos-helios-live-operational-raw-results.md`
