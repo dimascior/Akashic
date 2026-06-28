@@ -1,5 +1,7 @@
 {
   "schema_version": "akashic-installer-contract-readiness.v1",
+  "_classification": "wrapper_summary",
+  "_note": "Project status summary assembled outside tools. The schema akashic-installer-contract-readiness.v1 does not exist in any tool. Canonical evidence is in raw results files and tool-produced JSON (akashic-os-lock-evidence.v1, akashic-install-evidence.v1).",
   "timestamp_utc": "2026-06-28T14:39:00Z",
   "contract_document": "docs/akashic-helios-installer-contract.md",
   "unified_installer": "tools/AkashicHeliosInstallPlan.ps1",

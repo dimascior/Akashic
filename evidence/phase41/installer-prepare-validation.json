@@ -1,5 +1,7 @@
 {
     "schema_version":  "akashic-installer-prepare-validation.v1",
+    "_classification": "wrapper_summary",
+    "_note": "This file was assembled by a validation script, not produced by AkashicHeliosInstallPlan.ps1. The schema akashic-installer-prepare-validation.v1 does not exist in any tool. The tool-produced evidence schema is akashic-install-evidence.v1. No Windows raw validation log was captured for this session.",
     "timestamp_utc":  "2026-06-28T13:43:19.0462248Z",
     "parser_validation":  {
                               "scripts_checked":  5,

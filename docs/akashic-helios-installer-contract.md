@@ -256,16 +256,18 @@ The installer never applies locks to active runtime files in PlanOnly or Prepare
 
 A platform is supported when all three layers pass:
 
-1. Lock fixture PASS on that OS (evidence in `evidence/phase41/os-lock-validation/<platform>.json`).
-2. Installer PlanOnly generates a valid plan for that OS (no blockers).
-3. Installer Prepare completes on that OS (bridge synced, manifest CLEAN, directories created).
+1. Lock fixture PASS on that OS (evidence in `evidence/phase41/os-lock-validation/<platform>.json`, schema `akashic-os-lock-evidence.v1`).
+2. Installer PlanOnly generates a valid plan for that OS (no blockers, schema `akashic-helios-install-plan.v2`).
+3. Installer Prepare completes on that OS (bridge synced, manifest CLEAN, evidence schema `akashic-install-evidence.v1`).
 
 Active runtime locking is a separate milestone beyond platform support. It requires fixture PASS + Prepare + explicit Activate approval.
 
 ## Status Summary
 
-| Platform | Fixture | Installer Plan | Prepare | Activate |
-|---|---|---|---|---|
-| Windows | PASS | PASS | PASS | Deferred (approval plan only) |
-| Void Linux | PASS | PASS | PASS | Deferred |
-| macOS | PASS | PASS | PASS | Deferred (approval plan only) |
+| Platform | Fixture | Installer Plan | Prepare | Activate | Canonical Evidence |
+|---|---|---|---|---|---|
+| Windows | PASS | PASS | PASS | Deferred (approval plan only) | `os-lock-validation/windows.json` (tool). No raw log. |
+| Void Linux | PASS | PASS | PASS | Deferred | `os-lock-validation/void-linux.json` (tool) + `void-linux-validation-raw-results.md` (raw log) |
+| macOS | PASS | PASS | PASS | Deferred (approval plan only) | `os-lock-validation/macos.json` (tool) + `macos-validation-raw-results.md` (raw log) |
+
+Evidence classification: see `evidence/phase41/EVIDENCE-INDEX.md`.
