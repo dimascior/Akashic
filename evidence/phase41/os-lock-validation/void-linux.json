@@ -1,0 +1,100 @@
+{
+  "schema_version": "akashic-os-lock-evidence.v1",
+  "timestamp_utc": "2026-06-28T14:15:08.5791520Z",
+  "os_name": "Linux",
+  "kernel_version": "6.12.65_1",
+  "powershell_version": "7.6.3",
+  "filesystem_type": "tmpfs",
+  "backend_selected": "chattr",
+  "strength": "strong_if_supported",
+  "privilege_mode": "None",
+  "lock_command_used": "/usr/sbin/chattr +i",
+  "unlock_command_used": "/usr/sbin/chattr -i",
+  "status_command_used": "/usr/sbin/lsattr",
+  "test_path": "/tmp/akashic-lock-fixture",
+  "protected_files_tested": [
+    "hooks/helios_pretooluse.ps1",
+    "hooks/gate_check.ps1",
+    "hooks/evidence_capture.ps1",
+    "hooks/tier_classifier.ps1",
+    "hooks/lib/HeliosIntegrityBridge.ps1",
+    "policy/command-policy.json",
+    "manifest/helios-envelope.json",
+    "manifest/helios-envelope.sha256"
+  ],
+  "mutable_dirs_tested": [
+    "pending",
+    "inflight",
+    "evidence",
+    "blocked"
+  ],
+  "negative_write_delete_rename_results": {
+    "manifest/helios-envelope.json": {
+      "append_blocked": true,
+      "write_blocked": true,
+      "delete_blocked": true,
+      "rename_blocked": true
+    },
+    "hooks/tier_classifier.ps1": {
+      "append_blocked": true,
+      "write_blocked": true,
+      "delete_blocked": true,
+      "rename_blocked": true
+    },
+    "manifest/helios-envelope.sha256": {
+      "append_blocked": true,
+      "write_blocked": true,
+      "delete_blocked": true,
+      "rename_blocked": true
+    },
+    "hooks/evidence_capture.ps1": {
+      "append_blocked": true,
+      "write_blocked": true,
+      "delete_blocked": true,
+      "rename_blocked": true
+    },
+    "hooks/gate_check.ps1": {
+      "append_blocked": true,
+      "write_blocked": true,
+      "delete_blocked": true,
+      "rename_blocked": true
+    },
+    "hooks/helios_pretooluse.ps1": {
+      "append_blocked": true,
+      "write_blocked": true,
+      "delete_blocked": true,
+      "rename_blocked": true
+    },
+    "hooks/lib/HeliosIntegrityBridge.ps1": {
+      "append_blocked": true,
+      "write_blocked": true,
+      "delete_blocked": true,
+      "rename_blocked": true
+    },
+    "policy/command-policy.json": {
+      "append_blocked": true,
+      "write_blocked": true,
+      "delete_blocked": true,
+      "rename_blocked": true
+    }
+  },
+  "unlock_recovery_results": {
+    "manifest/helios-envelope.json": true,
+    "hooks/tier_classifier.ps1": true,
+    "manifest/helios-envelope.sha256": true,
+    "hooks/evidence_capture.ps1": true,
+    "hooks/gate_check.ps1": true,
+    "hooks/helios_pretooluse.ps1": true,
+    "hooks/lib/HeliosIntegrityBridge.ps1": true,
+    "policy/command-policy.json": true
+  },
+  "overall_result": "PASS",
+  "remaining_limitation": "",
+  "blockers": [],
+  "notes": [
+    "Linux immutable attribute (chattr +i)",
+    "chattr: /usr/sbin/chattr",
+    "lsattr: /usr/sbin/lsattr",
+    "Running as root"
+  ]
+}

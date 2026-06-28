@@ -185,7 +185,7 @@ See `docs/install-sequence.md` for the complete procedure, `docs/package-archite
 
 ## Current Status
 
-**Phase:** 4.1 — cross-platform lock/unlock/rebaseline tooling. Windows fixture PASS. Linux/macOS lock backends designed but not validated on physical machines. Installer contract defined. Active Helios runtime locking deferred until fixture + installer pass per platform.
+**Phase:** 4.1 — cross-platform lock/unlock/rebaseline tooling. Windows fixture PASS. Linux (Void) validated, macOS pending physical machine test. Installer contract defined. Active Helios runtime locking deferred until fixture + installer pass per platform.
 
 | Component | Status |
 |---|---|
@@ -207,11 +207,11 @@ See `docs/install-sequence.md` for the complete procedure, `docs/package-archite
 | Package validation (3.99.1) | Complete — adapter verifier BOM checks, runtime manifest completeness, e2e execution |
 | Install sequence | Complete — `docs/install-sequence.md` |
 | Lock design (4.0) | Complete — `docs/phase40-lock-design-from-gap-evidence.md` |
-| Lock tooling (4.1) | Windows validated, Linux/macOS backends designed but not validated — `docs/phase41-lock-implementation.md` |
+| Lock tooling (4.1) | Windows and Linux (Void) validated, macOS pending physical machine test — `docs/phase41-lock-implementation.md` |
 | Lock strategy resolver | Complete — `Get-AkashicLockStrategy.ps1` (icacls/chattr/chflags/chmod) |
 | Lock dispatch layer | Complete — `lib/AkashicLockTargets.ps1` + `lib/AkashicLockBackend.ps1` (inventory + backend dispatch) |
-| Lock/unlock tools | Windows fixture PASS. Linux/macOS backends exist in code but require physical machine fixture validation |
-| Lock fixture test | Windows PASS — `Test-AkashicOsLockFixture.ps1`. Linux/macOS NOT_TESTED (requires physical machines) |
+| Lock/unlock tools | Windows fixture PASS. Linux (Void) fixture PASS. macOS backend exists but requires physical machine validation |
+| Lock fixture test | Windows PASS, Linux (Void) PASS — `Test-AkashicOsLockFixture.ps1`. macOS NOT_TESTED |
 | Installer contract | Defined — `docs/akashic-helios-installer-contract.md` |
 | Unified installer | Created — `tools/AkashicHeliosInstallPlan.ps1` (16-phase, PlanOnly/Prepare/Activate) |
 | Rebaseline workflow | Implemented — live 7-step cycle pending |
@@ -236,7 +236,7 @@ Originally extracted from [TerminalContextExporter](https://github.com/dimascior
 | Phase 3.99.1 | Complete (package validation + manifest hardening + execution proof) |
 | Phase 3.99.2 | Complete (final readback audit) |
 | Phase 4.0 | Complete (lock design from gap evidence) |
-| Phase 4.1 | In progress (cross-platform lock strategy — Windows PASS, Linux/macOS pending physical test) |
+| Phase 4.1 | In progress (cross-platform lock strategy — Windows PASS, Linux (Void) PASS, macOS pending physical test) |
 | Phase 4.2 | Future — live lock verification evidence |
 | Phase 5 | Future — lock system packaging |
 | Phase 6 | Future — long-term lock verification + audit strategy |

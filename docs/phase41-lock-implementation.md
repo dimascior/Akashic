@@ -1,6 +1,6 @@
 # Phase 4.1 — Lock/Unlock/Rebaseline Tooling
 
-**Status: Cross-platform lock backends implemented. Windows fixture PASS. Linux/macOS backends designed but not validated on physical machines. Installer contract defined — see `docs/akashic-helios-installer-contract.md`.**
+**Status: Cross-platform lock backends implemented. Windows fixture PASS. Linux (Void) fixture PASS. macOS backend designed but not validated on physical machines. Installer contract defined — see `docs/akashic-helios-installer-contract.md`.**
 
 ## Scope
 
@@ -152,7 +152,7 @@ Deferred to Phase 4.2+:
 | 1 | Lock granularity | Individual file locks. More precise, avoids interfering with mutable directories. |
 | 2 | Unlock authorization | Human-initiated via `Invoke-HeliosRebaseline -RebaselinedBy human`. No automated unlock. |
 | 3 | Rebaseline atomicity | 7-step cycle with emergency relock on failure. Not truly atomic but minimized window. |
-| 4 | Cross-platform | Resolved: strategy-driven dispatch. Windows PASS, Linux/macOS pending physical machine test. |
+| 4 | Cross-platform | Resolved: strategy-driven dispatch. Windows PASS, Linux (Void) PASS, macOS pending physical machine test. |
 | 5 | Evidence integrity scope | Minimum viable: content hashing + tamper marking. Signing/archival deferred. |
 | 6 | Template trust scope | Conditional. Lock with `-IncludeTemplates` when templates are trusted. |
 | 7 | settings.json unlock frequency | Expected to be rare. Lock by default, unlock only for config changes. |
@@ -190,7 +190,7 @@ Evidence files are in `evidence/phase41/`.
 | Platform | Result | Evidence |
 |---|---|---|
 | Windows (NTFS, icacls) | PASS | `windows.json` |
-| Void Linux (chattr) | NOT_TESTED | Requires physical machine |
+| Void Linux (chattr) | PASS | `void-linux.json` |
 | macOS (chflags) | NOT_TESTED | Requires physical machine |
 
 ### Remaining gaps before Phase 4.1 complete
@@ -200,6 +200,6 @@ Evidence files are in `evidence/phase41/`.
 3. **Live rebaseline cycle** — Full 7-step cycle has not been executed end-to-end.
 4. ~~**Mutable directory writability after lock**~~ — Resolved: all 4 mutable dirs writable while protected files locked.
 5. **Package builder path dependency** — `AkashicPackage.ps1` standalone packaging deferred to Phase 5.
-6. **Linux fixture test** — Requires physical Void Linux machine with chattr/lsattr and privilege path validated. Backend code exists but is NOT validated.
+6. ~~**Linux fixture test**~~ — Resolved: Void Linux fixture PASS (`evidence/phase41/os-lock-validation/void-linux.json`). Kernel 6.12.65_1, PowerShell 7.6.3, chattr/lsattr backend.
 7. **macOS fixture test** — Requires physical macOS machine with chflags uchg validated. Backend code exists but is NOT validated.
 8. **Installer contract validation** — `AkashicHeliosInstallPlan.ps1` PlanOnly must generate a valid plan per platform before claiming support. See `docs/akashic-helios-installer-contract.md`.
