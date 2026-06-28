@@ -15,11 +15,13 @@ Having a lock backend in code does not constitute platform support. Platform sup
 | Component | Status |
 |---|---|
 | Windows lock fixture | PASS |
-| Void Linux lock backend | Pending physical fixture validation |
-| macOS lock backend | Pending physical fixture validation |
-| Akashic installer | Pending (contract defined here, planner tool created) |
+| Windows installer PlanOnly/Prepare | PASS |
+| Void Linux lock fixture | PASS |
+| macOS lock fixture | PASS |
+| macOS installer PlanOnly/Prepare | PASS |
+| Akashic installer | Validated (PlanOnly + Prepare on Windows and macOS) |
 | Helios runtime install contract | Defined here |
-| Active Helios runtime locking | Deferred until fixture + install pass |
+| Active Helios runtime locking | Deferred until fixture + install pass + explicit Activate approval |
 
 ## Akashic Source Package Layout
 
@@ -256,5 +258,5 @@ Active runtime locking is a separate milestone beyond platform support. It requi
 | Platform | Fixture | Installer Plan | Prepare | Activate |
 |---|---|---|---|---|
 | Windows | PASS | PASS | PASS | Deferred (approval plan only) |
-| Void Linux | NOT_TESTED | Pending | Pending | Deferred |
-| macOS | NOT_TESTED | Pending | Pending | Deferred |
+| Void Linux | PASS | Pending | Pending | Deferred |
+| macOS | PASS | PASS | PASS | Deferred (approval plan only) |

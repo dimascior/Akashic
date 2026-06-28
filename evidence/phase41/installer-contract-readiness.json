@@ -1,6 +1,6 @@
 {
   "schema_version": "akashic-installer-contract-readiness.v1",
-  "timestamp_utc": "2026-06-28T21:30:00Z",
+  "timestamp_utc": "2026-06-28T14:39:00Z",
   "contract_document": "docs/akashic-helios-installer-contract.md",
   "unified_installer": "tools/AkashicHeliosInstallPlan.ps1",
   "installer_schema_version": "akashic-helios-install-plan.v2",
@@ -51,42 +51,62 @@
       "activate": "deferred (approval plan only)"
     },
     "Linux": {
-      "lock_fixture": "NOT_TESTED",
-      "lock_backend": "chattr (designed, not validated)",
+      "lock_fixture": "PASS (Void Linux)",
+      "lock_backend": "chattr",
       "lock_strength": "strong_if_supported",
       "installer_plan": "pending_validation",
       "prepare": "pending",
-      "activate": "deferred",
-      "blockers": ["Requires physical Void Linux machine with chattr/lsattr and privilege path"]
+      "activate": "deferred"
     },
     "macOS": {
-      "lock_fixture": "NOT_TESTED",
-      "lock_backend": "chflags (designed, not validated)",
+      "lock_fixture": "PASS",
+      "lock_backend": "chflags",
       "lock_strength": "strong_user_immutable",
-      "installer_plan": "pending_validation",
-      "prepare": "pending",
-      "activate": "deferred",
-      "blockers": ["Requires physical macOS machine with chflags uchg"]
+      "installer_plan": "PASS (PlanOnly validated)",
+      "prepare": "PASS (disposable fixture validated)",
+      "activate": "deferred (approval plan only)",
+      "validated_on": {
+        "product_version": "14.6.1",
+        "build_version": "23G93",
+        "architecture": "x86_64",
+        "powershell_version": "7.4.7"
+      }
     }
   },
   "prepare_validation": {
-    "evidence": "evidence/phase41/installer-prepare-validation.json",
-    "runtime_bundle_root_enforcement": "Prepare blocks without RuntimeBundleRoot",
-    "plan_only_dry": true,
-    "prepare_results": {
-      "protected_files_copied": "5/5",
-      "support_files_copied": 4,
-      "bridge_byte_identical": true,
-      "manifest_status": "CLEAN",
-      "settings_touched": false,
-      "locks_applied": false,
-      "active_runtime_touched": false
+    "windows": {
+      "evidence": "evidence/phase41/installer-prepare-validation.json",
+      "runtime_bundle_root_enforcement": "Prepare blocks without RuntimeBundleRoot",
+      "plan_only_dry": true,
+      "prepare_results": {
+        "protected_files_copied": "5/5",
+        "support_files_copied": 4,
+        "bridge_byte_identical": true,
+        "manifest_status": "CLEAN",
+        "settings_touched": false,
+        "locks_applied": false,
+        "active_runtime_touched": false
+      }
+    },
+    "macOS": {
+      "evidence": "evidence/phase41/installer-prepare-validation-macos.json",
+      "plan_only_dry": true,
+      "prepare_results": {
+        "protected_files_copied": "5/5",
+        "support_files_copied": 4,
+        "bridge_byte_identical": true,
+        "bridge_sha256": "8008a336b8d5c35704aa677a57796807f8bb7790d3ff0a9af89767519c51e454",
+        "manifest_status": "CLEAN",
+        "settings_touched": false,
+        "locks_applied": false,
+        "active_runtime_touched": false
+      }
     }
   },
   "legacy_installers": [
     "tools/AkashicInstallPlan.ps1 (adapter-only, superseded)",
     "tools/AkashicCombinedInstallPlan.ps1 (combined, superseded)"
   ],
-  "active_runtime_locking": "Deferred until fixture PASS + installer Prepare completes per platform",
+  "active_runtime_locking": "Deferred until fixture PASS + installer Prepare completes per platform + explicit Activate approval",
   "overall_readiness": "PREPARE_VALIDATED"
 }

@@ -1,0 +1,98 @@
+{
+  "schema_version": "akashic-os-lock-evidence.v1",
+  "timestamp_utc": "2026-06-28T14:38:32.7907190Z",
+  "os_name": "macOS",
+  "kernel_version": "23.6.0",
+  "powershell_version": "7.4.7",
+  "filesystem_type": "",
+  "backend_selected": "chflags",
+  "strength": "strong_user_immutable",
+  "privilege_mode": "None",
+  "lock_command_used": "/usr/bin/chflags uchg",
+  "unlock_command_used": "/usr/bin/chflags nouchg",
+  "status_command_used": "/bin/ls -lO",
+  "test_path": "/tmp/akashic-macos-lock-fixture",
+  "protected_files_tested": [
+    "hooks/helios_pretooluse.ps1",
+    "hooks/gate_check.ps1",
+    "hooks/evidence_capture.ps1",
+    "hooks/tier_classifier.ps1",
+    "hooks/lib/HeliosIntegrityBridge.ps1",
+    "policy/command-policy.json",
+    "manifest/helios-envelope.json",
+    "manifest/helios-envelope.sha256"
+  ],
+  "mutable_dirs_tested": [
+    "pending",
+    "inflight",
+    "evidence",
+    "blocked"
+  ],
+  "negative_write_delete_rename_results": {
+    "hooks/helios_pretooluse.ps1": {
+      "append_blocked": true,
+      "write_blocked": true,
+      "delete_blocked": true,
+      "rename_blocked": true
+    },
+    "manifest/helios-envelope.sha256": {
+      "append_blocked": true,
+      "write_blocked": true,
+      "delete_blocked": true,
+      "rename_blocked": true
+    },
+    "hooks/gate_check.ps1": {
+      "append_blocked": true,
+      "write_blocked": true,
+      "delete_blocked": true,
+      "rename_blocked": true
+    },
+    "hooks/evidence_capture.ps1": {
+      "append_blocked": true,
+      "write_blocked": true,
+      "delete_blocked": true,
+      "rename_blocked": true
+    },
+    "hooks/lib/HeliosIntegrityBridge.ps1": {
+      "append_blocked": true,
+      "write_blocked": true,
+      "delete_blocked": true,
+      "rename_blocked": true
+    },
+    "manifest/helios-envelope.json": {
+      "append_blocked": true,
+      "write_blocked": true,
+      "delete_blocked": true,
+      "rename_blocked": true
+    },
+    "hooks/tier_classifier.ps1": {
+      "append_blocked": true,
+      "write_blocked": true,
+      "delete_blocked": true,
+      "rename_blocked": true
+    },
+    "policy/command-policy.json": {
+      "append_blocked": true,
+      "write_blocked": true,
+      "delete_blocked": true,
+      "rename_blocked": true
+    }
+  },
+  "unlock_recovery_results": {
+    "hooks/helios_pretooluse.ps1": true,
+    "manifest/helios-envelope.sha256": true,
+    "hooks/gate_check.ps1": true,
+    "hooks/evidence_capture.ps1": true,
+    "hooks/lib/HeliosIntegrityBridge.ps1": true,
+    "manifest/helios-envelope.json": true,
+    "hooks/tier_classifier.ps1": true,
+    "policy/command-policy.json": true
+  },
+  "overall_result": "PASS",
+  "remaining_limitation": "",
+  "blockers": [],
+  "notes": [
+    "BSD user immutable flag (uchg) via chflags",
+    "Owner can clear flag; schg avoided for recovery safety"
+  ]
+}

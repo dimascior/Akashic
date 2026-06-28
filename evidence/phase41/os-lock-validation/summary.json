@@ -1,6 +1,6 @@
 {
   "schema_version": "akashic-os-lock-summary.v1",
-  "generated_utc": "2026-06-28T12:11:00Z",
+  "generated_utc": "2026-06-28T14:39:00Z",
   "platforms": {
     "windows": {
       "result": "PASS",
@@ -12,31 +12,29 @@
       "evidence_file": "windows.json"
     },
     "void_linux": {
-      "result": "NOT_TESTED",
+      "result": "PASS",
       "backend": "chattr",
       "strength": "strong_if_supported",
-      "privilege_mode": null,
-      "filesystem_type": null,
-      "blockers": ["REQUIRES_PHYSICAL_MACHINE_TEST"],
-      "evidence_file": null,
-      "notes": "Requires fixture test on Void Linux machine with chattr/lsattr and privilege path validated"
+      "privilege_mode": "None",
+      "filesystem_type": "tmpfs",
+      "blockers": [],
+      "evidence_file": "void-linux.json",
+      "notes": "Void Linux kernel 6.12.65_1, PowerShell 7.6.3, chattr/lsattr backend"
     },
     "macos": {
-      "result": "NOT_TESTED",
+      "result": "PASS",
       "backend": "chflags",
       "strength": "strong_user_immutable",
-      "privilege_mode": null,
+      "privilege_mode": "None",
       "filesystem_type": null,
-      "blockers": ["REQUIRES_PHYSICAL_MACHINE_TEST"],
-      "evidence_file": null,
-      "notes": "Requires fixture test on macOS machine with chflags uchg validated"
+      "blockers": [],
+      "evidence_file": "macos.json",
+      "notes": "macOS 14.6.1 (23G93), x86_64, PowerShell 7.4.7, chflags uchg backend"
     }
   },
   "active_runtime_touched": false,
   "design_rule": "Akashic proves backend against disposable fixture first; active Helios runtime locking deferred until explicit approval",
   "remaining_blockers": [
-    "Void Linux fixture test not yet executed",
-    "macOS fixture test not yet executed",
     "Active runtime lock activation deferred"
   ]
 }
