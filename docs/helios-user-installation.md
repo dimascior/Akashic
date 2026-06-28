@@ -9,8 +9,10 @@
 | macOS | pwsh 7+, chflags (built-in) |
 
 You need two repositories:
-- **Akashic** — the integrity adapter (this repo)
+- **Akashic** — the installer, integrity adapter, and activation helper (this repo)
 - **Helios-** — the runtime bundle source (`dimascior/Helios-`)
+
+Akashic installs, prepares, verifies, activates, locks, unlocks, and rolls back a Helios runtime. Helios is the runtime that actually controls Claude's Bash/PowerShell execution through gate enforcement.
 
 ## Quick Start
 
@@ -37,12 +39,27 @@ pwsh -NoProfile -File ./tools/Install-AkashicHeliosRuntime.ps1 \
 ```
 
 This will:
-1. Copy hooks, policy, and support files from RuntimeBundleRoot to HeliosGateRoot
-2. Sync the Akashic integrity bridge
-3. Generate the manifest and sidecar
+1. Copy Helios hooks, policy, and support files from RuntimeBundleRoot to HeliosGateRoot
+2. Sync the Akashic integrity bridge to the Helios vendor location
+3. Generate the manifest and sidecar for the Helios runtime
 4. Back up your current Claude settings
-5. Add Helios hooks (PreToolUse, PostToolUse, PostToolUseFailure)
-6. Verify the installation (hooks, manifest, hashes, structure)
+5. Add Helios hooks (PreToolUse, PostToolUse, PostToolUseFailure) to Claude settings
+6. Verify the Helios runtime (hooks, manifest, hashes, structure)
+
+### Dry Run First
+
+Before modifying settings, preview what would happen:
+
+```powershell
+.\tools\Install-AkashicHeliosRuntime.ps1 `
+  -AkashicRoot "C:\path\to\Akashic" `
+  -RuntimeBundleRoot "C:\path\to\Helios-\.command-gate" `
+  -HeliosGateRoot "C:\path\to\your-project\.command-gate" `
+  -ActivateClaudeHooks `
+  -WhatIf
+```
+
+This shows exactly which hook commands would be written, where the backup would go, and whether existing hooks point to a different runtime root — without touching any files.
 
 ### 2. What Happens After Activation
 

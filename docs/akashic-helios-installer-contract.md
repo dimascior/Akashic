@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This document defines the contract between Akashic (the integrity adapter) and Helios (the runtime gate system) for installation, verification, and platform activation. It is the prerequisite for claiming cross-platform support.
+This document defines the contract between Akashic (the installer, integrity adapter, and activation helper) and Helios (the runtime that actually controls Claude's Bash/PowerShell execution through gate enforcement). Akashic installs, prepares, verifies, activates, locks, unlocks, and rolls back a Helios runtime. Helios remains the runtime — Akashic is the tooling that gets it there and maintains it.
 
 Having a lock backend in code does not constitute platform support. Platform support requires all three layers to work together:
 

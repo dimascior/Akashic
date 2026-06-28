@@ -1,7 +1,7 @@
-# Remove-AkashicClaudeHooks.ps1 — Remove Helios hook entries from Claude settings
-# Removes only Helios-related hooks (matching helios_pretooluse or evidence_capture
-# in command strings). Preserves all non-Helios hooks and other settings keys.
-# Optionally restores from backup.
+# Remove-AkashicClaudeHooks.ps1 — Deactivation helper for a Helios runtime
+# Akashic activates and deactivates; Helios is the runtime that enforces gates.
+# This tool removes Helios hook entries from Claude settings (selective removal
+# or full backup restore), disconnecting Claude from the Helios runtime.
 [CmdletBinding()]
 param(
     [string]$ClaudeSettingsPath,
@@ -10,6 +10,8 @@ param(
     [string]$Platform = 'Auto',
 
     [switch]$RestoreFromBackup,
+
+    [switch]$WhatIf,
 
     [string]$EvidenceOutputDir
 )
@@ -47,6 +49,14 @@ $backupPath = "$ClaudeSettingsPath.pre-helios-backup"
 if ($RestoreFromBackup) {
     if (-not (Test-Path $backupPath)) {
         throw "Backup file not found: $backupPath"
+    }
+    if ($WhatIf) {
+        Write-Host ''
+        Write-Host '=== DRY RUN (no changes will be made) ==='
+        Write-Host "Would restore from backup: $backupPath"
+        Write-Host "Target settings: $ClaudeSettingsPath"
+        Write-Host '=== END DRY RUN ==='
+        return [ordered]@{ status = 'WHATIF'; method = 'restore_from_backup'; backup_path = $backupPath }
     }
     Copy-Item -Path $backupPath -Destination $ClaudeSettingsPath -Force
     $hashAfter = Get-FileHash256 $ClaudeSettingsPath
@@ -118,6 +128,20 @@ foreach ($hookName in @('PreToolUse', 'PostToolUse', 'PostToolUseFailure')) {
 # Remove empty hooks object
 if ($settings.hooks.PSObject.Properties.Count -eq 0) {
     $settings.PSObject.Properties.Remove('hooks')
+}
+
+if ($WhatIf) {
+    Write-Host ''
+    Write-Host '=== DRY RUN (no changes will be made) ==='
+    Write-Host "Settings file: $ClaudeSettingsPath"
+    Write-Host "Hooks that WOULD be removed: $($hooksRemoved -join ', ')"
+    if ($hooksRemoved.Count -eq 0) { Write-Host 'No Helios hooks found to remove.' }
+    Write-Host '=== END DRY RUN ==='
+    return [ordered]@{
+        status        = 'WHATIF'
+        method        = 'selective_removal'
+        hooks_would_remove = [string[]]$hooksRemoved
+    }
 }
 
 $settingsJson = $settings | ConvertTo-Json -Depth 10

@@ -1,19 +1,10 @@
-# Install-AkashicHeliosRuntime.ps1 — Unified install entrypoint for humans
-# Wraps the full workflow: Prepare → optional settings activation → optional
-# live verification → optional runtime locking.
+# Install-AkashicHeliosRuntime.ps1 — Akashic installer for a Helios runtime
+# Akashic installs, prepares, verifies, activates, and locks a Helios runtime.
+# Helios is the runtime that actually controls Claude's Bash/PowerShell execution.
 #
-# Examples:
-#   # Prepare only (copy files, generate manifest, no settings changes):
-#   .\Install-AkashicHeliosRuntime.ps1 -AkashicRoot . -RuntimeBundleRoot <path> -HeliosGateRoot <path>
-#
-#   # Prepare + activate Claude hooks:
-#   .\Install-AkashicHeliosRuntime.ps1 -AkashicRoot . -RuntimeBundleRoot <path> -HeliosGateRoot <path> -ActivateClaudeHooks
-#
-#   # Prepare + activate + verify:
-#   .\Install-AkashicHeliosRuntime.ps1 -AkashicRoot . -RuntimeBundleRoot <path> -HeliosGateRoot <path> -ActivateClaudeHooks -Verify
-#
-#   # Full activation with locks (requires prior fixture PASS):
-#   .\Install-AkashicHeliosRuntime.ps1 -AkashicRoot . -RuntimeBundleRoot <path> -HeliosGateRoot <path> -ActivateClaudeHooks -Verify -LockRuntime
+# Phase boundary: Prepare copies files and generates the manifest. Activation
+# modifies Claude settings to point to Helios hooks. These are separate steps
+# — Prepare never touches settings, and activation requires explicit opt-in.
 [CmdletBinding()]
 param(
     [Parameter(Mandatory)]
@@ -37,6 +28,8 @@ param(
     [switch]$RunFixtureCheck,
 
     [switch]$RequireStrongLock,
+
+    [switch]$WhatIf,
 
     [string]$ClaudeSettingsPath,
 
@@ -73,11 +66,12 @@ function Add-Step([string]$Name, [string]$Status, $Detail) {
     Write-Host "$mark $Name"
 }
 
-Write-Host "=== Akashic-Helios Runtime Install ==="
-Write-Host "Platform:         $Platform"
-Write-Host "AkashicRoot:      $AkashicRoot"
+$modeLabel = if ($WhatIf) { ' (DRY RUN)' } else { '' }
+Write-Host "=== Helios Runtime Install via Akashic$modeLabel ==="
+Write-Host "Platform:          $Platform"
+Write-Host "AkashicRoot:       $AkashicRoot"
 Write-Host "RuntimeBundleRoot: $RuntimeBundleRoot"
-Write-Host "HeliosGateRoot:   $HeliosGateRoot"
+Write-Host "HeliosGateRoot:    $HeliosGateRoot"
 Write-Host ""
 
 # ============================================================
@@ -128,10 +122,17 @@ if ($ActivateClaudeHooks) {
         EvidenceOutputDir = $EvidenceOutputDir
     }
     if ($ClaudeSettingsPath) { $applyArgs['ClaudeSettingsPath'] = $ClaudeSettingsPath }
+    if ($WhatIf) { $applyArgs['WhatIf'] = $true }
 
     $activationResult = & (Join-Path $ScriptDir 'Apply-AkashicClaudeHooks.ps1') @applyArgs
 
-    if ($activationResult.status -eq 'ACTIVATED' -or $activationResult.status -eq 'ALREADY_ACTIVE') {
+    if ($activationResult.status -eq 'WHATIF') {
+        Add-Step 'Activate Claude Hooks' 'PLAN' ([ordered]@{
+            hooks_would_add   = $activationResult.hooks_would_add
+            hooks_already     = $activationResult.hooks_already_present
+            different_root    = $activationResult.different_root_detected
+        })
+    } elseif ($activationResult.status -eq 'ACTIVATED' -or $activationResult.status -eq 'ALREADY_ACTIVE') {
         Add-Step 'Activate Claude Hooks' 'PASS' ([ordered]@{
             status            = $activationResult.status
             hooks_added       = $activationResult.hooks_added
@@ -219,7 +220,7 @@ if ($results.overall -eq 'PENDING') {
 }
 
 Write-Host ""
-Write-Host "=== Install $($results.overall) ==="
+Write-Host "=== Helios Install $($results.overall)$modeLabel ==="
 Write-Host ""
 foreach ($s in $results.steps) {
     Write-Host "  $($s.status.PadRight(6)) $($s.step)"
