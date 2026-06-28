@@ -203,8 +203,9 @@ if ($RuntimeBundleRoot) {
         }
 
         if ($missingRuntime.Count -gt 0) {
-            $phase2Status = 'WARN'
-            $phase2Detail = "RuntimeBundleRoot verified but missing: $($missingRuntime -join ', ')"
+            $phase2Status = 'FAIL'
+            $phase2Detail = "RuntimeBundleRoot missing protected files: $($missingRuntime -join ', ')"
+            $blockers.Add("Phase 2: $phase2Detail")
         } else {
             $phase2Status = 'PASS'
             $phase2Detail = "RuntimeBundleRoot verified: $RuntimeBundleRoot ($($runtimeProtectedCopyPlan.Count) protected, $($runtimeSupportCopyPlan.Count) support files)"

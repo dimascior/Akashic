@@ -168,6 +168,14 @@ Does NOT:
 
 Until those switches exist, Activate mode is functionally equivalent to Prepare with activation plans attached.
 
+## RuntimeBundleRoot
+
+`RuntimeBundleRoot` is a **Helios runtime bundle source**, not an Akashic adapter path. It must point to a directory containing the complete set of protected runtime files that the installer will copy to `HeliosGateRoot`. The canonical source is the Helios repo's `.command-gate` directory or an export of an active Helios runtime.
+
+The installer **copies** hook and policy files from RuntimeBundleRoot but does not **generate** them. It also generates `manifest/helios-envelope.json`, `manifest/helios-envelope.sha256`, and syncs `hooks/lib/HeliosIntegrityBridge.ps1` from Akashic — but the front controller and policy files must already exist in the bundle.
+
+Missing protected runtime files in RuntimeBundleRoot cause Phase 2 to FAIL with a blocker. Prepare and Activate will not proceed with a partial protected file set.
+
 ## Install Plan Phases
 
 Manifest generation happens AFTER all protected files and the vendored bridge are in final position.
@@ -175,7 +183,7 @@ Manifest generation happens AFTER all protected files and the vendored bridge ar
 | Phase | Action | Mode | Blocking |
 |---|---|---|---|
 | 1 | Verify Akashic package/root + tool availability | All | Yes |
-| 2 | Verify RuntimeBundleRoot (if provided) | All | No |
+| 2 | Verify RuntimeBundleRoot (missing protected files = FAIL) | All | Yes |
 | 3 | Create runtime directories | PlanOnly: check; Prepare/Activate: create | Yes |
 | 4 | Copy runtime protected files from RuntimeBundleRoot | PlanOnly: plan; Prepare/Activate: copy | Yes |
 | 5 | Copy runtime support files from RuntimeBundleRoot | PlanOnly: plan; Prepare/Activate: copy | No |
