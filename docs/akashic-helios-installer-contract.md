@@ -89,6 +89,7 @@ The installer verifies these tools exist in the Akashic root:
 | `tools/Lock-HeliosRuntime.ps1` | Lock runtime (optional fixture pre-check) |
 | `tools/Unlock-HeliosRuntime.ps1` | Unlock runtime for maintenance |
 | `tools/Invoke-HeliosRuntimeRebaseline.ps1` | Unlock → rebaseline manifest → verify → optionally re-lock |
+| `tools/Test-HeliosPrerequisites.ps1` | Platform prerequisite checker (pwsh, lock backend, ownership, writable dirs) |
 
 ## Helios Runtime Target Layout
 
@@ -286,6 +287,33 @@ Install evidence records:
 | `lock_activation` | activated, skipped, or plan_only |
 | `blockers` | Any blocking issues |
 
+## Trust Boundary
+
+Akashic provides manifest-based drift detection and runtime integrity verification. It does not provide cryptographic authority separation unless manifests are signed, externally anchored, append-only logged, or protected by OS locks outside the agent's write ability.
+
+If an actor can write the protected file, the manifest, and the sidecar, then hash-based integrity cannot stop that actor. Akashic can detect drift from the baseline, but if the same actor can rewrite the baseline, then the baseline is no longer external authority.
+
+This is not a failure of SHA256 or the manifest chain. It means the actor is inside the same write authority as the thing being protected.
+
+### What Akashic claims
+
+- Manifest-based drift detection: "has this file changed since the manifest was created?"
+- Runtime structure verification: hooks, policy, bridge, and manifest are present and consistent
+- Cross-platform lock framework: OS-native protections (icacls, chattr, chflags) to prevent modification during gated execution
+
+### What Akashic does not claim
+
+- Authority separation against an actor with write access to both protected files and the manifest
+- Cryptographic proof of origin or authorship without signed manifests
+- Tamper prevention without OS locks or external baseline authority
+
+### Mitigation options (future phases)
+
+- Signed manifest sidecar (cryptographic authority)
+- External baseline authority (manifests stored outside agent write scope)
+- Append-only integrity log (tamper-evident history)
+- OS locks applied after Phase 4.2 proof (Phase 4.2 step 10)
+
 ## OS Lock Fixture Prerequisite
 
 Active runtime locking is not permitted until the disposable fixture passes on the target machine.
@@ -354,9 +382,32 @@ Evidence classification: see `evidence/phase41/EVIDENCE-INDEX.md`.
 | Platform | Live Helios | Evidence |
 |---|---|---|
 | Windows | PASS (steps 1–9). Active MythosJustAFable runtime. Locking deferred. | `evidence/phase42/windows-helios-live-operational-raw-results.md` |
-| Void Linux | Ready for live install/activation. Not yet operational. | `evidence/phase42/` (pending) |
+| Void Linux | Live operational behavior proven (interception, gate approval, evidence capture). Upstream stdin fix at Helios- `46e2393`. Raw Phase 4.2 evidence file pending. | `docs/void-linux-validation.md` (summary) + `evidence/phase42/void-linux-helios-live-operational-raw-results.md` (pending) |
 | macOS | Ready for live install/activation. Not yet operational. | `evidence/phase42/` (pending) |
 
 Remaining evidence artifacts:
 - `evidence/phase42/void-linux-helios-live-operational-raw-results.md`
 - `evidence/phase42/macos-helios-live-operational-raw-results.md`
+
+## Platform Accommodations
+
+### Helios- runtime compatibility
+
+Helios- must be at or after commit `46e2393` (stdin guard fix for `gate_check.ps1`). When `helios_pretooluse.ps1` dot-sources `gate_check.ps1`, stdin is already consumed by the parent script. The fix skips the stdin read if `$RawInput` / `$Payload` are already set, preventing `Empty stdin` on Linux PowerShell.
+
+### Void Linux
+
+- PowerShell 7+ must be installed manually or through a repo-specific bootstrap. There is no standard `xbps` package path.
+- If installer operations run as root, ownership must be corrected afterward: `sudo chown -R $USER:$USER <HeliosGateRoot>`. Root-owned runtime files prevent Claude/user-level hook execution from writing to mutable directories.
+- The installer should verify runtime ownership matches the user running Claude before marking activation as complete.
+
+### macOS
+
+- PowerShell 7+ installed via `brew install powershell` or manual download.
+- `chflags` lock backend requires user-owned files (no sudo needed for `uchg` flag on user-owned items).
+
+### Installer guards (to be implemented)
+
+1. **Prerequisite checker**: verify `pwsh`, lock backend, filesystem support, Claude settings path, and runtime ownership before activation.
+2. **Ownership guard**: if `HeliosGateRoot` is owned by root but Claude runs as the user, mark activation BLOCKED or offer an explicit ownership correction plan.
+3. **Stdin compatibility test**: simulate parent front-controller stdin consumption and dot-source `gate_check.ps1` with `$RawInput` / `$Payload` already populated.

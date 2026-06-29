@@ -75,8 +75,41 @@ Write-Host "HeliosGateRoot:    $HeliosGateRoot"
 Write-Host ""
 
 # ============================================================
+# Step 0: Prerequisites
+# ============================================================
+Write-Host "--- Step 0: Prerequisites ---"
+$prereqScript = Join-Path $ScriptDir 'Test-HeliosPrerequisites.ps1'
+if (Test-Path $prereqScript) {
+    $prereqArgs = @{
+        HeliosGateRoot = $HeliosGateRoot
+        Platform       = $Platform
+    }
+    if ($ClaudeSettingsPath) { $prereqArgs['ClaudeSettingsPath'] = $ClaudeSettingsPath }
+
+    $prereqResult = & $prereqScript @prereqArgs
+
+    if ($prereqResult.status -eq 'READY') {
+        Add-Step 'Prerequisites' 'PASS' ([ordered]@{
+            checks   = $prereqResult.checks.Count
+            blockers = 0
+        })
+    } else {
+        Add-Step 'Prerequisites' 'FAIL' ([ordered]@{
+            blockers = $prereqResult.blockers
+        })
+        $results.overall = 'BLOCKED'
+        Write-Host ""
+        Write-Host "=== Helios Install BLOCKED at Prerequisites ==="
+        return $results
+    }
+} else {
+    Add-Step 'Prerequisites' 'SKIP' 'Test-HeliosPrerequisites.ps1 not found'
+}
+
+# ============================================================
 # Step 1: Run Prepare
 # ============================================================
+Write-Host ""
 Write-Host "--- Step 1: Prepare ---"
 $prepareArgs = @{
     AkashicRoot       = $AkashicRoot
