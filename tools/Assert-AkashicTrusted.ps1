@@ -25,10 +25,11 @@ if ($result.verdict -eq 'CLEAN') {
 }
 
 $reason = switch ($result.verdict) {
-    'DRIFT'             { "file drift detected ($($result.drift_count) drifted, $($result.missing_count) missing, $($result.unmanifested_files.Count) unmanifested)" }
-    'NO_MANIFEST'       { 'akashic-envelope.json not found' }
-    'SIDECAR_MISMATCH'  { 'akashic-envelope.sha256 does not match manifest hash' }
-    default             { "unknown verdict: $($result.verdict)" }
+    'DRIFT'                    { "file drift detected ($($result.drift_count) drifted, $($result.missing_count) missing, $($result.unmanifested_files.Count) unmanifested)" }
+    'NO_MANIFEST'              { 'akashic-envelope.json not found' }
+    'SIDECAR_MISMATCH'         { 'akashic-envelope.sha256 does not match manifest hash' }
+    'UNCLASSIFIED_FILES_FOUND' { "$($result.classification_audit.unknown_unclassified_count) unclassified file(s) found - update coverage policy in AkashicCoveragePolicy.ps1 and rebaseline" }
+    default                    { "unknown verdict: $($result.verdict)" }
 }
 
 throw "AKASHIC_UNTRUSTED: $reason. Run Invoke-AkashicSelfRebaseline.ps1 after verifying changes are intentional."

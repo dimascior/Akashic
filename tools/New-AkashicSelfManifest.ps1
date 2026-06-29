@@ -14,8 +14,12 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
+$AkashicRoot = $AkashicRoot.TrimEnd('\', '/')
 $Utf8NoBom = New-Object System.Text.UTF8Encoding($false)
 $sha = [System.Security.Cryptography.SHA256]::Create()
+
+$libDir = Join-Path (Split-Path -Parent $MyInvocation.MyCommand.Definition) 'lib'
+. (Join-Path $libDir 'AkashicCoveragePolicy.ps1')
 
 function Get-Hash([string]$FilePath) {
     $bytes = [System.IO.File]::ReadAllBytes($FilePath)
@@ -28,6 +32,7 @@ function Get-Role([string]$RelPath) {
     if ($RelPath -like 'Tests/*') { return 'test' }
     if ($RelPath -like 'schemas/*') { return 'schema' }
     if ($RelPath -like 'docs/*') { return 'contract-doc' }
+    if ($RelPath -like '.github/workflows/*') { return 'ci-workflow' }
     if ($RelPath -like 'tools/New-Helios*' -or
         $RelPath -like 'tools/Test-Helios*' -or
         $RelPath -like 'tools/Sync-Helios*' -or
@@ -39,34 +44,42 @@ function Get-Role([string]$RelPath) {
         $RelPath -like 'tools/Clear-Helios*') {
         return 'compatibility-wrapper'
     }
+    if ($RelPath -like 'tools/*') { return 'tool' }
+    $ext = [System.IO.Path]::GetExtension($RelPath).ToLower()
+    if ($ext -in @('.psd1', '.psm1', '.ps1xml')) { return 'module' }
+    if ($ext -in @('.sh', '.bash', '.zsh', '.bat', '.cmd', '.py')) { return 'script' }
+    if ($ext -in @('.json', '.yml', '.yaml', '.toml', '.xml')) { return 'config' }
+    if ($ext -eq '.md') { return 'contract-doc' }
     return 'tool'
 }
 
-$protectedPatterns = @(
-    @{ Dir = ''; Pattern = 'AkashicIntegrityBridge.ps1' },
-    @{ Dir = 'tools'; Pattern = '*.ps1' },
-    @{ Dir = 'tools/lib'; Pattern = '*.ps1' },
-    @{ Dir = 'schemas'; Pattern = '*.json' },
-    @{ Dir = 'docs'; Pattern = '*.md' },
-    @{ Dir = 'Tests'; Pattern = '*.ps1' }
-)
-
 $sep = [System.IO.Path]::DirectorySeparatorChar
+$seen = @{}
 $files = @()
 
-foreach ($p in $protectedPatterns) {
+foreach ($p in $script:AkashicProtectedDiscovery) {
     $searchDir = if ($p.Dir) { Join-Path $AkashicRoot ($p.Dir -replace '/', $sep) } else { $AkashicRoot }
     if (-not (Test-Path $searchDir)) { continue }
-    $found = Get-ChildItem -Path $searchDir -Filter $p.Pattern -File
+
+    $gcArgs = @{ Path = $searchDir; Filter = $p.Pattern; File = $true; Force = $true }
+    if ($p.Recurse) { $gcArgs['Recurse'] = $true }
+
+    $found = Get-ChildItem @gcArgs
     foreach ($f in $found) {
         $relPath = $f.FullName.Substring($AkashicRoot.Length + 1).Replace('\', '/')
+
+        if ($seen.ContainsKey($relPath)) { continue }
+
+        $class = Get-AkashicFileClassification $relPath
+        if ($class -ne 'protected') { continue }
+
+        $seen[$relPath] = $true
         $hash = Get-Hash $f.FullName
-        $size = $f.Length
         $role = Get-Role $relPath
         $files += [ordered]@{
             path   = $relPath
             sha256 = $hash
-            size   = [int]$size
+            size   = [int]$f.Length
             role   = $role
         }
     }
@@ -79,25 +92,28 @@ $allProtectedPaths += 'manifest/akashic-envelope.json'
 $allProtectedPaths += 'manifest/akashic-envelope.sha256'
 $allProtectedPaths = @($allProtectedPaths | Sort-Object)
 
-$mutablePaths = @(
-    'evidence/',
-    'manifest/akashic-envelope.sig',
-    'manifest/akashic-public-key.asc'
-)
-
 $manifest = [ordered]@{
     schema_version   = 'akashic-self-envelope.v1'
     created_utc      = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
     rebaselined_by   = $RebaselinedBy
     signature_status = 'SIGNATURE_NOT_IMPLEMENTED'
     protected        = [ordered]@{
-        description = 'Akashic installer, integrity adapter, and activation tooling files. Must not change outside of explicit human rebaseline.'
+        description = 'Files that can alter Akashic behavior, trust, installation, verification, CI, schema interpretation, or documentation contracts. Must not change outside of explicit human rebaseline.'
         paths       = $allProtectedPaths
         files       = $files
     }
     mutable          = [ordered]@{
-        description = 'Paths that change during normal Akashic operation.'
-        paths       = $mutablePaths
+        description = 'Paths expected to change during normal Akashic operation.'
+        paths       = [string[]]$script:AkashicMutablePatterns
+    }
+    ignored          = [ordered]@{
+        description = 'Paths intentionally outside the trust boundary.'
+        patterns    = [string[]]$script:AkashicIgnoredPatterns
+    }
+    classification   = [ordered]@{
+        protected_file_count  = $files.Count
+        mutable_pattern_count = $script:AkashicMutablePatterns.Count
+        ignored_pattern_count = $script:AkashicIgnoredPatterns.Count
     }
 }
 
@@ -118,7 +134,7 @@ $manifestHash = ($sha.ComputeHash($manifestBytes) | ForEach-Object { $_.ToString
 $sidecarPath = Join-Path $manifestDir 'akashic-envelope.sha256'
 [System.IO.File]::WriteAllText($sidecarPath, $manifestHash, $Utf8NoBom)
 
-Write-Host "Akashic self-manifest created."
+Write-Host 'Akashic self-manifest created.'
 Write-Host "  Manifest:  $manifestPath"
 Write-Host "  Sidecar:   $sidecarPath"
 Write-Host "  Hash:      $manifestHash"

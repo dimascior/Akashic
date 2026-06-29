@@ -1,6 +1,5 @@
 # Test-AkashicSelfIntegrity.ps1 - Verify Akashic files against its self-manifest
-# Checks: file drift, missing files, unmanifested protected-pattern files,
-# sidecar mismatch, and unsigned manifest state.
+# Full classification audit: every repo file is protected, mutable, ignored, or unknown.
 # Hash-only self-integrity detects drift. Signed or external authority is
 # required to prevent an agent from rewriting both files and manifests.
 [CmdletBinding()]
@@ -8,12 +7,18 @@ param(
     [Parameter(Mandatory)]
     [string]$AkashicRoot,
 
-    [string]$EvidenceOutputDir
+    [string]$EvidenceOutputDir,
+
+    [switch]$AllowUnclassified
 )
 
 $ErrorActionPreference = 'Stop'
+$AkashicRoot = $AkashicRoot.TrimEnd('\', '/')
 $Utf8NoBom = New-Object System.Text.UTF8Encoding($false)
 $sha = [System.Security.Cryptography.SHA256]::Create()
+
+$libDir = Join-Path (Split-Path -Parent $MyInvocation.MyCommand.Definition) 'lib'
+. (Join-Path $libDir 'AkashicCoveragePolicy.ps1')
 
 function Get-Hash([string]$FilePath) {
     $bytes = [System.IO.File]::ReadAllBytes($FilePath)
@@ -27,22 +32,32 @@ $sidecarPath  = Join-Path $AkashicRoot "manifest${sep}akashic-envelope.sha256"
 Write-Host '=== Akashic Self-Integrity Check ==='
 Write-Host ''
 
+# --- No manifest ---
 if (-not (Test-Path $manifestPath)) {
     Write-Host '[FAIL] Manifest not found'
     $result = [ordered]@{
-        schema_version     = 'akashic-self-integrity-evidence.v1'
-        timestamp_utc      = (Get-Date).ToUniversalTime().ToString('o')
-        akashic_root       = $AkashicRoot
-        verdict            = 'NO_MANIFEST'
-        signature_status   = 'SIGNATURE_NOT_IMPLEMENTED'
-        sidecar_valid      = $false
-        manifest_hash      = $null
-        file_results       = @()
-        unmanifested_files = @()
+        schema_version       = 'akashic-self-integrity-evidence.v1'
+        timestamp_utc        = (Get-Date).ToUniversalTime().ToString('o')
+        akashic_root         = $AkashicRoot
+        verdict              = 'NO_MANIFEST'
+        signature_status     = 'SIGNATURE_NOT_IMPLEMENTED'
+        sidecar_valid        = $false
+        manifest_hash        = $null
+        file_results         = @()
+        unmanifested_files   = @()
+        classification_audit = [ordered]@{
+            protected_manifested_count   = 0
+            protected_unmanifested_count = 0
+            mutable_present_count        = 0
+            ignored_present_count        = 0
+            unknown_unclassified_count   = 0
+            unknown_unclassified_files   = @()
+        }
+        allow_unclassified   = [bool]$AllowUnclassified
         protected_file_count = 0
-        clean_count        = 0
-        drift_count        = 0
-        missing_count      = 0
+        clean_count          = 0
+        drift_count          = 0
+        missing_count        = 0
     }
     if ($EvidenceOutputDir) {
         if (-not (Test-Path $EvidenceOutputDir)) { New-Item -ItemType Directory -Path $EvidenceOutputDir -Force | Out-Null }
@@ -52,10 +67,11 @@ if (-not (Test-Path $manifestPath)) {
     return $result
 }
 
-# Sidecar check
+# --- Sidecar check ---
+$hasSidecarIssue = $false
+$hasBomIssue = $false
 $sidecarValid = $false
 $manifestHash = $null
-$verdict = 'CLEAN'
 
 $manifestBytes = [System.IO.File]::ReadAllBytes($manifestPath)
 $manifestHash = ($sha.ComputeHash($manifestBytes) | ForEach-Object { $_.ToString('x2') }) -join ''
@@ -63,17 +79,17 @@ $manifestHash = ($sha.ComputeHash($manifestBytes) | ForEach-Object { $_.ToString
 $bomCheck = [ordered]@{ manifest_bom_free = $true; sidecar_bom_free = $true }
 if ($manifestBytes.Length -ge 3 -and $manifestBytes[0] -eq 0xEF -and $manifestBytes[1] -eq 0xBB -and $manifestBytes[2] -eq 0xBF) {
     $bomCheck.manifest_bom_free = $false
-    $verdict = 'DRIFT'
+    $hasBomIssue = $true
 }
 
 if (-not (Test-Path $sidecarPath)) {
     Write-Host '[FAIL] Sidecar not found'
-    $verdict = 'SIDECAR_MISMATCH'
+    $hasSidecarIssue = $true
 } else {
     $sidecarRaw = [System.IO.File]::ReadAllBytes($sidecarPath)
     if ($sidecarRaw.Length -ge 3 -and $sidecarRaw[0] -eq 0xEF -and $sidecarRaw[1] -eq 0xBB -and $sidecarRaw[2] -eq 0xBF) {
         $bomCheck.sidecar_bom_free = $false
-        $verdict = 'DRIFT'
+        $hasBomIssue = $true
     }
     $sidecarHash = [System.Text.Encoding]::UTF8.GetString($sidecarRaw).Trim()
     if ($sidecarHash -eq $manifestHash) {
@@ -81,26 +97,28 @@ if (-not (Test-Path $sidecarPath)) {
         Write-Host '[PASS] Sidecar matches manifest hash'
     } else {
         Write-Host '[FAIL] Sidecar mismatch'
-        $verdict = 'SIDECAR_MISMATCH'
+        $hasSidecarIssue = $true
     }
 }
 
-# Parse manifest
+# --- Parse manifest ---
 $manifest = Get-Content -LiteralPath $manifestPath -Raw | ConvertFrom-Json
-
-# Signature status
 $sigStatus = $manifest.signature_status
 if (-not $sigStatus) { $sigStatus = 'SIGNATURE_NOT_IMPLEMENTED' }
 Write-Host "[INFO] Signature status: $sigStatus"
 
-# File-by-file verification
+# --- File-by-file verification ---
 $fileResults = @()
 $cleanCount = 0
 $driftCount = 0
 $missingCount = 0
+$hasFileDrift = $false
+
+$manifestedPaths = @{}
 
 foreach ($entry in $manifest.protected.files) {
     $relPath = $entry.path
+    $manifestedPaths[$relPath] = $true
     $fullPath = Join-Path $AkashicRoot ($relPath -replace '/', $sep)
 
     $fr = [ordered]@{
@@ -118,7 +136,7 @@ foreach ($entry in $manifest.protected.files) {
         $fr.status = 'MISSING'
         $fr.exists = $false
         $missingCount++
-        $verdict = 'DRIFT'
+        $hasFileDrift = $true
         Write-Host "[FAIL] MISSING: $relPath"
     } else {
         $fr.exists = $true
@@ -129,12 +147,12 @@ foreach ($entry in $manifest.protected.files) {
         if ($fr.actual_sha256 -ne $entry.sha256) {
             $fr.status = 'HASH_MISMATCH'
             $driftCount++
-            $verdict = 'DRIFT'
+            $hasFileDrift = $true
             Write-Host "[FAIL] HASH_MISMATCH: $relPath"
         } elseif ($fr.actual_size -ne $entry.size) {
             $fr.status = 'SIZE_MISMATCH'
             $driftCount++
-            $verdict = 'DRIFT'
+            $hasFileDrift = $true
             Write-Host "[FAIL] SIZE_MISMATCH: $relPath"
         } else {
             $cleanCount++
@@ -145,46 +163,83 @@ foreach ($entry in $manifest.protected.files) {
     $fileResults += $fr
 }
 
-# Scan for unmanifested files matching protected patterns
-$protectedPatterns = @(
-    @{ Dir = ''; Pattern = 'AkashicIntegrityBridge.ps1' },
-    @{ Dir = 'tools'; Pattern = '*.ps1' },
-    @{ Dir = 'tools/lib'; Pattern = '*.ps1' },
-    @{ Dir = 'schemas'; Pattern = '*.json' },
-    @{ Dir = 'docs'; Pattern = '*.md' },
-    @{ Dir = 'Tests'; Pattern = '*.ps1' }
-)
+# --- Classification audit: walk entire repo ---
+Write-Host ''
+Write-Host '=== Classification Audit ==='
 
-$manifestedPaths = @{}
-foreach ($entry in $manifest.protected.files) {
-    $manifestedPaths[$entry.path] = $true
+$classAudit = [ordered]@{
+    protected_manifested   = @()
+    protected_unmanifested = @()
+    mutable_present        = @()
+    ignored_present        = @()
+    unknown_unclassified   = @()
 }
 
-$unmanifestedFiles = @()
-foreach ($p in $protectedPatterns) {
-    $searchDir = if ($p.Dir) { Join-Path $AkashicRoot ($p.Dir -replace '/', $sep) } else { $AkashicRoot }
-    if (-not (Test-Path $searchDir)) { continue }
-    $found = Get-ChildItem -Path $searchDir -Filter $p.Pattern -File
-    foreach ($f in $found) {
-        $relPath = $f.FullName.Substring($AkashicRoot.Length + 1).Replace('\', '/')
-        if (-not $manifestedPaths.ContainsKey($relPath)) {
-            $unmanifestedFiles += $relPath
-            Write-Host "[WARN] UNMANIFESTED: $relPath"
+$repoFiles = @()
+$topItems = Get-ChildItem -Path $AkashicRoot -Force
+foreach ($item in $topItems) {
+    if ($item.PSIsContainer) {
+        if ($item.Name -eq '.git') { continue }
+        $subFiles = Get-ChildItem -Path $item.FullName -File -Recurse -Force -ErrorAction SilentlyContinue
+        foreach ($sf in $subFiles) { $repoFiles += $sf }
+    } else {
+        $repoFiles += $item
+    }
+}
+
+foreach ($f in $repoFiles) {
+    $relPath = $f.FullName.Substring($AkashicRoot.Length + 1).Replace('\', '/')
+    $class = Get-AkashicFileClassification $relPath
+
+    switch ($class) {
+        'protected' {
+            if ($manifestedPaths.ContainsKey($relPath) -or
+                $relPath -eq 'manifest/akashic-envelope.json' -or
+                $relPath -eq 'manifest/akashic-envelope.sha256') {
+                $classAudit.protected_manifested += $relPath
+            } else {
+                $classAudit.protected_unmanifested += $relPath
+                Write-Host "[WARN] PROTECTED_UNMANIFESTED: $relPath"
+            }
+        }
+        'mutable' {
+            $classAudit.mutable_present += $relPath
+        }
+        'ignored' {
+            $classAudit.ignored_present += $relPath
+        }
+        'unknown' {
+            $classAudit.unknown_unclassified += $relPath
+            Write-Host "[WARN] UNCLASSIFIED: $relPath"
         }
     }
 }
 
-if ($unmanifestedFiles.Count -gt 0) {
+$hasUnmanifested = $classAudit.protected_unmanifested.Count -gt 0
+$hasUnclassified = $classAudit.unknown_unclassified.Count -gt 0
+
+# --- Determine verdict (most severe wins) ---
+if ($hasSidecarIssue) {
+    $verdict = 'SIDECAR_MISMATCH'
+} elseif ($hasBomIssue -or $hasFileDrift -or $hasUnmanifested) {
     $verdict = 'DRIFT'
+} elseif ($hasUnclassified -and -not $AllowUnclassified) {
+    $verdict = 'UNCLASSIFIED_FILES_FOUND'
+} else {
+    $verdict = 'CLEAN'
 }
 
 Write-Host ''
 Write-Host "Verdict: $verdict"
-Write-Host "  Protected: $($fileResults.Count) files"
-Write-Host "  Clean:     $cleanCount"
-Write-Host "  Drift:     $driftCount"
-Write-Host "  Missing:   $missingCount"
-Write-Host "  Unmanifested: $($unmanifestedFiles.Count)"
+Write-Host "  Protected manifested:   $($classAudit.protected_manifested.Count)"
+Write-Host "  Protected unmanifested: $($classAudit.protected_unmanifested.Count)"
+Write-Host "  Mutable present:        $($classAudit.mutable_present.Count)"
+Write-Host "  Ignored present:        $($classAudit.ignored_present.Count)"
+Write-Host "  Unknown unclassified:   $($classAudit.unknown_unclassified.Count)"
+Write-Host "  File integrity:"
+Write-Host "    Clean:   $cleanCount"
+Write-Host "    Drift:   $driftCount"
+Write-Host "    Missing: $missingCount"
 
 $result = [ordered]@{
     schema_version       = 'akashic-self-integrity-evidence.v1'
@@ -196,7 +251,16 @@ $result = [ordered]@{
     manifest_hash        = $manifestHash
     bom_check            = $bomCheck
     file_results         = $fileResults
-    unmanifested_files   = [string[]]$unmanifestedFiles
+    unmanifested_files   = [string[]]$classAudit.protected_unmanifested
+    classification_audit = [ordered]@{
+        protected_manifested_count   = $classAudit.protected_manifested.Count
+        protected_unmanifested_count = $classAudit.protected_unmanifested.Count
+        mutable_present_count        = $classAudit.mutable_present.Count
+        ignored_present_count        = $classAudit.ignored_present.Count
+        unknown_unclassified_count   = $classAudit.unknown_unclassified.Count
+        unknown_unclassified_files   = [string[]]$classAudit.unknown_unclassified
+    }
+    allow_unclassified   = [bool]$AllowUnclassified
     protected_file_count = $fileResults.Count
     clean_count          = $cleanCount
     drift_count          = $driftCount

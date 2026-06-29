@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "akashic-self-integrity-evidence.v1",
   "title": "Akashic Self-Integrity Evidence",
-  "description": "Evidence record produced by Test-AkashicSelfIntegrity.ps1. Documents the result of verifying Akashic's own files against its self-manifest.",
+  "description": "Evidence record produced by Test-AkashicSelfIntegrity.ps1. Documents the result of verifying Akashic's own files against its self-manifest and classifying every repo file.",
   "type": "object",
   "required": ["schema_version", "timestamp_utc", "akashic_root", "verdict", "signature_status", "sidecar_valid", "manifest_hash", "file_results", "unmanifested_files"],
   "properties": {
@@ -19,8 +19,8 @@
     },
     "verdict": {
       "type": "string",
-      "enum": ["CLEAN", "DRIFT", "NO_MANIFEST", "SIDECAR_MISMATCH"],
-      "description": "Overall integrity verdict."
+      "enum": ["CLEAN", "DRIFT", "NO_MANIFEST", "SIDECAR_MISMATCH", "UNCLASSIFIED_FILES_FOUND"],
+      "description": "Overall integrity verdict. UNCLASSIFIED_FILES_FOUND means files exist outside protected, mutable, and ignored classifications."
     },
     "signature_status": {
       "type": "string",
@@ -63,6 +63,26 @@
       "type": "array",
       "items": { "type": "string" },
       "description": "Files matching protected patterns that are not listed in the manifest."
+    },
+    "classification_audit": {
+      "type": "object",
+      "properties": {
+        "protected_manifested_count": { "type": "integer", "minimum": 0 },
+        "protected_unmanifested_count": { "type": "integer", "minimum": 0 },
+        "mutable_present_count": { "type": "integer", "minimum": 0 },
+        "ignored_present_count": { "type": "integer", "minimum": 0 },
+        "unknown_unclassified_count": { "type": "integer", "minimum": 0 },
+        "unknown_unclassified_files": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Files that do not match any protected, mutable, or ignored pattern."
+        }
+      },
+      "description": "Full repo classification audit. Every file is protected, mutable, ignored, or unknown."
+    },
+    "allow_unclassified": {
+      "type": "boolean",
+      "description": "Whether unclassified files were allowed in this check (discovery mode)."
     },
     "protected_file_count": {
       "type": "integer"

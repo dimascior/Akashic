@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "akashic-self-envelope.v1",
   "title": "Akashic Self-Envelope Manifest",
-  "description": "Manifest defining the protected and mutable boundaries of the Akashic installer itself. The sidecar file akashic-envelope.sha256 contains the SHA256 of this JSON file. Hash-only self-integrity detects drift but does not prevent an agent with write access to both files and manifests from rewriting them. Signed or external authority is required for that guarantee.",
+  "description": "Manifest defining the protected, mutable, and ignored boundaries of the Akashic installer itself. Every repo file must be classified as protected, mutable, or ignored. Unclassified files are a coverage gap. Hash-only self-integrity detects drift but does not prevent an agent with write access to both files and manifests from rewriting them. Signed or external authority is required for that guarantee.",
   "type": "object",
   "required": ["schema_version", "created_utc", "rebaselined_by", "protected", "mutable", "signature_status"],
   "properties": {
@@ -59,7 +59,7 @@
               },
               "role": {
                 "type": "string",
-                "enum": ["bridge", "tool", "library", "schema", "contract-doc", "test", "compatibility-wrapper"],
+                "enum": ["bridge", "tool", "library", "schema", "contract-doc", "test", "compatibility-wrapper", "ci-workflow", "config", "module", "script"],
                 "description": "Functional role of the file within Akashic."
               }
             },
@@ -81,6 +81,29 @@
           "description": "Paths that change during normal Akashic operation."
         }
       }
+    },
+    "ignored": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "patterns": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Patterns for paths intentionally outside the trust boundary."
+        }
+      },
+      "description": "Paths intentionally outside the trust boundary."
+    },
+    "classification": {
+      "type": "object",
+      "properties": {
+        "protected_file_count": { "type": "integer", "minimum": 0 },
+        "mutable_pattern_count": { "type": "integer", "minimum": 0 },
+        "ignored_pattern_count": { "type": "integer", "minimum": 0 }
+      },
+      "description": "Summary counts for coverage classification."
     }
   },
   "additionalProperties": false

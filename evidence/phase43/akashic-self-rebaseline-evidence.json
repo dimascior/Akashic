@@ -1,6 +1,6 @@
 {
     "schema_version":  "akashic-self-integrity-evidence.v1",
-    "timestamp_utc":  "2026-06-29T01:51:40.4079889Z",
+    "timestamp_utc":  "2026-06-29T07:33:14.2996876Z",
     "akashic_root":  "C:\\Users\\dimas\\Desktop\\helios-integrity-adapter",
     "rebaselined_by":  "human",
     "overall":  "COMPLETE",
@@ -14,8 +14,8 @@
                       "step":  "Regenerate manifest",
                       "status":  "PASS",
                       "detail":  {
-                                     "protected_count":  90,
-                                     "manifest_hash":  "317efbade8372f7984a4ff33542d8f5a5dad76253fc042880d4beb90717c7f4a",
+                                     "protected_count":  92,
+                                     "manifest_hash":  "690d897df96640c757db5df90017a8f93a0956e767303adfb0a48d3da3066284",
                                      "signature_status":  "SIGNATURE_NOT_IMPLEMENTED"
                                  }
                   },
@@ -24,8 +24,8 @@
                       "status":  "PASS",
                       "detail":  {
                                      "verdict":  "CLEAN",
-                                     "protected_count":  90,
-                                     "clean_count":  90
+                                     "protected_count":  92,
+                                     "clean_count":  92
                                  }
                   },
                   {
@@ -34,8 +34,8 @@
                       "detail":  "not requested (pass -RelockAfter)"
                   }
               ],
-    "manifest_hash":  "317efbade8372f7984a4ff33542d8f5a5dad76253fc042880d4beb90717c7f4a",
-    "protected_count":  90,
+    "manifest_hash":  "690d897df96640c757db5df90017a8f93a0956e767303adfb0a48d3da3066284",
+    "protected_count":  92,
     "signature_status":  "SIGNATURE_NOT_IMPLEMENTED",
     "verify_verdict":  "CLEAN"
 }

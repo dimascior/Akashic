@@ -1,10 +1,10 @@
 {
     "schema_version":  "akashic-self-envelope.v1",
-    "created_utc":  "2026-06-29T01:51:40Z",
+    "created_utc":  "2026-06-29T07:33:13Z",
     "rebaselined_by":  "human",
     "signature_status":  "SIGNATURE_NOT_IMPLEMENTED",
     "protected":  {
-                      "description":  "Akashic installer, integrity adapter, and activation tooling files. Must not change outside of explicit human rebaseline.",
+                      "description":  "Files that can alter Akashic behavior, trust, installation, verification, CI, schema interpretation, or documentation contracts. Must not change outside of explicit human rebaseline.",
                       "paths":  [
                                     "AkashicIntegrityBridge.ps1",
                                     "docs/akashic-helios-installer-contract.md",
@@ -27,6 +27,7 @@
                                     "docs/void-linux-validation.md",
                                     "manifest/akashic-envelope.json",
                                     "manifest/akashic-envelope.sha256",
+                                    "README.md",
                                     "schemas/akashic-self-envelope.v1.json",
                                     "schemas/akashic-self-integrity-evidence.v1.json",
                                     "schemas/helios-baseline.schema.json",
@@ -64,6 +65,7 @@
                                     "tools/Invoke-HeliosGapTest.ps1",
                                     "tools/Invoke-HeliosRebaseline.ps1",
                                     "tools/Invoke-HeliosRuntimeRebaseline.ps1",
+                                    "tools/lib/AkashicCoveragePolicy.ps1",
                                     "tools/lib/AkashicLockBackend.ps1",
                                     "tools/lib/AkashicLockTargets.ps1",
                                     "tools/Lock-AkashicProtectedFiles.ps1",
@@ -120,8 +122,8 @@
                                     },
                                     {
                                         "path":  "docs/akashic-self-integrity-boundary.md",
-                                        "sha256":  "5a315d766e2e0ec0f938d4c63d8409d772e69d27966c3aa3ab4916994fbf9ae0",
-                                        "size":  5292,
+                                        "sha256":  "a52a1b83dce4cfa4583894f36d5ed99a7cb4b76b59b82e88518d3d63b707693d",
+                                        "size":  7540,
                                         "role":  "contract-doc"
                                     },
                                     {
@@ -215,15 +217,21 @@
                                         "role":  "contract-doc"
                                     },
                                     {
+                                        "path":  "README.md",
+                                        "sha256":  "589bed14f09083b7c7237899f6a3036e4d0bcb5ff201180189a568fa670f116d",
+                                        "size":  13515,
+                                        "role":  "contract-doc"
+                                    },
+                                    {
                                         "path":  "schemas/akashic-self-envelope.v1.json",
-                                        "sha256":  "2bbbb68dbc770dec5d872a4a3c50e33a809ebfde8c0a2322449f753fbfd0568d",
-                                        "size":  3150,
+                                        "sha256":  "859ae30d545d5a78f22e0e77abff40e0b3c8401f1d14606bd97a17047bf25fd3",
+                                        "size":  3996,
                                         "role":  "schema"
                                     },
                                     {
                                         "path":  "schemas/akashic-self-integrity-evidence.v1.json",
-                                        "sha256":  "a188acd58d0c8d298be94d22a180c231f6d7dc1a9a0a63576bfb644952d6c403",
-                                        "size":  2516,
+                                        "sha256":  "137395f82f94204e06f7373262dff180615ed9db8ad2189e4df2475b1635b305",
+                                        "size":  3613,
                                         "role":  "schema"
                                     },
                                     {
@@ -348,14 +356,14 @@
                                     },
                                     {
                                         "path":  "tools/Apply-AkashicClaudeHooks.ps1",
-                                        "sha256":  "bf3b02baf91520a5141a1eb0bdf4ed455b720e55aee3163552947b0ae7b1db51",
-                                        "size":  10926,
+                                        "sha256":  "01ea73716a45de8e8d2d3c2d9104af806dcceb67302e27a4048568e5f7562f7f",
+                                        "size":  11207,
                                         "role":  "tool"
                                     },
                                     {
                                         "path":  "tools/Assert-AkashicTrusted.ps1",
-                                        "sha256":  "30c98ce69fb94668e49ecf6b3bcb4534d64df729bffc69c9730244b5096a5e88",
-                                        "size":  1323,
+                                        "sha256":  "52af68f25ed32f4010bf8bb7e38e12d9dc7c0bf5d77f95937bca6d1e63c8ee89",
+                                        "size":  1578,
                                         "role":  "tool"
                                     },
                                     {
@@ -408,14 +416,14 @@
                                     },
                                     {
                                         "path":  "tools/Invoke-AkashicRebaseline.ps1",
-                                        "sha256":  "7f8e85aa622dc3d6c2b752dd7cceb9c752f710b7b5729509b8a68c79be9bfcb8",
-                                        "size":  8630,
+                                        "sha256":  "4aa403f2f91aef91992c3308028b87030d361a87608f558fbee5d7e89f94bb30",
+                                        "size":  8859,
                                         "role":  "tool"
                                     },
                                     {
                                         "path":  "tools/Invoke-AkashicSelfRebaseline.ps1",
-                                        "sha256":  "cecaff2d61e788dc2848854e2740859e984a473cb3f26df049e0e9ec3c0f6481",
-                                        "size":  4885,
+                                        "sha256":  "d80ced435defa61131354e13295f9053c0d5f09e0ac624f4f5f82bfde085e55c",
+                                        "size":  5213,
                                         "role":  "tool"
                                     },
                                     {
@@ -432,9 +440,15 @@
                                     },
                                     {
                                         "path":  "tools/Invoke-HeliosRuntimeRebaseline.ps1",
-                                        "sha256":  "5c65358f9c2b3cfdde2d8f1ddec6ef845d2f64c61ce0221d70a8687b85603e11",
-                                        "size":  3488,
+                                        "sha256":  "946621be4780238e8ed96eeaab3d13f4b48b2f992caf6a4438fd4b2a8a52fe7c",
+                                        "size":  3589,
                                         "role":  "compatibility-wrapper"
+                                    },
+                                    {
+                                        "path":  "tools/lib/AkashicCoveragePolicy.ps1",
+                                        "sha256":  "092a0518e796cf70b0f89870c8dea4e1e3eea4dee02118756c4987b09e6f15ad",
+                                        "size":  4144,
+                                        "role":  "library"
                                     },
                                     {
                                         "path":  "tools/lib/AkashicLockBackend.ps1",
@@ -450,14 +464,14 @@
                                     },
                                     {
                                         "path":  "tools/Lock-AkashicProtectedFiles.ps1",
-                                        "sha256":  "86261e1e7acf7c1bd3e97b4da6653669d4823338a530ce26d679bec47086f316",
-                                        "size":  5568,
+                                        "sha256":  "57a632b3fa0c523880950abd05ba147fb78c662848c466b2374df59ca38f9a12",
+                                        "size":  5713,
                                         "role":  "tool"
                                     },
                                     {
                                         "path":  "tools/Lock-AkashicRoot.ps1",
-                                        "sha256":  "a2f7cd668e94117b2ab0ee20ab2866837c5885f02099d9445594db1a026fac7c",
-                                        "size":  3582,
+                                        "sha256":  "19444eefe71ec041b2543bf84bb0aedc1cb9db8a03fe621db9aaf8769b236d7c",
+                                        "size":  3674,
                                         "role":  "tool"
                                     },
                                     {
@@ -468,8 +482,8 @@
                                     },
                                     {
                                         "path":  "tools/Lock-HeliosRuntime.ps1",
-                                        "sha256":  "3ba55b76bdf2a0296f4e33c56e40aaadedb4278666e7450e8ed843143d55dea1",
-                                        "size":  1428,
+                                        "sha256":  "e957610cf3552915e23179b5e3946bcc7091ac7500adaebad7fde394fd1e6469",
+                                        "size":  1482,
                                         "role":  "compatibility-wrapper"
                                     },
                                     {
@@ -486,8 +500,8 @@
                                     },
                                     {
                                         "path":  "tools/New-AkashicSelfManifest.ps1",
-                                        "sha256":  "c8781a44e133745d3c4d7ae1c741124079def3be593b56d5bd866d75a73945cd",
-                                        "size":  4860,
+                                        "sha256":  "a9011a112646657c8e2345c615732e36813bd08f75980c31e29a7bb1c7bf8e02",
+                                        "size":  5894,
                                         "role":  "tool"
                                     },
                                     {
@@ -534,14 +548,14 @@
                                     },
                                     {
                                         "path":  "tools/Remove-AkashicClaudeHooks.ps1",
-                                        "sha256":  "173e49db473f2d6f58254dbd172b975207f3c65b66365e511baddeaba43393bc",
-                                        "size":  6476,
+                                        "sha256":  "5d1117795a02a9272c6ec89b6f9ad9cb3a934dd5c1dce8bb7b65a32b43eff094",
+                                        "size":  6652,
                                         "role":  "tool"
                                     },
                                     {
                                         "path":  "tools/Rollback-AkashicHeliosRuntime.ps1",
-                                        "sha256":  "64eea30b5d1305fbe92391972f86091b602c20e2e9a7d61fd7b7e5890a7cfc01",
-                                        "size":  4346,
+                                        "sha256":  "e0129b3caaae8a2a4b0b66e34b9aed4e53aa2a8068e48baf9246e85aa7770044",
+                                        "size":  4471,
                                         "role":  "tool"
                                     },
                                     {
@@ -564,8 +578,8 @@
                                     },
                                     {
                                         "path":  "tools/Test-AkashicSelfIntegrity.ps1",
-                                        "sha256":  "03c1815005c3e235a4b1d0f3aec01af6439a7bfd18d0beb36cd053794117940b",
-                                        "size":  7528,
+                                        "sha256":  "6ffbe8ab48553e6e3fe9b17ed09fcfb0ba85392b5d6c7a092399b68cdfee161a",
+                                        "size":  10133,
                                         "role":  "tool"
                                     },
                                     {
@@ -618,14 +632,14 @@
                                     },
                                     {
                                         "path":  "tools/Unlock-AkashicProtectedFiles.ps1",
-                                        "sha256":  "587b6786d339894025c069e1958f32bbfb687f4c51a155e8982a96a597f20578",
-                                        "size":  5645,
+                                        "sha256":  "e39673f1b0fc6c53eaf52aea30cdb3d4abea828ab7094d27610ecfa4087b81f2",
+                                        "size":  5790,
                                         "role":  "tool"
                                     },
                                     {
                                         "path":  "tools/Unlock-AkashicRoot.ps1",
-                                        "sha256":  "2978461d9124b84f3f19758b10be08c8c9f5c9e428e0d7e1a5a33b80bf5e0fec",
-                                        "size":  3543,
+                                        "sha256":  "b4f257bfd69ab8c2ad21e7e972833d063a1377ca4d52f17dd412deb3fc371c0f",
+                                        "size":  3632,
                                         "role":  "tool"
                                     },
                                     {
@@ -636,19 +650,37 @@
                                     },
                                     {
                                         "path":  "tools/Unlock-HeliosRuntime.ps1",
-                                        "sha256":  "cc3b1e9bef3b729ad230596de714fb346a2da35c0a4cac524cc8249495712b0d",
-                                        "size":  829,
+                                        "sha256":  "922be991e9f6fa0a7b23af179d77991c33dbb44fa683faccff5c537ca1b82be2",
+                                        "size":  863,
                                         "role":  "compatibility-wrapper"
                                     }
                                 ]
                   },
     "mutable":  {
-                    "description":  "Paths that change during normal Akashic operation.",
+                    "description":  "Paths expected to change during normal Akashic operation.",
                     "paths":  [
-                                  "evidence/",
+                                  "evidence/*",
                                   "manifest/akashic-envelope.sig",
-                                  "manifest/akashic-public-key.asc"
+                                  "manifest/akashic-public-key.asc",
+                                  "install-plan.json",
+                                  "*.tmp",
+                                  "*.log"
                               ]
                 },
-    "note":  "Post-test rebaseline"
+    "ignored":  {
+                    "description":  "Paths intentionally outside the trust boundary.",
+                    "patterns":  [
+                                     ".git/*",
+                                     ".vscode/*",
+                                     ".idea/*",
+                                     "node_modules/*",
+                                     "__pycache__/*"
+                                 ]
+                },
+    "classification":  {
+                           "protected_file_count":  92,
+                           "mutable_pattern_count":  6,
+                           "ignored_pattern_count":  5
+                       },
+    "note":  "Phase 4.3.1 - coverage policy hardening"
 }

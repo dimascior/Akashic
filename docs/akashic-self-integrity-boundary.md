@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Akashic verifies, prepares, activates, locks, unlocks, and rolls back a Helios runtime. Before Phase 4.3, Akashic verified Helios but was not itself independently verified. This phase makes Akashic a protected subject: Akashic must verify its own files before it is allowed to verify or modify Helios.
+Akashic verifies, prepares, activates, locks, unlocks, and rolls back a Helios runtime. Akashic must verify its own files before it is allowed to verify or modify Helios.
 
 ## Architecture
 
@@ -19,7 +19,9 @@ Hash-only self-integrity detects drift but does not prevent an agent with write 
 - Before any high-impact tool runs, all protected files are verified against the manifest.
 - File additions matching protected patterns that are not in the manifest are flagged.
 - Sidecar hash mismatches are detected and fail the integrity check.
-- Verification fails closed: if the manifest is missing, the sidecar is wrong, or any file has drifted, high-impact tools refuse to run.
+- Every repo file is classified as protected, mutable, ignored, or unknown.
+- Unclassified files fail the integrity check by default.
+- Verification fails closed: if the manifest is missing, the sidecar is wrong, any file has drifted, or unclassified files exist, high-impact tools refuse to run.
 
 **What Akashic self-integrity does not claim:**
 - It does not prevent an actor with the same write authority over both protected files and the manifest from rewriting both.
@@ -32,39 +34,91 @@ Hash-only self-integrity detects drift but does not prevent an agent with write 
 - OS-level lock on manifest files (already supported via Lock-AkashicRoot.ps1)
 - Append-only audit log of rebaseline events
 
-## Protected Files
+## Coverage Policy
 
-Protected patterns (discovered by tools at manifest generation time):
+Every repo file must be classified. Silent noncoverage is the bug.
 
-| Pattern | Role |
-|---------|------|
-| `AkashicIntegrityBridge.ps1` | bridge |
-| `tools/*.ps1` | tool |
-| `tools/lib/*.ps1` | library |
-| `schemas/*.json` | schema |
-| `docs/*.md` | contract-doc |
-| `Tests/*.ps1` | test |
+### Protected
+
+Files that can alter Akashic behavior, trust, installation, verification, CI, schema interpretation, or documentation contracts.
+
+| Pattern | Scope | Role |
+|---------|-------|------|
+| `AkashicIntegrityBridge.ps1` | root | bridge |
+| `*.ps1` | root | tool |
+| `*.md` | root | contract-doc |
+| `*.json` | root | config |
+| `tools/**/*.ps1` | recursive | tool / compatibility-wrapper |
+| `tools/lib/**/*.ps1` | recursive | library |
+| `Tests/**/*.ps1` | recursive | test |
+| `schemas/**/*.json` | recursive | schema |
+| `docs/**/*.md` | recursive | contract-doc |
+| `.github/workflows/*.yml` | directory | ci-workflow |
+| `.github/workflows/*.yaml` | directory | ci-workflow |
+| `*.psd1` | anywhere | module |
+| `*.psm1` | anywhere | module |
+| `*.ps1xml` | anywhere | module |
+| `*.sh`, `*.bash`, `*.zsh` | anywhere | script |
+| `*.bat`, `*.cmd` | anywhere | script |
+| `*.py` | anywhere | script |
+| `*.yml`, `*.yaml` | anywhere | config |
+| `*.toml`, `*.xml` | anywhere | config |
 
 The manifest also lists itself and its sidecar as protected paths, but does not hash them (avoids self-referential hashing).
 
-## Mutable Paths
+### Mutable
 
-| Path | Purpose |
-|------|---------|
-| `evidence/` | Validation output, phase evidence, gap test results |
+Paths expected to change during normal Akashic operation.
+
+| Pattern | Purpose |
+|---------|---------|
+| `evidence/*` | Validation output, phase evidence, gap test results |
 | `manifest/akashic-envelope.sig` | Placeholder for detached signature |
 | `manifest/akashic-public-key.asc` | Placeholder for verification key |
+| `install-plan.json` | Generated install plan output |
+| `*.tmp` | Temporary files |
+| `*.log` | Log files |
+
+### Ignored
+
+Paths intentionally outside the trust boundary.
+
+| Pattern | Purpose |
+|---------|---------|
+| `.git/*` | Git internals |
+| `.vscode/*` | Editor metadata |
+| `.idea/*` | Editor metadata |
+| `node_modules/*` | Dependency cache |
+| `__pycache__/*` | Python bytecode cache |
+| `.DS_Store` | macOS Finder metadata |
+
+### Unknown / Unclassified
+
+Files that do not match any protected, mutable, or ignored pattern. The verifier reports `UNCLASSIFIED_FILES_FOUND` and fails the integrity check by default. Pass `-AllowUnclassified` for discovery mode.
+
+## Classification Audit
+
+The verifier walks every file in the repo and reports:
+
+| Category | Meaning |
+|----------|---------|
+| `protected_manifested` | In the manifest and hashes match |
+| `protected_unmanifested` | Matches a protected pattern but absent from manifest |
+| `mutable_present` | In a mutable path, allowed to change |
+| `ignored_present` | In an ignored path, outside trust boundary |
+| `unknown_unclassified` | Not matched by any category |
 
 ## Tools
 
 | Tool | Purpose |
 |------|---------|
 | `New-AkashicSelfManifest.ps1` | Generate akashic-envelope.json and .sha256 sidecar |
-| `Test-AkashicSelfIntegrity.ps1` | Verify all protected files against the manifest |
+| `Test-AkashicSelfIntegrity.ps1` | Verify all protected files and classify every repo file |
 | `Assert-AkashicTrusted.ps1` | Fail-closed guard callable by other tools |
 | `Lock-AkashicRoot.ps1` | Apply OS locks to protected Akashic files |
 | `Unlock-AkashicRoot.ps1` | Remove OS locks from protected Akashic files |
 | `Invoke-AkashicSelfRebaseline.ps1` | Unlock, regenerate manifest, verify, optionally re-lock |
+| `lib/AkashicCoveragePolicy.ps1` | Shared coverage policy (protected, mutable, ignored patterns) |
 
 ## Assert-AkashicTrusted Integration
 
@@ -92,6 +146,8 @@ When Akashic files change intentionally (new tools, updated scripts, schema chan
 1. A human runs `Invoke-AkashicSelfRebaseline.ps1 -AkashicRoot <path> -RebaselinedBy human`
 2. The tool unlocks files if locked, regenerates the manifest, verifies the new baseline, and optionally re-locks.
 3. The manifest records `rebaselined_by: human` and `signature_status: SIGNATURE_NOT_IMPLEMENTED`.
+
+If the verifier finds unclassified files after rebaseline, update the coverage policy in `tools/lib/AkashicCoveragePolicy.ps1` and rebaseline again.
 
 ## Signature Status
 

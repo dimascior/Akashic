@@ -84,11 +84,15 @@ if ($verifyResult.verdict -eq 'CLEAN') {
         clean_count     = $verifyResult.clean_count
     })
 } else {
-    Add-Step 'Verify integrity' 'FAIL' ([ordered]@{
+    $verifyDetail = [ordered]@{
         verdict    = $verifyResult.verdict
         drift      = $verifyResult.drift_count
         missing    = $verifyResult.missing_count
-    })
+    }
+    if ($verifyResult.classification_audit) {
+        $verifyDetail['unclassified'] = $verifyResult.classification_audit.unknown_unclassified_count
+    }
+    Add-Step 'Verify integrity' 'FAIL' $verifyDetail
 }
 
 # Step 4: Re-lock if requested
