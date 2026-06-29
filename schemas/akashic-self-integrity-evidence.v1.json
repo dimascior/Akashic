@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "akashic-self-integrity-evidence.v1",
+  "title": "Akashic Self-Integrity Evidence",
+  "description": "Evidence record produced by Test-AkashicSelfIntegrity.ps1. Documents the result of verifying Akashic's own files against its self-manifest.",
+  "type": "object",
+  "required": ["schema_version", "timestamp_utc", "akashic_root", "verdict", "signature_status", "sidecar_valid", "manifest_hash", "file_results", "unmanifested_files"],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "akashic-self-integrity-evidence.v1"
+    },
+    "timestamp_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "akashic_root": {
+      "type": "string"
+    },
+    "verdict": {
+      "type": "string",
+      "enum": ["CLEAN", "DRIFT", "NO_MANIFEST", "SIDECAR_MISMATCH"],
+      "description": "Overall integrity verdict."
+    },
+    "signature_status": {
+      "type": "string",
+      "enum": ["SIGNATURE_NOT_IMPLEMENTED", "SIGNED_UNVERIFIED", "SIGNED_VERIFIED", "SIGNATURE_INVALID"]
+    },
+    "sidecar_valid": {
+      "type": "boolean"
+    },
+    "manifest_hash": {
+      "type": ["string", "null"]
+    },
+    "bom_check": {
+      "type": "object",
+      "properties": {
+        "manifest_bom_free": { "type": "boolean" },
+        "sidecar_bom_free": { "type": "boolean" }
+      }
+    },
+    "file_results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "status"],
+        "properties": {
+          "path": { "type": "string" },
+          "role": { "type": "string" },
+          "expected_sha256": { "type": ["string", "null"] },
+          "actual_sha256": { "type": ["string", "null"] },
+          "expected_size": { "type": ["integer", "null"] },
+          "actual_size": { "type": ["integer", "null"] },
+          "exists": { "type": "boolean" },
+          "status": {
+            "type": "string",
+            "enum": ["CLEAN", "HASH_MISMATCH", "SIZE_MISMATCH", "MISSING"]
+          }
+        }
+      }
+    },
+    "unmanifested_files": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Files matching protected patterns that are not listed in the manifest."
+    },
+    "protected_file_count": {
+      "type": "integer"
+    },
+    "clean_count": {
+      "type": "integer"
+    },
+    "drift_count": {
+      "type": "integer"
+    },
+    "missing_count": {
+      "type": "integer"
+    }
+  },
+  "additionalProperties": false
+}

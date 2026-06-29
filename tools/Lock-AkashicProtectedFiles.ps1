@@ -45,6 +45,8 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
+& (Join-Path $PSScriptRoot 'Assert-AkashicTrusted.ps1')
+
 $libDir = Join-Path $PSScriptRoot 'lib'
 . (Join-Path $libDir 'AkashicLockTargets.ps1')
 . (Join-Path $libDir 'AkashicLockBackend.ps1')

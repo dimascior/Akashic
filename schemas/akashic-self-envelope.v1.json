@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "akashic-self-envelope.v1",
+  "title": "Akashic Self-Envelope Manifest",
+  "description": "Manifest defining the protected and mutable boundaries of the Akashic installer itself. The sidecar file akashic-envelope.sha256 contains the SHA256 of this JSON file. Hash-only self-integrity detects drift but does not prevent an agent with write access to both files and manifests from rewriting them. Signed or external authority is required for that guarantee.",
+  "type": "object",
+  "required": ["schema_version", "created_utc", "rebaselined_by", "protected", "mutable", "signature_status"],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "akashic-self-envelope.v1"
+    },
+    "created_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "rebaselined_by": {
+      "type": "string",
+      "description": "Identity of the rebaseline actor. Must be 'human' for trusted rebaselines."
+    },
+    "note": {
+      "type": "string"
+    },
+    "signature_status": {
+      "type": "string",
+      "enum": ["SIGNATURE_NOT_IMPLEMENTED", "SIGNED_UNVERIFIED", "SIGNED_VERIFIED"],
+      "description": "Current state of manifest signature. SIGNATURE_NOT_IMPLEMENTED means no cryptographic authority separation exists."
+    },
+    "protected": {
+      "type": "object",
+      "required": ["description", "paths", "files"],
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "paths": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "All protected relative paths including manifest files. Manifest and sidecar are listed in paths but NOT in files (avoids self-referential hashing)."
+        },
+        "files": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["path", "sha256", "size", "role"],
+            "properties": {
+              "path": {
+                "type": "string",
+                "description": "Relative path from Akashic root."
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              "size": {
+                "type": "integer",
+                "minimum": 0,
+                "description": "File size in bytes."
+              },
+              "role": {
+                "type": "string",
+                "enum": ["bridge", "tool", "library", "schema", "contract-doc", "test", "compatibility-wrapper"],
+                "description": "Functional role of the file within Akashic."
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    "mutable": {
+      "type": "object",
+      "required": ["description", "paths"],
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "paths": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Paths that change during normal Akashic operation."
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

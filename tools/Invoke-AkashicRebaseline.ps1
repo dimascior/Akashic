@@ -63,6 +63,8 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
+& (Join-Path $PSScriptRoot 'Assert-AkashicTrusted.ps1')
+
 $lockScript = Join-Path $ToolsRoot 'Lock-AkashicProtectedFiles.ps1'
 $unlockScript = Join-Path $ToolsRoot 'Unlock-AkashicProtectedFiles.ps1'
 $lockStatusScript = Join-Path $ToolsRoot 'AkashicLockStatus.ps1'
@@ -113,7 +115,7 @@ function Add-Step {
         detail = $Detail
         timestamp_utc = (Get-Date).ToUniversalTime().ToString('o')
     }
-    Write-Host "[$Status] $Name $(if ($Detail) { "— $Detail" })"
+    Write-Host "[$Status] $Name $(if ($Detail) { "- $Detail" })"
 }
 
 function Emergency-Relock {
@@ -128,7 +130,7 @@ function Emergency-Relock {
 }
 
 # Step 1: Pre-flight lock verification
-Write-Host "`n=== Rebaseline: Step 1 — Pre-flight Lock Check ===`n"
+Write-Host "`n=== Rebaseline: Step 1 -Pre-flight Lock Check ===`n"
 try {
     $preflight = & $lockStatusScript @commonParams
     Add-Step -Name 'preflight_lock_check' -Status 'PASS' -Detail 'Current lock state verified'
@@ -137,7 +139,7 @@ try {
 }
 
 # Step 2: Unlock
-Write-Host "`n=== Rebaseline: Step 2 — Unlock ===`n"
+Write-Host "`n=== Rebaseline: Step 2 -Unlock ===`n"
 try {
     $unlockResults = & $unlockScript @commonParams
     $unlockFailed = ($unlockResults | Where-Object { $_.Status -eq 'FAILED' }).Count
@@ -156,7 +158,7 @@ try {
 }
 
 # Step 3: Execute update action
-Write-Host "`n=== Rebaseline: Step 3 — Update Action ===`n"
+Write-Host "`n=== Rebaseline: Step 3 -Update Action ===`n"
 try {
     & $UpdateAction $HeliosGateRoot
     Add-Step -Name 'update_action' -Status 'PASS' -Detail 'Update completed'
@@ -169,7 +171,7 @@ try {
 }
 
 # Step 4: Regenerate manifest
-Write-Host "`n=== Rebaseline: Step 4 — Regenerate Manifest ===`n"
+Write-Host "`n=== Rebaseline: Step 4 -Regenerate Manifest ===`n"
 try {
     & $manifestScript -HeliosGateRoot $HeliosGateRoot -RebaselinedBy $RebaselinedBy
     Add-Step -Name 'regenerate_manifest' -Status 'PASS' -Detail 'Manifest regenerated'
@@ -182,7 +184,7 @@ try {
 }
 
 # Step 5: Relock
-Write-Host "`n=== Rebaseline: Step 5 — Relock ===`n"
+Write-Host "`n=== Rebaseline: Step 5 -Relock ===`n"
 try {
     $relockResults = & $lockScript @commonParams
     $relockFailed = ($relockResults | Where-Object { $_.Status -eq 'FAILED' }).Count
@@ -202,7 +204,7 @@ try {
 }
 
 # Step 6: Post-flight lock verification
-Write-Host "`n=== Rebaseline: Step 6 — Post-flight Lock Check ===`n"
+Write-Host "`n=== Rebaseline: Step 6 -Post-flight Lock Check ===`n"
 try {
     $postflight = & $lockStatusScript @commonParams
     Add-Step -Name 'postflight_lock_check' -Status 'PASS' -Detail 'Locks verified after rebaseline'
@@ -211,7 +213,7 @@ try {
 }
 
 # Step 7: Verify envelope integrity
-Write-Host "`n=== Rebaseline: Step 7 — Envelope Integrity Verification ===`n"
+Write-Host "`n=== Rebaseline: Step 7 -Envelope Integrity Verification ===`n"
 try {
     & $integrityScript -HeliosGateRoot $HeliosGateRoot
     Add-Step -Name 'envelope_integrity' -Status 'PASS' -Detail 'Envelope integrity verified after rebaseline'

@@ -1,0 +1,922 @@
+{
+    "schema_version":  "akashic-self-integrity-evidence.v1",
+    "timestamp_utc":  "2026-06-29T01:51:40.3789905Z",
+    "akashic_root":  "C:\\Users\\dimas\\Desktop\\helios-integrity-adapter",
+    "verdict":  "CLEAN",
+    "signature_status":  "SIGNATURE_NOT_IMPLEMENTED",
+    "sidecar_valid":  true,
+    "manifest_hash":  "317efbade8372f7984a4ff33542d8f5a5dad76253fc042880d4beb90717c7f4a",
+    "bom_check":  {
+                      "manifest_bom_free":  true,
+                      "sidecar_bom_free":  true
+                  },
+    "file_results":  [
+                         {
+                             "path":  "AkashicIntegrityBridge.ps1",
+                             "role":  "bridge",
+                             "expected_sha256":  "ba6c9576cee58c561d379565e533fdef6bbc6fbf709179a33299d51d859757c7",
+                             "actual_sha256":  "ba6c9576cee58c561d379565e533fdef6bbc6fbf709179a33299d51d859757c7",
+                             "expected_size":  10838,
+                             "actual_size":  10838,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "docs/akashic-helios-installer-contract.md",
+                             "role":  "contract-doc",
+                             "expected_sha256":  "e2b5eecbce6921e0831eba16b405c807800fdffa3aabd574f7d38adb54661921",
+                             "actual_sha256":  "e2b5eecbce6921e0831eba16b405c807800fdffa3aabd574f7d38adb54661921",
+                             "expected_size":  21155,
+                             "actual_size":  21155,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "docs/akashic-naming-and-runtime-boundary.md",
+                             "role":  "contract-doc",
+                             "expected_sha256":  "8f5c40954f006108fee8c100769f40bc8251159cbb848b33ca1147b6801fff8d",
+                             "actual_sha256":  "8f5c40954f006108fee8c100769f40bc8251159cbb848b33ca1147b6801fff8d",
+                             "expected_size":  3366,
+                             "actual_size":  3366,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "docs/akashic-self-integrity-boundary.md",
+                             "role":  "contract-doc",
+                             "expected_sha256":  "5a315d766e2e0ec0f938d4c63d8409d772e69d27966c3aa3ab4916994fbf9ae0",
+                             "actual_sha256":  "5a315d766e2e0ec0f938d4c63d8409d772e69d27966c3aa3ab4916994fbf9ae0",
+                             "expected_size":  5292,
+                             "actual_size":  5292,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "docs/helios-runtime-bundle-contract.md",
+                             "role":  "contract-doc",
+                             "expected_sha256":  "1c43bba167203ededf5073fe124df4875dda57aee04d47d9a810b2c75844c91d",
+                             "actual_sha256":  "1c43bba167203ededf5073fe124df4875dda57aee04d47d9a810b2c75844c91d",
+                             "expected_size":  5695,
+                             "actual_size":  5695,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "docs/helios-user-installation.md",
+                             "role":  "contract-doc",
+                             "expected_sha256":  "a917e3ac6458ed5036451a83e439d96e37a25ebb4b7bf1eda2fe55d7bfd9373b",
+                             "actual_sha256":  "a917e3ac6458ed5036451a83e439d96e37a25ebb4b7bf1eda2fe55d7bfd9373b",
+                             "expected_size":  8429,
+                             "actual_size":  8429,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "docs/install-sequence.md",
+                             "role":  "contract-doc",
+                             "expected_sha256":  "cc0ade79cce4e8bfa2b85f0735d253a6ef1ab66e8173fc8669d6740aa87bfe9d",
+                             "actual_sha256":  "cc0ade79cce4e8bfa2b85f0735d253a6ef1ab66e8173fc8669d6740aa87bfe9d",
+                             "expected_size":  10954,
+                             "actual_size":  10954,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "docs/package-architecture.md",
+                             "role":  "contract-doc",
+                             "expected_sha256":  "2e4ac38a2756939a8de55a9e6f2b7837d2e35ae3f33a9c7a61ec0ecc4fd1243a",
+                             "actual_sha256":  "2e4ac38a2756939a8de55a9e6f2b7837d2e35ae3f33a9c7a61ec0ecc4fd1243a",
+                             "expected_size":  10774,
+                             "actual_size":  10774,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "docs/package-manifest-schema.md",
+                             "role":  "contract-doc",
+                             "expected_sha256":  "135429d3f5428cca16297294642565cca9b8bfdf66f913ea454d6e381cc04e93",
+                             "actual_sha256":  "135429d3f5428cca16297294642565cca9b8bfdf66f913ea454d6e381cc04e93",
+                             "expected_size":  5270,
+                             "actual_size":  5270,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "docs/package-options.md",
+                             "role":  "contract-doc",
+                             "expected_sha256":  "575bafdc8572af1f6972ba95c05ad10e924d8b22d7cce974e82436b7de090635",
+                             "actual_sha256":  "575bafdc8572af1f6972ba95c05ad10e924d8b22d7cce974e82436b7de090635",
+                             "expected_size":  7125,
+                             "actual_size":  7125,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "docs/phase398-packaging-decision.md",
+                             "role":  "contract-doc",
+                             "expected_sha256":  "e22a9eb749f455f8a482071a9af819c5f002425fa85c5582d37f0662bced3fc0",
+                             "actual_sha256":  "e22a9eb749f455f8a482071a9af819c5f002425fa85c5582d37f0662bced3fc0",
+                             "expected_size":  6142,
+                             "actual_size":  6142,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "docs/phase3991-package-validation-results.md",
+                             "role":  "contract-doc",
+                             "expected_sha256":  "5f145787415d2d7f0050c1c9a419533656563f015f569e0a91069df32daf06a2",
+                             "actual_sha256":  "5f145787415d2d7f0050c1c9a419533656563f015f569e0a91069df32daf06a2",
+                             "expected_size":  4254,
+                             "actual_size":  4254,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "docs/phase399-operational-enforcement-observations.md",
+                             "role":  "contract-doc",
+                             "expected_sha256":  "6adfc247fff33abb5b861b69ba6421944c38ef117b8f715802dda1e5a64b9a4b",
+                             "actual_sha256":  "6adfc247fff33abb5b861b69ba6421944c38ef117b8f715802dda1e5a64b9a4b",
+                             "expected_size":  3199,
+                             "actual_size":  3199,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "docs/phase40-lock-design-from-gap-evidence.md",
+                             "role":  "contract-doc",
+                             "expected_sha256":  "faf277c629b8b7c8b08029d1f44913f91c14bf09983cac25c7fd776a03ab7a8f",
+                             "actual_sha256":  "faf277c629b8b7c8b08029d1f44913f91c14bf09983cac25c7fd776a03ab7a8f",
+                             "expected_size":  44703,
+                             "actual_size":  44703,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "docs/phase41-lock-implementation.md",
+                             "role":  "contract-doc",
+                             "expected_sha256":  "abb3e181298704c20c7e9679028f61e367239107bc4530b879887b9ee5d93320",
+                             "actual_sha256":  "abb3e181298704c20c7e9679028f61e367239107bc4530b879887b9ee5d93320",
+                             "expected_size":  12035,
+                             "actual_size":  12035,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "docs/phase4-lock-requirements-from-gap-tests.md",
+                             "role":  "contract-doc",
+                             "expected_sha256":  "2452e4c363e8a4dab118a98cd6501f5982d9cd72f4d240a6f11eb948ad1a84f2",
+                             "actual_sha256":  "2452e4c363e8a4dab118a98cd6501f5982d9cd72f4d240a6f11eb948ad1a84f2",
+                             "expected_size":  14033,
+                             "actual_size":  14033,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "docs/standalone-repo-transition.md",
+                             "role":  "contract-doc",
+                             "expected_sha256":  "b2d03045787ce5ba435bee56c99884e4504667c01f689f10f624a336853d564d",
+                             "actual_sha256":  "b2d03045787ce5ba435bee56c99884e4504667c01f689f10f624a336853d564d",
+                             "expected_size":  4643,
+                             "actual_size":  4643,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "docs/tce-helios-integrity-adapter-spec.md",
+                             "role":  "contract-doc",
+                             "expected_sha256":  "57905a42513e1739768c4574fe594c7dec74932dd53dd0af154df5167cf3085b",
+                             "actual_sha256":  "57905a42513e1739768c4574fe594c7dec74932dd53dd0af154df5167cf3085b",
+                             "expected_size":  10499,
+                             "actual_size":  10499,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "docs/void-linux-validation.md",
+                             "role":  "contract-doc",
+                             "expected_sha256":  "a19759d860b39e213e3651c4a2a748f15ef9dff451b5b91c786942beefafde6d",
+                             "actual_sha256":  "a19759d860b39e213e3651c4a2a748f15ef9dff451b5b91c786942beefafde6d",
+                             "expected_size":  3068,
+                             "actual_size":  3068,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "schemas/akashic-self-envelope.v1.json",
+                             "role":  "schema",
+                             "expected_sha256":  "2bbbb68dbc770dec5d872a4a3c50e33a809ebfde8c0a2322449f753fbfd0568d",
+                             "actual_sha256":  "2bbbb68dbc770dec5d872a4a3c50e33a809ebfde8c0a2322449f753fbfd0568d",
+                             "expected_size":  3150,
+                             "actual_size":  3150,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "schemas/akashic-self-integrity-evidence.v1.json",
+                             "role":  "schema",
+                             "expected_sha256":  "a188acd58d0c8d298be94d22a180c231f6d7dc1a9a0a63576bfb644952d6c403",
+                             "actual_sha256":  "a188acd58d0c8d298be94d22a180c231f6d7dc1a9a0a63576bfb644952d6c403",
+                             "expected_size":  2516,
+                             "actual_size":  2516,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "schemas/helios-baseline.schema.json",
+                             "role":  "schema",
+                             "expected_sha256":  "d7c160d074eed7c7aff39a39b2950405fbe69c9de370d18d1e1d55c73cd2bc0a",
+                             "actual_sha256":  "d7c160d074eed7c7aff39a39b2950405fbe69c9de370d18d1e1d55c73cd2bc0a",
+                             "expected_size":  2148,
+                             "actual_size":  2148,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "schemas/helios-command-evidence.schema.json",
+                             "role":  "schema",
+                             "expected_sha256":  "3d2859790c1eed34161130fa536c041f1d075fd8be6662f57c9d82b4cfaa76e0",
+                             "actual_sha256":  "3d2859790c1eed34161130fa536c041f1d075fd8be6662f57c9d82b4cfaa76e0",
+                             "expected_size":  7228,
+                             "actual_size":  7228,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "schemas/helios-envelope.schema.json",
+                             "role":  "schema",
+                             "expected_sha256":  "b891984acba3642d659ecaebaf9d6a827c1d55af4be174593f5b2d6839f748cc",
+                             "actual_sha256":  "b891984acba3642d659ecaebaf9d6a827c1d55af4be174593f5b2d6839f748cc",
+                             "expected_size":  2299,
+                             "actual_size":  2299,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "schemas/helios-rebaseline.schema.json",
+                             "role":  "schema",
+                             "expected_sha256":  "69fdbdff0b21d2e9328afaf648d7967b73adb0eb24c92b35c15f7bff6489cd4f",
+                             "actual_sha256":  "69fdbdff0b21d2e9328afaf648d7967b73adb0eb24c92b35c15f7bff6489cd4f",
+                             "expected_size":  1723,
+                             "actual_size":  1723,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "schemas/helios-rollback-evidence.schema.json",
+                             "role":  "schema",
+                             "expected_sha256":  "f4a490d97e1d71e550534b508a58960ce3297c33a9a57a52dbea075a6d35f4dc",
+                             "actual_sha256":  "f4a490d97e1d71e550534b508a58960ce3297c33a9a57a52dbea075a6d35f4dc",
+                             "expected_size":  1249,
+                             "actual_size":  1249,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "schemas/helios-settings-activation-evidence.schema.json",
+                             "role":  "schema",
+                             "expected_sha256":  "9921322647132df1938171f83ec62e64bad4e99dd0b91556951554b1df3aed7d",
+                             "actual_sha256":  "9921322647132df1938171f83ec62e64bad4e99dd0b91556951554b1df3aed7d",
+                             "expected_size":  2230,
+                             "actual_size":  2230,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "Tests/AkashicIntegrityBridge.Tests.ps1",
+                             "role":  "test",
+                             "expected_sha256":  "18fba12f9a6d0281fad7ef31c27ba946d0db7c518cb485aea202ced775bfada3",
+                             "actual_sha256":  "18fba12f9a6d0281fad7ef31c27ba946d0db7c518cb485aea202ced775bfada3",
+                             "expected_size":  16482,
+                             "actual_size":  16482,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/AkashicCombinedInstallPlan.ps1",
+                             "role":  "tool",
+                             "expected_sha256":  "6dccca664d18eb5d3f5b5eb48da9ac4a699fb518effcca18a9462800d0b01c4b",
+                             "actual_sha256":  "6dccca664d18eb5d3f5b5eb48da9ac4a699fb518effcca18a9462800d0b01c4b",
+                             "expected_size":  11890,
+                             "actual_size":  11890,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/AkashicEndToEndInstallPlanValidation.ps1",
+                             "role":  "tool",
+                             "expected_sha256":  "eac53b7150bf141ce6bfbb302abbbe13ff134200b6aa7aab208b4648fe5b9a20",
+                             "actual_sha256":  "eac53b7150bf141ce6bfbb302abbbe13ff134200b6aa7aab208b4648fe5b9a20",
+                             "expected_size":  8582,
+                             "actual_size":  8582,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/AkashicEnvelopeIntegrityValidation.ps1",
+                             "role":  "tool",
+                             "expected_sha256":  "b39ab5ce09a9d8c52f488ce97270f455c7f3814e733b003205734cd1f2c27752",
+                             "actual_sha256":  "b39ab5ce09a9d8c52f488ce97270f455c7f3814e733b003205734cd1f2c27752",
+                             "expected_size":  5150,
+                             "actual_size":  5150,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/AkashicEnvelopeManifest.ps1",
+                             "role":  "tool",
+                             "expected_sha256":  "a334b9d0d5ff46e032019fcda474d65f3df173f23f6d02e5bf89f1300d7b2b5e",
+                             "actual_sha256":  "a334b9d0d5ff46e032019fcda474d65f3df173f23f6d02e5bf89f1300d7b2b5e",
+                             "expected_size":  3235,
+                             "actual_size":  3235,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/AkashicGapTestMatrix.ps1",
+                             "role":  "tool",
+                             "expected_sha256":  "f3188e366407c257e831b1e06997196cc3137ba7f6366bd38bbaf0ec7a3149c0",
+                             "actual_sha256":  "f3188e366407c257e831b1e06997196cc3137ba7f6366bd38bbaf0ec7a3149c0",
+                             "expected_size":  22464,
+                             "actual_size":  22464,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/AkashicHeliosInstallPlan.ps1",
+                             "role":  "tool",
+                             "expected_sha256":  "faa4d59b82c71d89fc8563133b3114611e6c84048335e78211a98fb08ff1a2f6",
+                             "actual_sha256":  "faa4d59b82c71d89fc8563133b3114611e6c84048335e78211a98fb08ff1a2f6",
+                             "expected_size":  30769,
+                             "actual_size":  30769,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/AkashicInstallPlan.ps1",
+                             "role":  "tool",
+                             "expected_sha256":  "c6eb983944c5e545ab729b9b059461444b5b90e7e0819bff677cd24966e9a576",
+                             "actual_sha256":  "c6eb983944c5e545ab729b9b059461444b5b90e7e0819bff677cd24966e9a576",
+                             "expected_size":  7470,
+                             "actual_size":  7470,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/AkashicLockStatus.ps1",
+                             "role":  "tool",
+                             "expected_sha256":  "0ab06bcab3d0d758207f06b0f5c5b67ad4fb274b078f7232749a39b83e04a329",
+                             "actual_sha256":  "0ab06bcab3d0d758207f06b0f5c5b67ad4fb274b078f7232749a39b83e04a329",
+                             "expected_size":  6411,
+                             "actual_size":  6411,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/AkashicPackage.ps1",
+                             "role":  "tool",
+                             "expected_sha256":  "2d850315c9360d42d31907d713c14cd79801f43bac969d0d8821f56cb677e3af",
+                             "actual_sha256":  "2d850315c9360d42d31907d713c14cd79801f43bac969d0d8821f56cb677e3af",
+                             "expected_size":  10606,
+                             "actual_size":  10606,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/AkashicPackageValidation.ps1",
+                             "role":  "tool",
+                             "expected_sha256":  "5ab02b9348612949ddcedef2dc85a773704f707b4fe5125366be191ae331d065",
+                             "actual_sha256":  "5ab02b9348612949ddcedef2dc85a773704f707b4fe5125366be191ae331d065",
+                             "expected_size":  9365,
+                             "actual_size":  9365,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/AkashicRuntimeBundle.ps1",
+                             "role":  "tool",
+                             "expected_sha256":  "824410769334ee9601bc9b47c414339a0bd57dea96f691b81c3a4594cc7fe5d0",
+                             "actual_sha256":  "824410769334ee9601bc9b47c414339a0bd57dea96f691b81c3a4594cc7fe5d0",
+                             "expected_size":  6960,
+                             "actual_size":  6960,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/AkashicRuntimeBundleValidation.ps1",
+                             "role":  "tool",
+                             "expected_sha256":  "5cf2db4834c2ffa32123251b699eedfa421a164122d4081ac22d77b856d46373",
+                             "actual_sha256":  "5cf2db4834c2ffa32123251b699eedfa421a164122d4081ac22d77b856d46373",
+                             "expected_size":  9536,
+                             "actual_size":  9536,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/AkashicSettingsIntegrity.ps1",
+                             "role":  "tool",
+                             "expected_sha256":  "fc1e789d244c2d6802d2572060f73a1b08fc02e63f86a55488564939744ceaf4",
+                             "actual_sha256":  "fc1e789d244c2d6802d2572060f73a1b08fc02e63f86a55488564939744ceaf4",
+                             "expected_size":  5447,
+                             "actual_size":  5447,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/Apply-AkashicClaudeHooks.ps1",
+                             "role":  "tool",
+                             "expected_sha256":  "bf3b02baf91520a5141a1eb0bdf4ed455b720e55aee3163552947b0ae7b1db51",
+                             "actual_sha256":  "bf3b02baf91520a5141a1eb0bdf4ed455b720e55aee3163552947b0ae7b1db51",
+                             "expected_size":  10926,
+                             "actual_size":  10926,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/Assert-AkashicTrusted.ps1",
+                             "role":  "tool",
+                             "expected_sha256":  "30c98ce69fb94668e49ecf6b3bcb4534d64df729bffc69c9730244b5096a5e88",
+                             "actual_sha256":  "30c98ce69fb94668e49ecf6b3bcb4534d64df729bffc69c9730244b5096a5e88",
+                             "expected_size":  1323,
+                             "actual_size":  1323,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/Clear-HeliosStaleGates.ps1",
+                             "role":  "compatibility-wrapper",
+                             "expected_sha256":  "446f7302d70f20c999b986c5f644f2d9f0a2305d5a1bd760bf44388964630136",
+                             "actual_sha256":  "446f7302d70f20c999b986c5f644f2d9f0a2305d5a1bd760bf44388964630136",
+                             "expected_size":  1948,
+                             "actual_size":  1948,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/ConvertFrom-AkashicEvidence.ps1",
+                             "role":  "tool",
+                             "expected_sha256":  "53f6060b264fb17b6ac14aa2cbf82865e67f0b76c702e3641ca89d1ba679e0e9",
+                             "actual_sha256":  "53f6060b264fb17b6ac14aa2cbf82865e67f0b76c702e3641ca89d1ba679e0e9",
+                             "expected_size":  6978,
+                             "actual_size":  6978,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/ConvertFrom-HeliosEvidence.ps1",
+                             "role":  "tool",
+                             "expected_sha256":  "cd02762144e09c80661ba85734e0b1e85255e66069689bf76b8c76f63bdc5677",
+                             "actual_sha256":  "cd02762144e09c80661ba85734e0b1e85255e66069689bf76b8c76f63bdc5677",
+                             "expected_size":  161,
+                             "actual_size":  161,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/Get-AkashicLockStrategy.ps1",
+                             "role":  "tool",
+                             "expected_sha256":  "f8d2795f0b7c04e22302a539609de39d30439a77fb7721bdd575961731701e07",
+                             "actual_sha256":  "f8d2795f0b7c04e22302a539609de39d30439a77fb7721bdd575961731701e07",
+                             "expected_size":  9838,
+                             "actual_size":  9838,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/Get-HeliosEvidence.ps1",
+                             "role":  "compatibility-wrapper",
+                             "expected_sha256":  "608b50baf9cfdd556faa6e02501eb3b4d9b626e38e51d93132965f30fed208b2",
+                             "actual_sha256":  "608b50baf9cfdd556faa6e02501eb3b4d9b626e38e51d93132965f30fed208b2",
+                             "expected_size":  1952,
+                             "actual_size":  1952,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/Get-HeliosPendingGates.ps1",
+                             "role":  "compatibility-wrapper",
+                             "expected_sha256":  "83fe65eb32c7cb6e85f3cd3c01fb1db606643accaafc386a9891d1b0dc2a3455",
+                             "actual_sha256":  "83fe65eb32c7cb6e85f3cd3c01fb1db606643accaafc386a9891d1b0dc2a3455",
+                             "expected_size":  1873,
+                             "actual_size":  1873,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/Install-AkashicHeliosRuntime.ps1",
+                             "role":  "tool",
+                             "expected_sha256":  "76c2f38bd5e1693c62f871cfd2d86df74863dcbb48260b7db2bebf917dbc1397",
+                             "actual_sha256":  "76c2f38bd5e1693c62f871cfd2d86df74863dcbb48260b7db2bebf917dbc1397",
+                             "expected_size":  10142,
+                             "actual_size":  10142,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/Invoke-AkashicGapTest.ps1",
+                             "role":  "tool",
+                             "expected_sha256":  "7702b2fa272de958ba7312e55048600008ec7a5cb831cc3e39b7e276b2e84871",
+                             "actual_sha256":  "7702b2fa272de958ba7312e55048600008ec7a5cb831cc3e39b7e276b2e84871",
+                             "expected_size":  3785,
+                             "actual_size":  3785,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/Invoke-AkashicRebaseline.ps1",
+                             "role":  "tool",
+                             "expected_sha256":  "7f8e85aa622dc3d6c2b752dd7cceb9c752f710b7b5729509b8a68c79be9bfcb8",
+                             "actual_sha256":  "7f8e85aa622dc3d6c2b752dd7cceb9c752f710b7b5729509b8a68c79be9bfcb8",
+                             "expected_size":  8630,
+                             "actual_size":  8630,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/Invoke-AkashicSelfRebaseline.ps1",
+                             "role":  "tool",
+                             "expected_sha256":  "cecaff2d61e788dc2848854e2740859e984a473cb3f26df049e0e9ec3c0f6481",
+                             "actual_sha256":  "cecaff2d61e788dc2848854e2740859e984a473cb3f26df049e0e9ec3c0f6481",
+                             "expected_size":  4885,
+                             "actual_size":  4885,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/Invoke-HeliosGapTest.ps1",
+                             "role":  "compatibility-wrapper",
+                             "expected_sha256":  "5f23f01245f1660dbc23ae1f2890f3d81ef18053cfc694deddf7c416cfa02b77",
+                             "actual_sha256":  "5f23f01245f1660dbc23ae1f2890f3d81ef18053cfc694deddf7c416cfa02b77",
+                             "expected_size":  143,
+                             "actual_size":  143,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/Invoke-HeliosRebaseline.ps1",
+                             "role":  "compatibility-wrapper",
+                             "expected_sha256":  "f1029de03365c499bad41bc04aef079d147d556e9bd21f5688906aa6393bdbbc",
+                             "actual_sha256":  "f1029de03365c499bad41bc04aef079d147d556e9bd21f5688906aa6393bdbbc",
+                             "expected_size":  152,
+                             "actual_size":  152,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/Invoke-HeliosRuntimeRebaseline.ps1",
+                             "role":  "compatibility-wrapper",
+                             "expected_sha256":  "5c65358f9c2b3cfdde2d8f1ddec6ef845d2f64c61ce0221d70a8687b85603e11",
+                             "actual_sha256":  "5c65358f9c2b3cfdde2d8f1ddec6ef845d2f64c61ce0221d70a8687b85603e11",
+                             "expected_size":  3488,
+                             "actual_size":  3488,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/lib/AkashicLockBackend.ps1",
+                             "role":  "library",
+                             "expected_sha256":  "56e831e8b3fb24fdb715161b1c7625139af57a2f9b79af848ab4d16fc72b0374",
+                             "actual_sha256":  "56e831e8b3fb24fdb715161b1c7625139af57a2f9b79af848ab4d16fc72b0374",
+                             "expected_size":  7711,
+                             "actual_size":  7711,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/lib/AkashicLockTargets.ps1",
+                             "role":  "library",
+                             "expected_sha256":  "9184b99884cfdf8d8ed6bfabc0ab159abb47ef69ff089aec4003113d0ac22120",
+                             "actual_sha256":  "9184b99884cfdf8d8ed6bfabc0ab159abb47ef69ff089aec4003113d0ac22120",
+                             "expected_size":  526,
+                             "actual_size":  526,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/Lock-AkashicProtectedFiles.ps1",
+                             "role":  "tool",
+                             "expected_sha256":  "86261e1e7acf7c1bd3e97b4da6653669d4823338a530ce26d679bec47086f316",
+                             "actual_sha256":  "86261e1e7acf7c1bd3e97b4da6653669d4823338a530ce26d679bec47086f316",
+                             "expected_size":  5568,
+                             "actual_size":  5568,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/Lock-AkashicRoot.ps1",
+                             "role":  "tool",
+                             "expected_sha256":  "a2f7cd668e94117b2ab0ee20ab2866837c5885f02099d9445594db1a026fac7c",
+                             "actual_sha256":  "a2f7cd668e94117b2ab0ee20ab2866837c5885f02099d9445594db1a026fac7c",
+                             "expected_size":  3582,
+                             "actual_size":  3582,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/Lock-HeliosProtectedFiles.ps1",
+                             "role":  "compatibility-wrapper",
+                             "expected_sha256":  "ee45e7e97f69aaa2530e374ef56292286d99bb456122252254664191ad31fb47",
+                             "actual_sha256":  "ee45e7e97f69aaa2530e374ef56292286d99bb456122252254664191ad31fb47",
+                             "expected_size":  158,
+                             "actual_size":  158,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/Lock-HeliosRuntime.ps1",
+                             "role":  "compatibility-wrapper",
+                             "expected_sha256":  "3ba55b76bdf2a0296f4e33c56e40aaadedb4278666e7450e8ed843143d55dea1",
+                             "actual_sha256":  "3ba55b76bdf2a0296f4e33c56e40aaadedb4278666e7450e8ed843143d55dea1",
+                             "expected_size":  1428,
+                             "actual_size":  1428,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/Move-AkashicStaleGateArtifacts.ps1",
+                             "role":  "tool",
+                             "expected_sha256":  "208c7e65a7fa20e80e47aea192846f86098d3b1162a45893e4a82a42b39956ad",
+                             "actual_sha256":  "208c7e65a7fa20e80e47aea192846f86098d3b1162a45893e4a82a42b39956ad",
+                             "expected_size":  5001,
+                             "actual_size":  5001,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/Move-HeliosStaleGateArtifacts.ps1",
+                             "role":  "compatibility-wrapper",
+                             "expected_sha256":  "4120a158043d4e81f3e68472a27c168852b03b6b5e2a49ff040c804c9e274783",
+                             "actual_sha256":  "4120a158043d4e81f3e68472a27c168852b03b6b5e2a49ff040c804c9e274783",
+                             "expected_size":  170,
+                             "actual_size":  170,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/New-AkashicSelfManifest.ps1",
+                             "role":  "tool",
+                             "expected_sha256":  "c8781a44e133745d3c4d7ae1c741124079def3be593b56d5bd866d75a73945cd",
+                             "actual_sha256":  "c8781a44e133745d3c4d7ae1c741124079def3be593b56d5bd866d75a73945cd",
+                             "expected_size":  4860,
+                             "actual_size":  4860,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/New-HeliosAdapterPackage.ps1",
+                             "role":  "compatibility-wrapper",
+                             "expected_sha256":  "a0acdde799cba70acf181e0fb464285477b22eea8a33e725eb7451ade4c3ad6c",
+                             "actual_sha256":  "a0acdde799cba70acf181e0fb464285477b22eea8a33e725eb7451ade4c3ad6c",
+                             "expected_size":  133,
+                             "actual_size":  133,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/New-HeliosCombinedInstallPlan.ps1",
+                             "role":  "compatibility-wrapper",
+                             "expected_sha256":  "0f542343b0f3f338e8ceabb1d6340a72d647e2f309e6d767f66832e544799348",
+                             "actual_sha256":  "0f542343b0f3f338e8ceabb1d6340a72d647e2f309e6d767f66832e544799348",
+                             "expected_size":  162,
+                             "actual_size":  162,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/New-HeliosEnvelopeManifest.ps1",
+                             "role":  "compatibility-wrapper",
+                             "expected_sha256":  "0f3eedab3939e762360980e77474e789401a016c0c548b0b17495ecaa6479f71",
+                             "actual_sha256":  "0f3eedab3939e762360980e77474e789401a016c0c548b0b17495ecaa6479f71",
+                             "expected_size":  153,
+                             "actual_size":  153,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/New-HeliosGapTestMatrix.ps1",
+                             "role":  "compatibility-wrapper",
+                             "expected_sha256":  "651554f7753406a9070b790c05dc11f17a4903f54a5691718b603653ada6b9e2",
+                             "actual_sha256":  "651554f7753406a9070b790c05dc11f17a4903f54a5691718b603653ada6b9e2",
+                             "expected_size":  144,
+                             "actual_size":  144,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/New-HeliosGate.ps1",
+                             "role":  "compatibility-wrapper",
+                             "expected_sha256":  "6de3218d4f47c44c07a00b5d065db51171ed8cb6bdb835f255b6e8ead2c2f1d6",
+                             "actual_sha256":  "6de3218d4f47c44c07a00b5d065db51171ed8cb6bdb835f255b6e8ead2c2f1d6",
+                             "expected_size":  4006,
+                             "actual_size":  4006,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/New-HeliosInstallPlan.ps1",
+                             "role":  "compatibility-wrapper",
+                             "expected_sha256":  "d4f45fb8f7322cf653d2da505cbd4192e0da59a71425d84f86577539c349d606",
+                             "actual_sha256":  "d4f45fb8f7322cf653d2da505cbd4192e0da59a71425d84f86577539c349d606",
+                             "expected_size":  138,
+                             "actual_size":  138,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/New-HeliosRuntimeBundle.ps1",
+                             "role":  "compatibility-wrapper",
+                             "expected_sha256":  "1c435b4e4c94d3f499fa71dddc1e7cd8e631fe422941dd89746d1f43f40c757d",
+                             "actual_sha256":  "1c435b4e4c94d3f499fa71dddc1e7cd8e631fe422941dd89746d1f43f40c757d",
+                             "expected_size":  144,
+                             "actual_size":  144,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/Remove-AkashicClaudeHooks.ps1",
+                             "role":  "tool",
+                             "expected_sha256":  "173e49db473f2d6f58254dbd172b975207f3c65b66365e511baddeaba43393bc",
+                             "actual_sha256":  "173e49db473f2d6f58254dbd172b975207f3c65b66365e511baddeaba43393bc",
+                             "expected_size":  6476,
+                             "actual_size":  6476,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/Rollback-AkashicHeliosRuntime.ps1",
+                             "role":  "tool",
+                             "expected_sha256":  "64eea30b5d1305fbe92391972f86091b602c20e2e9a7d61fd7b7e5890a7cfc01",
+                             "actual_sha256":  "64eea30b5d1305fbe92391972f86091b602c20e2e9a7d61fd7b7e5890a7cfc01",
+                             "expected_size":  4346,
+                             "actual_size":  4346,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/Sync-AkashicBridge.ps1",
+                             "role":  "tool",
+                             "expected_sha256":  "1e9ecc491e4b2939ab19b574a2d84f0cfefbfcf3b8d4b60ad62dad2239a452fe",
+                             "actual_sha256":  "1e9ecc491e4b2939ab19b574a2d84f0cfefbfcf3b8d4b60ad62dad2239a452fe",
+                             "expected_size":  1802,
+                             "actual_size":  1802,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/Sync-HeliosBridge.ps1",
+                             "role":  "compatibility-wrapper",
+                             "expected_sha256":  "5987070e1a41a1d88ed5fbdb04692b7d43bea404909d0e6c203a0cb80b60636b",
+                             "actual_sha256":  "5987070e1a41a1d88ed5fbdb04692b7d43bea404909d0e6c203a0cb80b60636b",
+                             "expected_size":  134,
+                             "actual_size":  134,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/Test-AkashicOsLockFixture.ps1",
+                             "role":  "tool",
+                             "expected_sha256":  "ed7a86a5aea35f5869d2b302ddff8532f2e14a6defe3227f707ad34ef96d002a",
+                             "actual_sha256":  "ed7a86a5aea35f5869d2b302ddff8532f2e14a6defe3227f707ad34ef96d002a",
+                             "expected_size":  12162,
+                             "actual_size":  12162,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/Test-AkashicSelfIntegrity.ps1",
+                             "role":  "tool",
+                             "expected_sha256":  "03c1815005c3e235a4b1d0f3aec01af6439a7bfd18d0beb36cd053794117940b",
+                             "actual_sha256":  "03c1815005c3e235a4b1d0f3aec01af6439a7bfd18d0beb36cd053794117940b",
+                             "expected_size":  7528,
+                             "actual_size":  7528,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/Test-HeliosAdapterPackage.ps1",
+                             "role":  "compatibility-wrapper",
+                             "expected_sha256":  "18322eb1e4dba5612623220c51627ede2c605b085575f9ed68ec5bba48fca970",
+                             "actual_sha256":  "18322eb1e4dba5612623220c51627ede2c605b085575f9ed68ec5bba48fca970",
+                             "expected_size":  154,
+                             "actual_size":  154,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/Test-HeliosEndToEndInstallPlan.ps1",
+                             "role":  "compatibility-wrapper",
+                             "expected_sha256":  "bb9ea78f4587edb367266b6f3195477850d7c579ba5684a912a3a2ea4e658ce7",
+                             "actual_sha256":  "bb9ea78f4587edb367266b6f3195477850d7c579ba5684a912a3a2ea4e658ce7",
+                             "expected_size":  183,
+                             "actual_size":  183,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/Test-HeliosEnvelopeIntegrity.ps1",
+                             "role":  "compatibility-wrapper",
+                             "expected_sha256":  "26eda93db55d9a659ca139e47f436ed019496d3aae82bd3a9b090473cb93dcf7",
+                             "actual_sha256":  "26eda93db55d9a659ca139e47f436ed019496d3aae82bd3a9b090473cb93dcf7",
+                             "expected_size":  177,
+                             "actual_size":  177,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/Test-HeliosLiveOperational.ps1",
+                             "role":  "compatibility-wrapper",
+                             "expected_sha256":  "c484ec5ed71c245127f16ad0d7eac1d83b8ce77a664094722cbb5c07d005ed27",
+                             "actual_sha256":  "c484ec5ed71c245127f16ad0d7eac1d83b8ce77a664094722cbb5c07d005ed27",
+                             "expected_size":  11146,
+                             "actual_size":  11146,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/Test-HeliosLockStatus.ps1",
+                             "role":  "compatibility-wrapper",
+                             "expected_sha256":  "920b5773614c5e66e2942746497125a33ce42b4d43d9c50597795ba029c6416e",
+                             "actual_sha256":  "920b5773614c5e66e2942746497125a33ce42b4d43d9c50597795ba029c6416e",
+                             "expected_size":  136,
+                             "actual_size":  136,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/Test-HeliosPrerequisites.ps1",
+                             "role":  "compatibility-wrapper",
+                             "expected_sha256":  "c4c910c59caba79b2d3ab2c858686269dcbd0704635c974110d4c9a1cfd583ba",
+                             "actual_sha256":  "c4c910c59caba79b2d3ab2c858686269dcbd0704635c974110d4c9a1cfd583ba",
+                             "expected_size":  7603,
+                             "actual_size":  7603,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/Test-HeliosRuntimeBundle.ps1",
+                             "role":  "compatibility-wrapper",
+                             "expected_sha256":  "c6bda93fa3027474bbd3bdebd59f9d264b7c0dfa318d84c9163eaa64321cb2e2",
+                             "actual_sha256":  "c6bda93fa3027474bbd3bdebd59f9d264b7c0dfa318d84c9163eaa64321cb2e2",
+                             "expected_size":  165,
+                             "actual_size":  165,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/Test-HeliosSettingsIntegrity.ps1",
+                             "role":  "compatibility-wrapper",
+                             "expected_sha256":  "31a0d2fcf578e6822b78f93a3c5f729ccad3d45a5a9e880324c554fe3a80d197",
+                             "actual_sha256":  "31a0d2fcf578e6822b78f93a3c5f729ccad3d45a5a9e880324c554fe3a80d197",
+                             "expected_size":  157,
+                             "actual_size":  157,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/Unlock-AkashicProtectedFiles.ps1",
+                             "role":  "tool",
+                             "expected_sha256":  "587b6786d339894025c069e1958f32bbfb687f4c51a155e8982a96a597f20578",
+                             "actual_sha256":  "587b6786d339894025c069e1958f32bbfb687f4c51a155e8982a96a597f20578",
+                             "expected_size":  5645,
+                             "actual_size":  5645,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/Unlock-AkashicRoot.ps1",
+                             "role":  "tool",
+                             "expected_sha256":  "2978461d9124b84f3f19758b10be08c8c9f5c9e428e0d7e1a5a33b80bf5e0fec",
+                             "actual_sha256":  "2978461d9124b84f3f19758b10be08c8c9f5c9e428e0d7e1a5a33b80bf5e0fec",
+                             "expected_size":  3543,
+                             "actual_size":  3543,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/Unlock-HeliosProtectedFiles.ps1",
+                             "role":  "compatibility-wrapper",
+                             "expected_sha256":  "ce2a7dcfadc06e84a784dc56986bca88ea26a4f66f52f97225f037f93ccb39c0",
+                             "actual_sha256":  "ce2a7dcfadc06e84a784dc56986bca88ea26a4f66f52f97225f037f93ccb39c0",
+                             "expected_size":  164,
+                             "actual_size":  164,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/Unlock-HeliosRuntime.ps1",
+                             "role":  "compatibility-wrapper",
+                             "expected_sha256":  "cc3b1e9bef3b729ad230596de714fb346a2da35c0a4cac524cc8249495712b0d",
+                             "actual_sha256":  "cc3b1e9bef3b729ad230596de714fb346a2da35c0a4cac524cc8249495712b0d",
+                             "expected_size":  829,
+                             "actual_size":  829,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         }
+                     ],
+    "unmanifested_files":  [
+
+                           ],
+    "protected_file_count":  90,
+    "clean_count":  90,
+    "drift_count":  0,
+    "missing_count":  0
+}

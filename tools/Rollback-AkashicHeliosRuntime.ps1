@@ -15,6 +15,9 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
+
+& (Join-Path $PSScriptRoot 'Assert-AkashicTrusted.ps1')
+
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 
 if (-not $ClaudeSettingsPath) {

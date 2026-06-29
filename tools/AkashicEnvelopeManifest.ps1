@@ -14,6 +14,8 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
+& (Join-Path $PSScriptRoot 'Assert-AkashicTrusted.ps1')
+
 $protectedFiles = @(
     'hooks/gate_check.ps1',
     'hooks/evidence_capture.ps1',

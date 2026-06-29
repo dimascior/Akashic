@@ -11,6 +11,8 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
+& (Join-Path $PSScriptRoot 'Assert-AkashicTrusted.ps1')
+
 if (-not (Test-Path $HeliosGateRoot)) {
     throw "Helios gate root not found: $HeliosGateRoot"
 }

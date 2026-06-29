@@ -11,6 +11,8 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
+& (Join-Path $PSScriptRoot 'Assert-AkashicTrusted.ps1')
+
 $SourcePath = Join-Path $AdapterRoot 'AkashicIntegrityBridge.ps1'
 $DestPath   = Join-Path $HeliosGateRoot 'hooks\lib\HeliosIntegrityBridge.ps1'
 

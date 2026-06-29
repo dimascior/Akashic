@@ -41,6 +41,8 @@ param(
 $ErrorActionPreference = 'Stop'
 $Utf8NoBom = New-Object System.Text.UTF8Encoding($false)
 
+& (Join-Path $PSScriptRoot 'Assert-AkashicTrusted.ps1')
+
 if ($Platform -eq 'Auto') {
     if ($PSVersionTable.PSEdition -eq 'Desktop' -or $IsWindows) { $Platform = 'Windows' }
     elseif ($IsMacOS) { $Platform = 'macOS' }
