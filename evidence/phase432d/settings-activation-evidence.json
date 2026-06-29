@@ -1,0 +1,22 @@
+{
+  "schema_version": "helios-settings-activation-evidence.v1",
+  "timestamp_utc": "2026-06-29T22:07:44.7675710Z",
+  "settings_path": "/Users/thispc/.claude/settings.json",
+  "backup_path": "/Users/thispc/.claude/settings.json.pre-helios-backup",
+  "settings_hash_before": "b2e1dd97d1ff023f8512427ee1a65efff4faf49e602632da32abdc7058997989",
+  "settings_hash_after": "369ebfb5eb98207779979e13d8154727e43a385b1ffe954c837b9de36e8b55b0",
+  "helios_gate_root": "/Users/thispc/.helios/.command-gate",
+  "platform": "macOS",
+  "hook_commands": {
+    "PreToolUse": "pwsh -NoProfile -File '/Users/thispc/.helios/.command-gate/hooks/helios_pretooluse.ps1'",
+    "PostToolUse": "pwsh -NoProfile -File '/Users/thispc/.helios/.command-gate/hooks/evidence_capture.ps1'",
+    "PostToolUseFailure": "pwsh -NoProfile -File '/Users/thispc/.helios/.command-gate/hooks/evidence_capture.ps1'"
+  },
+  "hooks_added": [
+    "PreToolUse",
+    "PostToolUse",
+    "PostToolUseFailure"
+  ],
+  "hooks_already_present": [],
+  "status": "ACTIVATED"
+}

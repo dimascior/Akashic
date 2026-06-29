@@ -1,6 +1,6 @@
 {
   "schema_version": "akashic-os-lock-evidence.v1",
-  "timestamp_utc": "2026-06-29T01:06:16.2686240Z",
+  "timestamp_utc": "2026-06-29T22:07:22.8156100Z",
   "os_name": "macOS",
   "kernel_version": "23.6.0",
   "powershell_version": "7.4.7",
@@ -11,7 +11,7 @@
   "lock_command_used": "/usr/bin/chflags uchg",
   "unlock_command_used": "/usr/bin/chflags nouchg",
   "status_command_used": "/bin/ls -lO",
-  "test_path": "/tmp/akashic-lock-fixture-146923982",
+  "test_path": "/tmp/akashic-lock-fixture-524495834",
   "protected_files_tested": [
     "hooks/helios_pretooluse.ps1",
     "hooks/gate_check.ps1",
@@ -29,7 +29,7 @@
     "blocked"
   ],
   "negative_write_delete_rename_results": {
-    "manifest/helios-envelope.sha256": {
+    "hooks/lib/HeliosIntegrityBridge.ps1": {
       "append_blocked": true,
       "write_blocked": true,
       "delete_blocked": true,
@@ -41,7 +41,7 @@
       "delete_blocked": true,
       "rename_blocked": true
     },
-    "hooks/gate_check.ps1": {
+    "manifest/helios-envelope.sha256": {
       "append_blocked": true,
       "write_blocked": true,
       "delete_blocked": true,
@@ -53,13 +53,7 @@
       "delete_blocked": true,
       "rename_blocked": true
     },
-    "policy/command-policy.json": {
-      "append_blocked": true,
-      "write_blocked": true,
-      "delete_blocked": true,
-      "rename_blocked": true
-    },
-    "hooks/lib/HeliosIntegrityBridge.ps1": {
+    "hooks/gate_check.ps1": {
       "append_blocked": true,
       "write_blocked": true,
       "delete_blocked": true,
@@ -76,17 +70,23 @@
       "write_blocked": true,
       "delete_blocked": true,
       "rename_blocked": true
+    },
+    "policy/command-policy.json": {
+      "append_blocked": true,
+      "write_blocked": true,
+      "delete_blocked": true,
+      "rename_blocked": true
     }
   },
   "unlock_recovery_results": {
-    "manifest/helios-envelope.sha256": true,
-    "manifest/helios-envelope.json": true,
-    "hooks/gate_check.ps1": true,
-    "hooks/evidence_capture.ps1": true,
-    "policy/command-policy.json": true,
     "hooks/lib/HeliosIntegrityBridge.ps1": true,
+    "manifest/helios-envelope.json": true,
+    "manifest/helios-envelope.sha256": true,
+    "hooks/evidence_capture.ps1": true,
+    "hooks/gate_check.ps1": true,
     "hooks/helios_pretooluse.ps1": true,
-    "hooks/tier_classifier.ps1": true
+    "hooks/tier_classifier.ps1": true,
+    "policy/command-policy.json": true
   },
   "overall_result": "PASS",
   "remaining_limitation": "",
