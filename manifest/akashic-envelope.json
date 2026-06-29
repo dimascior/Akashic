@@ -1,769 +1,769 @@
 {
-    "schema_version":  "akashic-self-envelope.v1",
-    "created_utc":  "2026-06-29T14:43:31Z",
-    "rebaselined_by":  "phase432c-final",
-    "signature_status":  "SIGNATURE_NOT_IMPLEMENTED",
-    "protected":  {
-                      "description":  "Files that can alter Akashic behavior, trust, installation, verification, CI, schema interpretation, or documentation contracts. Must not change outside of explicit human rebaseline.",
-                      "paths":  [
-                                    "AkashicIntegrityBridge.ps1",
-                                    "docs/akashic-helios-installer-contract.md",
-                                    "docs/akashic-naming-and-runtime-boundary.md",
-                                    "docs/akashic-self-integrity-boundary.md",
-                                    "docs/helios-runtime-bundle-contract.md",
-                                    "docs/helios-runtime-reset-restore-uninstall.md",
-                                    "docs/helios-user-installation.md",
-                                    "docs/install-sequence.md",
-                                    "docs/package-architecture.md",
-                                    "docs/package-manifest-schema.md",
-                                    "docs/package-options.md",
-                                    "docs/phase398-packaging-decision.md",
-                                    "docs/phase3991-package-validation-results.md",
-                                    "docs/phase399-operational-enforcement-observations.md",
-                                    "docs/phase40-lock-design-from-gap-evidence.md",
-                                    "docs/phase41-lock-implementation.md",
-                                    "docs/phase4-lock-requirements-from-gap-tests.md",
-                                    "docs/standalone-repo-transition.md",
-                                    "docs/tce-helios-integrity-adapter-spec.md",
-                                    "docs/void-linux-validation.md",
-                                    "manifest/akashic-envelope.json",
-                                    "manifest/akashic-envelope.sha256",
-                                    "README.md",
-                                    "schemas/akashic-self-envelope.v1.json",
-                                    "schemas/akashic-self-integrity-evidence.v1.json",
-                                    "schemas/helios-baseline.schema.json",
-                                    "schemas/helios-command-evidence.schema.json",
-                                    "schemas/helios-envelope.schema.json",
-                                    "schemas/helios-install-origin.v1.json",
-                                    "schemas/helios-rebaseline.schema.json",
-                                    "schemas/helios-rollback-evidence.schema.json",
-                                    "schemas/helios-runtime-detection.v1.json",
-                                    "schemas/helios-runtime-reset-evidence.v1.json",
-                                    "schemas/helios-runtime-restore-evidence.v1.json",
-                                    "schemas/helios-runtime-uninstall-evidence.v1.json",
-                                    "schemas/helios-settings-activation-evidence.schema.json",
-                                    "Tests/AkashicIntegrityBridge.Tests.ps1",
-                                    "tools/AkashicCombinedInstallPlan.ps1",
-                                    "tools/AkashicEndToEndInstallPlanValidation.ps1",
-                                    "tools/AkashicEnvelopeIntegrityValidation.ps1",
-                                    "tools/AkashicEnvelopeManifest.ps1",
-                                    "tools/AkashicGapTestMatrix.ps1",
-                                    "tools/AkashicHeliosInstallPlan.ps1",
-                                    "tools/AkashicInstallPlan.ps1",
-                                    "tools/AkashicLockStatus.ps1",
-                                    "tools/AkashicPackage.ps1",
-                                    "tools/AkashicPackageValidation.ps1",
-                                    "tools/AkashicRuntimeBundle.ps1",
-                                    "tools/AkashicRuntimeBundleValidation.ps1",
-                                    "tools/AkashicSettingsIntegrity.ps1",
-                                    "tools/Apply-AkashicClaudeHooks.ps1",
-                                    "tools/Assert-AkashicTrusted.ps1",
-                                    "tools/Clear-HeliosStaleGates.ps1",
-                                    "tools/ConvertFrom-AkashicEvidence.ps1",
-                                    "tools/ConvertFrom-HeliosEvidence.ps1",
-                                    "tools/Get-AkashicLockStrategy.ps1",
-                                    "tools/Get-HeliosEvidence.ps1",
-                                    "tools/Get-HeliosPendingGates.ps1",
-                                    "tools/Install-AkashicHeliosRuntime.ps1",
-                                    "tools/Invoke-AkashicGapTest.ps1",
-                                    "tools/Invoke-AkashicRebaseline.ps1",
-                                    "tools/Invoke-AkashicSelfRebaseline.ps1",
-                                    "tools/Invoke-HeliosGapTest.ps1",
-                                    "tools/Invoke-HeliosRebaseline.ps1",
-                                    "tools/Invoke-HeliosRuntimeRebaseline.ps1",
-                                    "tools/lib/AkashicCoveragePolicy.ps1",
-                                    "tools/lib/AkashicLockBackend.ps1",
-                                    "tools/lib/AkashicLockTargets.ps1",
-                                    "tools/Lock-AkashicProtectedFiles.ps1",
-                                    "tools/Lock-AkashicRoot.ps1",
-                                    "tools/Lock-HeliosProtectedFiles.ps1",
-                                    "tools/Lock-HeliosRuntime.ps1",
-                                    "tools/Move-AkashicStaleGateArtifacts.ps1",
-                                    "tools/Move-HeliosStaleGateArtifacts.ps1",
-                                    "tools/New-AkashicSelfManifest.ps1",
-                                    "tools/New-HeliosAdapterPackage.ps1",
-                                    "tools/New-HeliosCombinedInstallPlan.ps1",
-                                    "tools/New-HeliosEnvelopeManifest.ps1",
-                                    "tools/New-HeliosGapTestMatrix.ps1",
-                                    "tools/New-HeliosGate.ps1",
-                                    "tools/New-HeliosInstallOrigin.ps1",
-                                    "tools/New-HeliosInstallPlan.ps1",
-                                    "tools/New-HeliosRuntimeBundle.ps1",
-                                    "tools/Remove-AkashicClaudeHooks.ps1",
-                                    "tools/Reset-AkashicHeliosRuntime.ps1",
-                                    "tools/Restore-HeliosRuntimeFromBundle.ps1",
-                                    "tools/Rollback-AkashicHeliosRuntime.ps1",
-                                    "tools/Sync-AkashicBridge.ps1",
-                                    "tools/Sync-HeliosBridge.ps1",
-                                    "tools/Test-AkashicOsLockFixture.ps1",
-                                    "tools/Test-AkashicSelfIntegrity.ps1",
-                                    "tools/Test-HeliosAdapterPackage.ps1",
-                                    "tools/Test-HeliosEndToEndInstallPlan.ps1",
-                                    "tools/Test-HeliosEnvelopeIntegrity.ps1",
-                                    "tools/Test-HeliosLiveOperational.ps1",
-                                    "tools/Test-HeliosLockStatus.ps1",
-                                    "tools/Test-HeliosPrerequisites.ps1",
-                                    "tools/Test-HeliosRuntimeBundle.ps1",
-                                    "tools/Test-HeliosRuntimeOrigin.ps1",
-                                    "tools/Test-HeliosSettingsIntegrity.ps1",
-                                    "tools/Uninstall-AkashicHeliosRuntime.ps1",
-                                    "tools/Unlock-AkashicProtectedFiles.ps1",
-                                    "tools/Unlock-AkashicRoot.ps1",
-                                    "tools/Unlock-HeliosProtectedFiles.ps1",
-                                    "tools/Unlock-HeliosRuntime.ps1",
-                                    "tools/Write-HeliosRuntimeDetection.ps1"
-                                ],
-                      "files":  [
-                                    {
-                                        "path":  "AkashicIntegrityBridge.ps1",
-                                        "sha256":  "ba6c9576cee58c561d379565e533fdef6bbc6fbf709179a33299d51d859757c7",
-                                        "size":  10838,
-                                        "role":  "bridge"
-                                    },
-                                    {
-                                        "path":  "docs/akashic-helios-installer-contract.md",
-                                        "sha256":  "e2b5eecbce6921e0831eba16b405c807800fdffa3aabd574f7d38adb54661921",
-                                        "size":  21155,
-                                        "role":  "contract-doc"
-                                    },
-                                    {
-                                        "path":  "docs/akashic-naming-and-runtime-boundary.md",
-                                        "sha256":  "8f5c40954f006108fee8c100769f40bc8251159cbb848b33ca1147b6801fff8d",
-                                        "size":  3366,
-                                        "role":  "contract-doc"
-                                    },
-                                    {
-                                        "path":  "docs/akashic-self-integrity-boundary.md",
-                                        "sha256":  "b40bdc9430b7627df3f428e7399a67fa7e12e3585d7b7f19a230c944686a5a20",
-                                        "size":  12919,
-                                        "role":  "contract-doc"
-                                    },
-                                    {
-                                        "path":  "docs/helios-runtime-bundle-contract.md",
-                                        "sha256":  "1c43bba167203ededf5073fe124df4875dda57aee04d47d9a810b2c75844c91d",
-                                        "size":  5695,
-                                        "role":  "contract-doc"
-                                    },
-                                    {
-                                        "path":  "docs/helios-runtime-reset-restore-uninstall.md",
-                                        "sha256":  "d044ec3466f06bf33a1212c4956676808fea91919105267be9123bdd85e881eb",
-                                        "size":  10340,
-                                        "role":  "contract-doc"
-                                    },
-                                    {
-                                        "path":  "docs/helios-user-installation.md",
-                                        "sha256":  "a917e3ac6458ed5036451a83e439d96e37a25ebb4b7bf1eda2fe55d7bfd9373b",
-                                        "size":  8429,
-                                        "role":  "contract-doc"
-                                    },
-                                    {
-                                        "path":  "docs/install-sequence.md",
-                                        "sha256":  "cc0ade79cce4e8bfa2b85f0735d253a6ef1ab66e8173fc8669d6740aa87bfe9d",
-                                        "size":  10954,
-                                        "role":  "contract-doc"
-                                    },
-                                    {
-                                        "path":  "docs/package-architecture.md",
-                                        "sha256":  "2e4ac38a2756939a8de55a9e6f2b7837d2e35ae3f33a9c7a61ec0ecc4fd1243a",
-                                        "size":  10774,
-                                        "role":  "contract-doc"
-                                    },
-                                    {
-                                        "path":  "docs/package-manifest-schema.md",
-                                        "sha256":  "135429d3f5428cca16297294642565cca9b8bfdf66f913ea454d6e381cc04e93",
-                                        "size":  5270,
-                                        "role":  "contract-doc"
-                                    },
-                                    {
-                                        "path":  "docs/package-options.md",
-                                        "sha256":  "575bafdc8572af1f6972ba95c05ad10e924d8b22d7cce974e82436b7de090635",
-                                        "size":  7125,
-                                        "role":  "contract-doc"
-                                    },
-                                    {
-                                        "path":  "docs/phase398-packaging-decision.md",
-                                        "sha256":  "e22a9eb749f455f8a482071a9af819c5f002425fa85c5582d37f0662bced3fc0",
-                                        "size":  6142,
-                                        "role":  "contract-doc"
-                                    },
-                                    {
-                                        "path":  "docs/phase3991-package-validation-results.md",
-                                        "sha256":  "5f145787415d2d7f0050c1c9a419533656563f015f569e0a91069df32daf06a2",
-                                        "size":  4254,
-                                        "role":  "contract-doc"
-                                    },
-                                    {
-                                        "path":  "docs/phase399-operational-enforcement-observations.md",
-                                        "sha256":  "6adfc247fff33abb5b861b69ba6421944c38ef117b8f715802dda1e5a64b9a4b",
-                                        "size":  3199,
-                                        "role":  "contract-doc"
-                                    },
-                                    {
-                                        "path":  "docs/phase40-lock-design-from-gap-evidence.md",
-                                        "sha256":  "faf277c629b8b7c8b08029d1f44913f91c14bf09983cac25c7fd776a03ab7a8f",
-                                        "size":  44703,
-                                        "role":  "contract-doc"
-                                    },
-                                    {
-                                        "path":  "docs/phase41-lock-implementation.md",
-                                        "sha256":  "abb3e181298704c20c7e9679028f61e367239107bc4530b879887b9ee5d93320",
-                                        "size":  12035,
-                                        "role":  "contract-doc"
-                                    },
-                                    {
-                                        "path":  "docs/phase4-lock-requirements-from-gap-tests.md",
-                                        "sha256":  "2452e4c363e8a4dab118a98cd6501f5982d9cd72f4d240a6f11eb948ad1a84f2",
-                                        "size":  14033,
-                                        "role":  "contract-doc"
-                                    },
-                                    {
-                                        "path":  "docs/standalone-repo-transition.md",
-                                        "sha256":  "b2d03045787ce5ba435bee56c99884e4504667c01f689f10f624a336853d564d",
-                                        "size":  4643,
-                                        "role":  "contract-doc"
-                                    },
-                                    {
-                                        "path":  "docs/tce-helios-integrity-adapter-spec.md",
-                                        "sha256":  "57905a42513e1739768c4574fe594c7dec74932dd53dd0af154df5167cf3085b",
-                                        "size":  10499,
-                                        "role":  "contract-doc"
-                                    },
-                                    {
-                                        "path":  "docs/void-linux-validation.md",
-                                        "sha256":  "a19759d860b39e213e3651c4a2a748f15ef9dff451b5b91c786942beefafde6d",
-                                        "size":  3068,
-                                        "role":  "contract-doc"
-                                    },
-                                    {
-                                        "path":  "README.md",
-                                        "sha256":  "589bed14f09083b7c7237899f6a3036e4d0bcb5ff201180189a568fa670f116d",
-                                        "size":  13515,
-                                        "role":  "contract-doc"
-                                    },
-                                    {
-                                        "path":  "schemas/akashic-self-envelope.v1.json",
-                                        "sha256":  "859ae30d545d5a78f22e0e77abff40e0b3c8401f1d14606bd97a17047bf25fd3",
-                                        "size":  3996,
-                                        "role":  "schema"
-                                    },
-                                    {
-                                        "path":  "schemas/akashic-self-integrity-evidence.v1.json",
-                                        "sha256":  "137395f82f94204e06f7373262dff180615ed9db8ad2189e4df2475b1635b305",
-                                        "size":  3613,
-                                        "role":  "schema"
-                                    },
-                                    {
-                                        "path":  "schemas/helios-baseline.schema.json",
-                                        "sha256":  "d7c160d074eed7c7aff39a39b2950405fbe69c9de370d18d1e1d55c73cd2bc0a",
-                                        "size":  2148,
-                                        "role":  "schema"
-                                    },
-                                    {
-                                        "path":  "schemas/helios-command-evidence.schema.json",
-                                        "sha256":  "3d2859790c1eed34161130fa536c041f1d075fd8be6662f57c9d82b4cfaa76e0",
-                                        "size":  7228,
-                                        "role":  "schema"
-                                    },
-                                    {
-                                        "path":  "schemas/helios-envelope.schema.json",
-                                        "sha256":  "b891984acba3642d659ecaebaf9d6a827c1d55af4be174593f5b2d6839f748cc",
-                                        "size":  2299,
-                                        "role":  "schema"
-                                    },
-                                    {
-                                        "path":  "schemas/helios-install-origin.v1.json",
-                                        "sha256":  "fc14e2426faa05369ec6fc7091bc0d0199a4cc446ff7b091666dc1d347d4e8bc",
-                                        "size":  4248,
-                                        "role":  "schema"
-                                    },
-                                    {
-                                        "path":  "schemas/helios-rebaseline.schema.json",
-                                        "sha256":  "69fdbdff0b21d2e9328afaf648d7967b73adb0eb24c92b35c15f7bff6489cd4f",
-                                        "size":  1723,
-                                        "role":  "schema"
-                                    },
-                                    {
-                                        "path":  "schemas/helios-rollback-evidence.schema.json",
-                                        "sha256":  "f4a490d97e1d71e550534b508a58960ce3297c33a9a57a52dbea075a6d35f4dc",
-                                        "size":  1249,
-                                        "role":  "schema"
-                                    },
-                                    {
-                                        "path":  "schemas/helios-runtime-detection.v1.json",
-                                        "sha256":  "bb02c704bc41b95963ac2c8377a6612e911c260a8d27a8db217b2d12bda5ce5d",
-                                        "size":  6443,
-                                        "role":  "schema"
-                                    },
-                                    {
-                                        "path":  "schemas/helios-runtime-reset-evidence.v1.json",
-                                        "sha256":  "84f1c64401e6d2c754df8d575e0a74f60ba89c679c96e5d2733b498fd3113c93",
-                                        "size":  3737,
-                                        "role":  "schema"
-                                    },
-                                    {
-                                        "path":  "schemas/helios-runtime-restore-evidence.v1.json",
-                                        "sha256":  "117825108dd7c0f4e741269ae24aebdee2cfd79c78501dc6d419ab03870364ef",
-                                        "size":  3064,
-                                        "role":  "schema"
-                                    },
-                                    {
-                                        "path":  "schemas/helios-runtime-uninstall-evidence.v1.json",
-                                        "sha256":  "de375dd108dd2e4430c3776225fcfce07f69758f23d5aa318b60db4a05e5e4d2",
-                                        "size":  2605,
-                                        "role":  "schema"
-                                    },
-                                    {
-                                        "path":  "schemas/helios-settings-activation-evidence.schema.json",
-                                        "sha256":  "9921322647132df1938171f83ec62e64bad4e99dd0b91556951554b1df3aed7d",
-                                        "size":  2230,
-                                        "role":  "schema"
-                                    },
-                                    {
-                                        "path":  "Tests/AkashicIntegrityBridge.Tests.ps1",
-                                        "sha256":  "18fba12f9a6d0281fad7ef31c27ba946d0db7c518cb485aea202ced775bfada3",
-                                        "size":  16482,
-                                        "role":  "test"
-                                    },
-                                    {
-                                        "path":  "tools/AkashicCombinedInstallPlan.ps1",
-                                        "sha256":  "6dccca664d18eb5d3f5b5eb48da9ac4a699fb518effcca18a9462800d0b01c4b",
-                                        "size":  11890,
-                                        "role":  "tool"
-                                    },
-                                    {
-                                        "path":  "tools/AkashicEndToEndInstallPlanValidation.ps1",
-                                        "sha256":  "eac53b7150bf141ce6bfbb302abbbe13ff134200b6aa7aab208b4648fe5b9a20",
-                                        "size":  8582,
-                                        "role":  "tool"
-                                    },
-                                    {
-                                        "path":  "tools/AkashicEnvelopeIntegrityValidation.ps1",
-                                        "sha256":  "b39ab5ce09a9d8c52f488ce97270f455c7f3814e733b003205734cd1f2c27752",
-                                        "size":  5150,
-                                        "role":  "tool"
-                                    },
-                                    {
-                                        "path":  "tools/AkashicEnvelopeManifest.ps1",
-                                        "sha256":  "a334b9d0d5ff46e032019fcda474d65f3df173f23f6d02e5bf89f1300d7b2b5e",
-                                        "size":  3235,
-                                        "role":  "tool"
-                                    },
-                                    {
-                                        "path":  "tools/AkashicGapTestMatrix.ps1",
-                                        "sha256":  "f3188e366407c257e831b1e06997196cc3137ba7f6366bd38bbaf0ec7a3149c0",
-                                        "size":  22464,
-                                        "role":  "tool"
-                                    },
-                                    {
-                                        "path":  "tools/AkashicHeliosInstallPlan.ps1",
-                                        "sha256":  "cee34c6dcaabaf4506db5776f6a3b32296d930724396baedde1e8def0b786bff",
-                                        "size":  33187,
-                                        "role":  "tool"
-                                    },
-                                    {
-                                        "path":  "tools/AkashicInstallPlan.ps1",
-                                        "sha256":  "c6eb983944c5e545ab729b9b059461444b5b90e7e0819bff677cd24966e9a576",
-                                        "size":  7470,
-                                        "role":  "tool"
-                                    },
-                                    {
-                                        "path":  "tools/AkashicLockStatus.ps1",
-                                        "sha256":  "0ab06bcab3d0d758207f06b0f5c5b67ad4fb274b078f7232749a39b83e04a329",
-                                        "size":  6411,
-                                        "role":  "tool"
-                                    },
-                                    {
-                                        "path":  "tools/AkashicPackage.ps1",
-                                        "sha256":  "2d850315c9360d42d31907d713c14cd79801f43bac969d0d8821f56cb677e3af",
-                                        "size":  10606,
-                                        "role":  "tool"
-                                    },
-                                    {
-                                        "path":  "tools/AkashicPackageValidation.ps1",
-                                        "sha256":  "5ab02b9348612949ddcedef2dc85a773704f707b4fe5125366be191ae331d065",
-                                        "size":  9365,
-                                        "role":  "tool"
-                                    },
-                                    {
-                                        "path":  "tools/AkashicRuntimeBundle.ps1",
-                                        "sha256":  "824410769334ee9601bc9b47c414339a0bd57dea96f691b81c3a4594cc7fe5d0",
-                                        "size":  6960,
-                                        "role":  "tool"
-                                    },
-                                    {
-                                        "path":  "tools/AkashicRuntimeBundleValidation.ps1",
-                                        "sha256":  "5cf2db4834c2ffa32123251b699eedfa421a164122d4081ac22d77b856d46373",
-                                        "size":  9536,
-                                        "role":  "tool"
-                                    },
-                                    {
-                                        "path":  "tools/AkashicSettingsIntegrity.ps1",
-                                        "sha256":  "fc1e789d244c2d6802d2572060f73a1b08fc02e63f86a55488564939744ceaf4",
-                                        "size":  5447,
-                                        "role":  "tool"
-                                    },
-                                    {
-                                        "path":  "tools/Apply-AkashicClaudeHooks.ps1",
-                                        "sha256":  "01ea73716a45de8e8d2d3c2d9104af806dcceb67302e27a4048568e5f7562f7f",
-                                        "size":  11207,
-                                        "role":  "tool"
-                                    },
-                                    {
-                                        "path":  "tools/Assert-AkashicTrusted.ps1",
-                                        "sha256":  "52af68f25ed32f4010bf8bb7e38e12d9dc7c0bf5d77f95937bca6d1e63c8ee89",
-                                        "size":  1578,
-                                        "role":  "tool"
-                                    },
-                                    {
-                                        "path":  "tools/Clear-HeliosStaleGates.ps1",
-                                        "sha256":  "446f7302d70f20c999b986c5f644f2d9f0a2305d5a1bd760bf44388964630136",
-                                        "size":  1948,
-                                        "role":  "compatibility-wrapper"
-                                    },
-                                    {
-                                        "path":  "tools/ConvertFrom-AkashicEvidence.ps1",
-                                        "sha256":  "53f6060b264fb17b6ac14aa2cbf82865e67f0b76c702e3641ca89d1ba679e0e9",
-                                        "size":  6978,
-                                        "role":  "tool"
-                                    },
-                                    {
-                                        "path":  "tools/ConvertFrom-HeliosEvidence.ps1",
-                                        "sha256":  "cd02762144e09c80661ba85734e0b1e85255e66069689bf76b8c76f63bdc5677",
-                                        "size":  161,
-                                        "role":  "tool"
-                                    },
-                                    {
-                                        "path":  "tools/Get-AkashicLockStrategy.ps1",
-                                        "sha256":  "f8d2795f0b7c04e22302a539609de39d30439a77fb7721bdd575961731701e07",
-                                        "size":  9838,
-                                        "role":  "tool"
-                                    },
-                                    {
-                                        "path":  "tools/Get-HeliosEvidence.ps1",
-                                        "sha256":  "608b50baf9cfdd556faa6e02501eb3b4d9b626e38e51d93132965f30fed208b2",
-                                        "size":  1952,
-                                        "role":  "compatibility-wrapper"
-                                    },
-                                    {
-                                        "path":  "tools/Get-HeliosPendingGates.ps1",
-                                        "sha256":  "83fe65eb32c7cb6e85f3cd3c01fb1db606643accaafc386a9891d1b0dc2a3455",
-                                        "size":  1873,
-                                        "role":  "compatibility-wrapper"
-                                    },
-                                    {
-                                        "path":  "tools/Install-AkashicHeliosRuntime.ps1",
-                                        "sha256":  "76c2f38bd5e1693c62f871cfd2d86df74863dcbb48260b7db2bebf917dbc1397",
-                                        "size":  10142,
-                                        "role":  "tool"
-                                    },
-                                    {
-                                        "path":  "tools/Invoke-AkashicGapTest.ps1",
-                                        "sha256":  "7702b2fa272de958ba7312e55048600008ec7a5cb831cc3e39b7e276b2e84871",
-                                        "size":  3785,
-                                        "role":  "tool"
-                                    },
-                                    {
-                                        "path":  "tools/Invoke-AkashicRebaseline.ps1",
-                                        "sha256":  "4aa403f2f91aef91992c3308028b87030d361a87608f558fbee5d7e89f94bb30",
-                                        "size":  8859,
-                                        "role":  "tool"
-                                    },
-                                    {
-                                        "path":  "tools/Invoke-AkashicSelfRebaseline.ps1",
-                                        "sha256":  "d80ced435defa61131354e13295f9053c0d5f09e0ac624f4f5f82bfde085e55c",
-                                        "size":  5213,
-                                        "role":  "tool"
-                                    },
-                                    {
-                                        "path":  "tools/Invoke-HeliosGapTest.ps1",
-                                        "sha256":  "5f23f01245f1660dbc23ae1f2890f3d81ef18053cfc694deddf7c416cfa02b77",
-                                        "size":  143,
-                                        "role":  "compatibility-wrapper"
-                                    },
-                                    {
-                                        "path":  "tools/Invoke-HeliosRebaseline.ps1",
-                                        "sha256":  "f1029de03365c499bad41bc04aef079d147d556e9bd21f5688906aa6393bdbbc",
-                                        "size":  152,
-                                        "role":  "compatibility-wrapper"
-                                    },
-                                    {
-                                        "path":  "tools/Invoke-HeliosRuntimeRebaseline.ps1",
-                                        "sha256":  "946621be4780238e8ed96eeaab3d13f4b48b2f992caf6a4438fd4b2a8a52fe7c",
-                                        "size":  3589,
-                                        "role":  "compatibility-wrapper"
-                                    },
-                                    {
-                                        "path":  "tools/lib/AkashicCoveragePolicy.ps1",
-                                        "sha256":  "092a0518e796cf70b0f89870c8dea4e1e3eea4dee02118756c4987b09e6f15ad",
-                                        "size":  4144,
-                                        "role":  "library"
-                                    },
-                                    {
-                                        "path":  "tools/lib/AkashicLockBackend.ps1",
-                                        "sha256":  "56e831e8b3fb24fdb715161b1c7625139af57a2f9b79af848ab4d16fc72b0374",
-                                        "size":  7711,
-                                        "role":  "library"
-                                    },
-                                    {
-                                        "path":  "tools/lib/AkashicLockTargets.ps1",
-                                        "sha256":  "9184b99884cfdf8d8ed6bfabc0ab159abb47ef69ff089aec4003113d0ac22120",
-                                        "size":  526,
-                                        "role":  "library"
-                                    },
-                                    {
-                                        "path":  "tools/Lock-AkashicProtectedFiles.ps1",
-                                        "sha256":  "57a632b3fa0c523880950abd05ba147fb78c662848c466b2374df59ca38f9a12",
-                                        "size":  5713,
-                                        "role":  "tool"
-                                    },
-                                    {
-                                        "path":  "tools/Lock-AkashicRoot.ps1",
-                                        "sha256":  "19444eefe71ec041b2543bf84bb0aedc1cb9db8a03fe621db9aaf8769b236d7c",
-                                        "size":  3674,
-                                        "role":  "tool"
-                                    },
-                                    {
-                                        "path":  "tools/Lock-HeliosProtectedFiles.ps1",
-                                        "sha256":  "ee45e7e97f69aaa2530e374ef56292286d99bb456122252254664191ad31fb47",
-                                        "size":  158,
-                                        "role":  "compatibility-wrapper"
-                                    },
-                                    {
-                                        "path":  "tools/Lock-HeliosRuntime.ps1",
-                                        "sha256":  "e957610cf3552915e23179b5e3946bcc7091ac7500adaebad7fde394fd1e6469",
-                                        "size":  1482,
-                                        "role":  "compatibility-wrapper"
-                                    },
-                                    {
-                                        "path":  "tools/Move-AkashicStaleGateArtifacts.ps1",
-                                        "sha256":  "208c7e65a7fa20e80e47aea192846f86098d3b1162a45893e4a82a42b39956ad",
-                                        "size":  5001,
-                                        "role":  "tool"
-                                    },
-                                    {
-                                        "path":  "tools/Move-HeliosStaleGateArtifacts.ps1",
-                                        "sha256":  "4120a158043d4e81f3e68472a27c168852b03b6b5e2a49ff040c804c9e274783",
-                                        "size":  170,
-                                        "role":  "compatibility-wrapper"
-                                    },
-                                    {
-                                        "path":  "tools/New-AkashicSelfManifest.ps1",
-                                        "sha256":  "a9011a112646657c8e2345c615732e36813bd08f75980c31e29a7bb1c7bf8e02",
-                                        "size":  5894,
-                                        "role":  "tool"
-                                    },
-                                    {
-                                        "path":  "tools/New-HeliosAdapterPackage.ps1",
-                                        "sha256":  "a0acdde799cba70acf181e0fb464285477b22eea8a33e725eb7451ade4c3ad6c",
-                                        "size":  133,
-                                        "role":  "compatibility-wrapper"
-                                    },
-                                    {
-                                        "path":  "tools/New-HeliosCombinedInstallPlan.ps1",
-                                        "sha256":  "0f542343b0f3f338e8ceabb1d6340a72d647e2f309e6d767f66832e544799348",
-                                        "size":  162,
-                                        "role":  "compatibility-wrapper"
-                                    },
-                                    {
-                                        "path":  "tools/New-HeliosEnvelopeManifest.ps1",
-                                        "sha256":  "0f3eedab3939e762360980e77474e789401a016c0c548b0b17495ecaa6479f71",
-                                        "size":  153,
-                                        "role":  "compatibility-wrapper"
-                                    },
-                                    {
-                                        "path":  "tools/New-HeliosGapTestMatrix.ps1",
-                                        "sha256":  "651554f7753406a9070b790c05dc11f17a4903f54a5691718b603653ada6b9e2",
-                                        "size":  144,
-                                        "role":  "compatibility-wrapper"
-                                    },
-                                    {
-                                        "path":  "tools/New-HeliosGate.ps1",
-                                        "sha256":  "6de3218d4f47c44c07a00b5d065db51171ed8cb6bdb835f255b6e8ead2c2f1d6",
-                                        "size":  4006,
-                                        "role":  "compatibility-wrapper"
-                                    },
-                                    {
-                                        "path":  "tools/New-HeliosInstallOrigin.ps1",
-                                        "sha256":  "e879a07b24e16119d07ccb318a153489be3301bae7f62208dd0be01678b4666a",
-                                        "size":  7093,
-                                        "role":  "compatibility-wrapper"
-                                    },
-                                    {
-                                        "path":  "tools/New-HeliosInstallPlan.ps1",
-                                        "sha256":  "d4f45fb8f7322cf653d2da505cbd4192e0da59a71425d84f86577539c349d606",
-                                        "size":  138,
-                                        "role":  "compatibility-wrapper"
-                                    },
-                                    {
-                                        "path":  "tools/New-HeliosRuntimeBundle.ps1",
-                                        "sha256":  "1c435b4e4c94d3f499fa71dddc1e7cd8e631fe422941dd89746d1f43f40c757d",
-                                        "size":  144,
-                                        "role":  "compatibility-wrapper"
-                                    },
-                                    {
-                                        "path":  "tools/Remove-AkashicClaudeHooks.ps1",
-                                        "sha256":  "5d1117795a02a9272c6ec89b6f9ad9cb3a934dd5c1dce8bb7b65a32b43eff094",
-                                        "size":  6652,
-                                        "role":  "tool"
-                                    },
-                                    {
-                                        "path":  "tools/Reset-AkashicHeliosRuntime.ps1",
-                                        "sha256":  "5ded7499695193bf4c676b7c699fadcd63ba7cc2e217ee527596043f6382ffb8",
-                                        "size":  23705,
-                                        "role":  "tool"
-                                    },
-                                    {
-                                        "path":  "tools/Restore-HeliosRuntimeFromBundle.ps1",
-                                        "sha256":  "7a15b58d6b89ddb3d194f587ee1ebc080fd9190035c5b5d2893e9d116f74a3d9",
-                                        "size":  19958,
-                                        "role":  "tool"
-                                    },
-                                    {
-                                        "path":  "tools/Rollback-AkashicHeliosRuntime.ps1",
-                                        "sha256":  "e0129b3caaae8a2a4b0b66e34b9aed4e53aa2a8068e48baf9246e85aa7770044",
-                                        "size":  4471,
-                                        "role":  "tool"
-                                    },
-                                    {
-                                        "path":  "tools/Sync-AkashicBridge.ps1",
-                                        "sha256":  "1e9ecc491e4b2939ab19b574a2d84f0cfefbfcf3b8d4b60ad62dad2239a452fe",
-                                        "size":  1802,
-                                        "role":  "tool"
-                                    },
-                                    {
-                                        "path":  "tools/Sync-HeliosBridge.ps1",
-                                        "sha256":  "5987070e1a41a1d88ed5fbdb04692b7d43bea404909d0e6c203a0cb80b60636b",
-                                        "size":  134,
-                                        "role":  "compatibility-wrapper"
-                                    },
-                                    {
-                                        "path":  "tools/Test-AkashicOsLockFixture.ps1",
-                                        "sha256":  "ed7a86a5aea35f5869d2b302ddff8532f2e14a6defe3227f707ad34ef96d002a",
-                                        "size":  12162,
-                                        "role":  "tool"
-                                    },
-                                    {
-                                        "path":  "tools/Test-AkashicSelfIntegrity.ps1",
-                                        "sha256":  "6ffbe8ab48553e6e3fe9b17ed09fcfb0ba85392b5d6c7a092399b68cdfee161a",
-                                        "size":  10133,
-                                        "role":  "tool"
-                                    },
-                                    {
-                                        "path":  "tools/Test-HeliosAdapterPackage.ps1",
-                                        "sha256":  "18322eb1e4dba5612623220c51627ede2c605b085575f9ed68ec5bba48fca970",
-                                        "size":  154,
-                                        "role":  "compatibility-wrapper"
-                                    },
-                                    {
-                                        "path":  "tools/Test-HeliosEndToEndInstallPlan.ps1",
-                                        "sha256":  "bb9ea78f4587edb367266b6f3195477850d7c579ba5684a912a3a2ea4e658ce7",
-                                        "size":  183,
-                                        "role":  "compatibility-wrapper"
-                                    },
-                                    {
-                                        "path":  "tools/Test-HeliosEnvelopeIntegrity.ps1",
-                                        "sha256":  "26eda93db55d9a659ca139e47f436ed019496d3aae82bd3a9b090473cb93dcf7",
-                                        "size":  177,
-                                        "role":  "compatibility-wrapper"
-                                    },
-                                    {
-                                        "path":  "tools/Test-HeliosLiveOperational.ps1",
-                                        "sha256":  "c484ec5ed71c245127f16ad0d7eac1d83b8ce77a664094722cbb5c07d005ed27",
-                                        "size":  11146,
-                                        "role":  "compatibility-wrapper"
-                                    },
-                                    {
-                                        "path":  "tools/Test-HeliosLockStatus.ps1",
-                                        "sha256":  "920b5773614c5e66e2942746497125a33ce42b4d43d9c50597795ba029c6416e",
-                                        "size":  136,
-                                        "role":  "compatibility-wrapper"
-                                    },
-                                    {
-                                        "path":  "tools/Test-HeliosPrerequisites.ps1",
-                                        "sha256":  "c4c910c59caba79b2d3ab2c858686269dcbd0704635c974110d4c9a1cfd583ba",
-                                        "size":  7603,
-                                        "role":  "compatibility-wrapper"
-                                    },
-                                    {
-                                        "path":  "tools/Test-HeliosRuntimeBundle.ps1",
-                                        "sha256":  "c6bda93fa3027474bbd3bdebd59f9d264b7c0dfa318d84c9163eaa64321cb2e2",
-                                        "size":  165,
-                                        "role":  "compatibility-wrapper"
-                                    },
-                                    {
-                                        "path":  "tools/Test-HeliosRuntimeOrigin.ps1",
-                                        "sha256":  "1949a2215ed2b6154534ec64b7c8f91736b48bc5a7e28ca9fce0d975db80d88d",
-                                        "size":  16918,
-                                        "role":  "compatibility-wrapper"
-                                    },
-                                    {
-                                        "path":  "tools/Test-HeliosSettingsIntegrity.ps1",
-                                        "sha256":  "31a0d2fcf578e6822b78f93a3c5f729ccad3d45a5a9e880324c554fe3a80d197",
-                                        "size":  157,
-                                        "role":  "compatibility-wrapper"
-                                    },
-                                    {
-                                        "path":  "tools/Uninstall-AkashicHeliosRuntime.ps1",
-                                        "sha256":  "8c10bae13c9f763d4e16eb3ced2313932484147371e4ab1096e217394e6d5507",
-                                        "size":  13610,
-                                        "role":  "tool"
-                                    },
-                                    {
-                                        "path":  "tools/Unlock-AkashicProtectedFiles.ps1",
-                                        "sha256":  "e39673f1b0fc6c53eaf52aea30cdb3d4abea828ab7094d27610ecfa4087b81f2",
-                                        "size":  5790,
-                                        "role":  "tool"
-                                    },
-                                    {
-                                        "path":  "tools/Unlock-AkashicRoot.ps1",
-                                        "sha256":  "b4f257bfd69ab8c2ad21e7e972833d063a1377ca4d52f17dd412deb3fc371c0f",
-                                        "size":  3632,
-                                        "role":  "tool"
-                                    },
-                                    {
-                                        "path":  "tools/Unlock-HeliosProtectedFiles.ps1",
-                                        "sha256":  "ce2a7dcfadc06e84a784dc56986bca88ea26a4f66f52f97225f037f93ccb39c0",
-                                        "size":  164,
-                                        "role":  "compatibility-wrapper"
-                                    },
-                                    {
-                                        "path":  "tools/Unlock-HeliosRuntime.ps1",
-                                        "sha256":  "922be991e9f6fa0a7b23af179d77991c33dbb44fa683faccff5c537ca1b82be2",
-                                        "size":  863,
-                                        "role":  "compatibility-wrapper"
-                                    },
-                                    {
-                                        "path":  "tools/Write-HeliosRuntimeDetection.ps1",
-                                        "sha256":  "d900b0453605db211fb1de93faf87aed8847b824fdfa03324020720aa06e8f07",
-                                        "size":  3633,
-                                        "role":  "tool"
-                                    }
-                                ]
-                  },
-    "mutable":  {
-                    "description":  "Paths expected to change during normal Akashic operation.",
-                    "paths":  [
-                                  "evidence/*",
-                                  "manifest/akashic-envelope.sig",
-                                  "manifest/akashic-public-key.asc",
-                                  "install-plan.json",
-                                  "*.tmp",
-                                  "*.log"
-                              ]
-                },
-    "ignored":  {
-                    "description":  "Paths intentionally outside the trust boundary.",
-                    "patterns":  [
-                                     ".git/*",
-                                     ".vscode/*",
-                                     ".idea/*",
-                                     "node_modules/*",
-                                     "__pycache__/*"
-                                 ]
-                },
-    "classification":  {
-                           "protected_file_count":  104,
-                           "mutable_pattern_count":  6,
-                           "ignored_pattern_count":  5
-                       }
+  "schema_version": "akashic-self-envelope.v1",
+  "created_utc": "2026-06-29T21:44:16Z",
+  "rebaselined_by": "phase432d-validation",
+  "signature_status": "SIGNATURE_NOT_IMPLEMENTED",
+  "protected": {
+    "description": "Files that can alter Akashic behavior, trust, installation, verification, CI, schema interpretation, or documentation contracts. Must not change outside of explicit human rebaseline.",
+    "paths": [
+      "AkashicIntegrityBridge.ps1",
+      "docs/akashic-helios-installer-contract.md",
+      "docs/akashic-naming-and-runtime-boundary.md",
+      "docs/akashic-self-integrity-boundary.md",
+      "docs/helios-runtime-bundle-contract.md",
+      "docs/helios-runtime-reset-restore-uninstall.md",
+      "docs/helios-user-installation.md",
+      "docs/install-sequence.md",
+      "docs/package-architecture.md",
+      "docs/package-manifest-schema.md",
+      "docs/package-options.md",
+      "docs/phase398-packaging-decision.md",
+      "docs/phase399-operational-enforcement-observations.md",
+      "docs/phase3991-package-validation-results.md",
+      "docs/phase4-lock-requirements-from-gap-tests.md",
+      "docs/phase40-lock-design-from-gap-evidence.md",
+      "docs/phase41-lock-implementation.md",
+      "docs/standalone-repo-transition.md",
+      "docs/tce-helios-integrity-adapter-spec.md",
+      "docs/void-linux-validation.md",
+      "manifest/akashic-envelope.json",
+      "manifest/akashic-envelope.sha256",
+      "README.md",
+      "schemas/akashic-self-envelope.v1.json",
+      "schemas/akashic-self-integrity-evidence.v1.json",
+      "schemas/helios-baseline.schema.json",
+      "schemas/helios-command-evidence.schema.json",
+      "schemas/helios-envelope.schema.json",
+      "schemas/helios-install-origin.v1.json",
+      "schemas/helios-rebaseline.schema.json",
+      "schemas/helios-rollback-evidence.schema.json",
+      "schemas/helios-runtime-detection.v1.json",
+      "schemas/helios-runtime-reset-evidence.v1.json",
+      "schemas/helios-runtime-restore-evidence.v1.json",
+      "schemas/helios-runtime-uninstall-evidence.v1.json",
+      "schemas/helios-settings-activation-evidence.schema.json",
+      "Tests/AkashicIntegrityBridge.Tests.ps1",
+      "tools/AkashicCombinedInstallPlan.ps1",
+      "tools/AkashicEndToEndInstallPlanValidation.ps1",
+      "tools/AkashicEnvelopeIntegrityValidation.ps1",
+      "tools/AkashicEnvelopeManifest.ps1",
+      "tools/AkashicGapTestMatrix.ps1",
+      "tools/AkashicHeliosInstallPlan.ps1",
+      "tools/AkashicInstallPlan.ps1",
+      "tools/AkashicLockStatus.ps1",
+      "tools/AkashicPackage.ps1",
+      "tools/AkashicPackageValidation.ps1",
+      "tools/AkashicRuntimeBundle.ps1",
+      "tools/AkashicRuntimeBundleValidation.ps1",
+      "tools/AkashicSettingsIntegrity.ps1",
+      "tools/Apply-AkashicClaudeHooks.ps1",
+      "tools/Assert-AkashicTrusted.ps1",
+      "tools/Clear-HeliosStaleGates.ps1",
+      "tools/ConvertFrom-AkashicEvidence.ps1",
+      "tools/ConvertFrom-HeliosEvidence.ps1",
+      "tools/Get-AkashicLockStrategy.ps1",
+      "tools/Get-HeliosEvidence.ps1",
+      "tools/Get-HeliosPendingGates.ps1",
+      "tools/Install-AkashicHeliosRuntime.ps1",
+      "tools/Invoke-AkashicGapTest.ps1",
+      "tools/Invoke-AkashicRebaseline.ps1",
+      "tools/Invoke-AkashicSelfRebaseline.ps1",
+      "tools/Invoke-HeliosGapTest.ps1",
+      "tools/Invoke-HeliosRebaseline.ps1",
+      "tools/Invoke-HeliosRuntimeRebaseline.ps1",
+      "tools/lib/AkashicCoveragePolicy.ps1",
+      "tools/lib/AkashicLockBackend.ps1",
+      "tools/lib/AkashicLockTargets.ps1",
+      "tools/Lock-AkashicProtectedFiles.ps1",
+      "tools/Lock-AkashicRoot.ps1",
+      "tools/Lock-HeliosProtectedFiles.ps1",
+      "tools/Lock-HeliosRuntime.ps1",
+      "tools/Move-AkashicStaleGateArtifacts.ps1",
+      "tools/Move-HeliosStaleGateArtifacts.ps1",
+      "tools/New-AkashicSelfManifest.ps1",
+      "tools/New-HeliosAdapterPackage.ps1",
+      "tools/New-HeliosCombinedInstallPlan.ps1",
+      "tools/New-HeliosEnvelopeManifest.ps1",
+      "tools/New-HeliosGapTestMatrix.ps1",
+      "tools/New-HeliosGate.ps1",
+      "tools/New-HeliosInstallOrigin.ps1",
+      "tools/New-HeliosInstallPlan.ps1",
+      "tools/New-HeliosRuntimeBundle.ps1",
+      "tools/Remove-AkashicClaudeHooks.ps1",
+      "tools/Reset-AkashicHeliosRuntime.ps1",
+      "tools/Restore-HeliosRuntimeFromBundle.ps1",
+      "tools/Rollback-AkashicHeliosRuntime.ps1",
+      "tools/Sync-AkashicBridge.ps1",
+      "tools/Sync-HeliosBridge.ps1",
+      "tools/Test-AkashicOsLockFixture.ps1",
+      "tools/Test-AkashicSelfIntegrity.ps1",
+      "tools/Test-HeliosAdapterPackage.ps1",
+      "tools/Test-HeliosEndToEndInstallPlan.ps1",
+      "tools/Test-HeliosEnvelopeIntegrity.ps1",
+      "tools/Test-HeliosLiveOperational.ps1",
+      "tools/Test-HeliosLockStatus.ps1",
+      "tools/Test-HeliosPrerequisites.ps1",
+      "tools/Test-HeliosRuntimeBundle.ps1",
+      "tools/Test-HeliosRuntimeOrigin.ps1",
+      "tools/Test-HeliosSettingsIntegrity.ps1",
+      "tools/Uninstall-AkashicHeliosRuntime.ps1",
+      "tools/Unlock-AkashicProtectedFiles.ps1",
+      "tools/Unlock-AkashicRoot.ps1",
+      "tools/Unlock-HeliosProtectedFiles.ps1",
+      "tools/Unlock-HeliosRuntime.ps1",
+      "tools/Write-HeliosRuntimeDetection.ps1"
+    ],
+    "files": [
+      {
+        "path": "AkashicIntegrityBridge.ps1",
+        "sha256": "8008a336b8d5c35704aa677a57796807f8bb7790d3ff0a9af89767519c51e454",
+        "size": 10542,
+        "role": "bridge"
+      },
+      {
+        "path": "docs/akashic-helios-installer-contract.md",
+        "sha256": "56a2a371e8a86576627b1443f09641e72d88037ac45a2d6722080007c9b72aed",
+        "size": 20742,
+        "role": "contract-doc"
+      },
+      {
+        "path": "docs/akashic-naming-and-runtime-boundary.md",
+        "sha256": "8f5c40954f006108fee8c100769f40bc8251159cbb848b33ca1147b6801fff8d",
+        "size": 3366,
+        "role": "contract-doc"
+      },
+      {
+        "path": "docs/akashic-self-integrity-boundary.md",
+        "sha256": "b40bdc9430b7627df3f428e7399a67fa7e12e3585d7b7f19a230c944686a5a20",
+        "size": 12919,
+        "role": "contract-doc"
+      },
+      {
+        "path": "docs/helios-runtime-bundle-contract.md",
+        "sha256": "1c43bba167203ededf5073fe124df4875dda57aee04d47d9a810b2c75844c91d",
+        "size": 5695,
+        "role": "contract-doc"
+      },
+      {
+        "path": "docs/helios-runtime-reset-restore-uninstall.md",
+        "sha256": "d044ec3466f06bf33a1212c4956676808fea91919105267be9123bdd85e881eb",
+        "size": 10340,
+        "role": "contract-doc"
+      },
+      {
+        "path": "docs/helios-user-installation.md",
+        "sha256": "a917e3ac6458ed5036451a83e439d96e37a25ebb4b7bf1eda2fe55d7bfd9373b",
+        "size": 8429,
+        "role": "contract-doc"
+      },
+      {
+        "path": "docs/install-sequence.md",
+        "sha256": "cc0ade79cce4e8bfa2b85f0735d253a6ef1ab66e8173fc8669d6740aa87bfe9d",
+        "size": 10954,
+        "role": "contract-doc"
+      },
+      {
+        "path": "docs/package-architecture.md",
+        "sha256": "2e4ac38a2756939a8de55a9e6f2b7837d2e35ae3f33a9c7a61ec0ecc4fd1243a",
+        "size": 10774,
+        "role": "contract-doc"
+      },
+      {
+        "path": "docs/package-manifest-schema.md",
+        "sha256": "135429d3f5428cca16297294642565cca9b8bfdf66f913ea454d6e381cc04e93",
+        "size": 5270,
+        "role": "contract-doc"
+      },
+      {
+        "path": "docs/package-options.md",
+        "sha256": "575bafdc8572af1f6972ba95c05ad10e924d8b22d7cce974e82436b7de090635",
+        "size": 7125,
+        "role": "contract-doc"
+      },
+      {
+        "path": "docs/phase398-packaging-decision.md",
+        "sha256": "e22a9eb749f455f8a482071a9af819c5f002425fa85c5582d37f0662bced3fc0",
+        "size": 6142,
+        "role": "contract-doc"
+      },
+      {
+        "path": "docs/phase399-operational-enforcement-observations.md",
+        "sha256": "6adfc247fff33abb5b861b69ba6421944c38ef117b8f715802dda1e5a64b9a4b",
+        "size": 3199,
+        "role": "contract-doc"
+      },
+      {
+        "path": "docs/phase3991-package-validation-results.md",
+        "sha256": "5f145787415d2d7f0050c1c9a419533656563f015f569e0a91069df32daf06a2",
+        "size": 4254,
+        "role": "contract-doc"
+      },
+      {
+        "path": "docs/phase4-lock-requirements-from-gap-tests.md",
+        "sha256": "2452e4c363e8a4dab118a98cd6501f5982d9cd72f4d240a6f11eb948ad1a84f2",
+        "size": 14033,
+        "role": "contract-doc"
+      },
+      {
+        "path": "docs/phase40-lock-design-from-gap-evidence.md",
+        "sha256": "faf277c629b8b7c8b08029d1f44913f91c14bf09983cac25c7fd776a03ab7a8f",
+        "size": 44703,
+        "role": "contract-doc"
+      },
+      {
+        "path": "docs/phase41-lock-implementation.md",
+        "sha256": "2317461c6602964e8ef057cc4b4ad680a65d8c148f5c67f913fbcd65f37571ed",
+        "size": 11830,
+        "role": "contract-doc"
+      },
+      {
+        "path": "docs/standalone-repo-transition.md",
+        "sha256": "b2d03045787ce5ba435bee56c99884e4504667c01f689f10f624a336853d564d",
+        "size": 4643,
+        "role": "contract-doc"
+      },
+      {
+        "path": "docs/tce-helios-integrity-adapter-spec.md",
+        "sha256": "57905a42513e1739768c4574fe594c7dec74932dd53dd0af154df5167cf3085b",
+        "size": 10499,
+        "role": "contract-doc"
+      },
+      {
+        "path": "docs/void-linux-validation.md",
+        "sha256": "72969edbc06b89bedcae3c94b6cb77ca082dd4f4585586104adb30d662e84d99",
+        "size": 2988,
+        "role": "contract-doc"
+      },
+      {
+        "path": "README.md",
+        "sha256": "e2d9d9e9f5eabec1242d4dd62efaa3ca05eb615536a82cc2e07eaec059e17fd5",
+        "size": 13273,
+        "role": "contract-doc"
+      },
+      {
+        "path": "schemas/akashic-self-envelope.v1.json",
+        "sha256": "859ae30d545d5a78f22e0e77abff40e0b3c8401f1d14606bd97a17047bf25fd3",
+        "size": 3996,
+        "role": "schema"
+      },
+      {
+        "path": "schemas/akashic-self-integrity-evidence.v1.json",
+        "sha256": "137395f82f94204e06f7373262dff180615ed9db8ad2189e4df2475b1635b305",
+        "size": 3613,
+        "role": "schema"
+      },
+      {
+        "path": "schemas/helios-baseline.schema.json",
+        "sha256": "8df1e8fc7bb0cda02c60df6e1c6f740faa64a2fc0d0c61a3f3943ffa5c9185b4",
+        "size": 2083,
+        "role": "schema"
+      },
+      {
+        "path": "schemas/helios-command-evidence.schema.json",
+        "sha256": "46be82efb4ae2e88c60434c5b076944f60a0bd35254714082bada3377494d50d",
+        "size": 7047,
+        "role": "schema"
+      },
+      {
+        "path": "schemas/helios-envelope.schema.json",
+        "sha256": "86de45829fc26e4c8c4d6c3bb64578f867e2f871296163075df0022fb9dcb0d0",
+        "size": 2235,
+        "role": "schema"
+      },
+      {
+        "path": "schemas/helios-install-origin.v1.json",
+        "sha256": "fc14e2426faa05369ec6fc7091bc0d0199a4cc446ff7b091666dc1d347d4e8bc",
+        "size": 4248,
+        "role": "schema"
+      },
+      {
+        "path": "schemas/helios-rebaseline.schema.json",
+        "sha256": "69fdbdff0b21d2e9328afaf648d7967b73adb0eb24c92b35c15f7bff6489cd4f",
+        "size": 1723,
+        "role": "schema"
+      },
+      {
+        "path": "schemas/helios-rollback-evidence.schema.json",
+        "sha256": "f4a490d97e1d71e550534b508a58960ce3297c33a9a57a52dbea075a6d35f4dc",
+        "size": 1249,
+        "role": "schema"
+      },
+      {
+        "path": "schemas/helios-runtime-detection.v1.json",
+        "sha256": "bb02c704bc41b95963ac2c8377a6612e911c260a8d27a8db217b2d12bda5ce5d",
+        "size": 6443,
+        "role": "schema"
+      },
+      {
+        "path": "schemas/helios-runtime-reset-evidence.v1.json",
+        "sha256": "84f1c64401e6d2c754df8d575e0a74f60ba89c679c96e5d2733b498fd3113c93",
+        "size": 3737,
+        "role": "schema"
+      },
+      {
+        "path": "schemas/helios-runtime-restore-evidence.v1.json",
+        "sha256": "117825108dd7c0f4e741269ae24aebdee2cfd79c78501dc6d419ab03870364ef",
+        "size": 3064,
+        "role": "schema"
+      },
+      {
+        "path": "schemas/helios-runtime-uninstall-evidence.v1.json",
+        "sha256": "de375dd108dd2e4430c3776225fcfce07f69758f23d5aa318b60db4a05e5e4d2",
+        "size": 2605,
+        "role": "schema"
+      },
+      {
+        "path": "schemas/helios-settings-activation-evidence.schema.json",
+        "sha256": "9921322647132df1938171f83ec62e64bad4e99dd0b91556951554b1df3aed7d",
+        "size": 2230,
+        "role": "schema"
+      },
+      {
+        "path": "Tests/AkashicIntegrityBridge.Tests.ps1",
+        "sha256": "339cc7698754887e27f7441cef342cf0fe4ee73770c9d7f91e3b8933c0111f02",
+        "size": 16144,
+        "role": "test"
+      },
+      {
+        "path": "tools/AkashicCombinedInstallPlan.ps1",
+        "sha256": "6dccca664d18eb5d3f5b5eb48da9ac4a699fb518effcca18a9462800d0b01c4b",
+        "size": 11890,
+        "role": "tool"
+      },
+      {
+        "path": "tools/AkashicEndToEndInstallPlanValidation.ps1",
+        "sha256": "eac53b7150bf141ce6bfbb302abbbe13ff134200b6aa7aab208b4648fe5b9a20",
+        "size": 8582,
+        "role": "tool"
+      },
+      {
+        "path": "tools/AkashicEnvelopeIntegrityValidation.ps1",
+        "sha256": "bcbb4dc79dad93a09e3a2e02caae880b7121b3914afbcc95ee8e431f1566f95e",
+        "size": 4999,
+        "role": "tool"
+      },
+      {
+        "path": "tools/AkashicEnvelopeManifest.ps1",
+        "sha256": "aeb033b3ff5dbc6018b476a104349f905ce14dab0a629dfc7136c24f7c336325",
+        "size": 3134,
+        "role": "tool"
+      },
+      {
+        "path": "tools/AkashicGapTestMatrix.ps1",
+        "sha256": "f3188e366407c257e831b1e06997196cc3137ba7f6366bd38bbaf0ec7a3149c0",
+        "size": 22464,
+        "role": "tool"
+      },
+      {
+        "path": "tools/AkashicHeliosInstallPlan.ps1",
+        "sha256": "ead8c99add1641b212080867a5ec646cee6fc6d273f734f6c69586e6593d8044",
+        "size": 32415,
+        "role": "tool"
+      },
+      {
+        "path": "tools/AkashicInstallPlan.ps1",
+        "sha256": "c6eb983944c5e545ab729b9b059461444b5b90e7e0819bff677cd24966e9a576",
+        "size": 7470,
+        "role": "tool"
+      },
+      {
+        "path": "tools/AkashicLockStatus.ps1",
+        "sha256": "0ab06bcab3d0d758207f06b0f5c5b67ad4fb274b078f7232749a39b83e04a329",
+        "size": 6411,
+        "role": "tool"
+      },
+      {
+        "path": "tools/AkashicPackage.ps1",
+        "sha256": "2d850315c9360d42d31907d713c14cd79801f43bac969d0d8821f56cb677e3af",
+        "size": 10606,
+        "role": "tool"
+      },
+      {
+        "path": "tools/AkashicPackageValidation.ps1",
+        "sha256": "5ab02b9348612949ddcedef2dc85a773704f707b4fe5125366be191ae331d065",
+        "size": 9365,
+        "role": "tool"
+      },
+      {
+        "path": "tools/AkashicRuntimeBundle.ps1",
+        "sha256": "824410769334ee9601bc9b47c414339a0bd57dea96f691b81c3a4594cc7fe5d0",
+        "size": 6960,
+        "role": "tool"
+      },
+      {
+        "path": "tools/AkashicRuntimeBundleValidation.ps1",
+        "sha256": "5cf2db4834c2ffa32123251b699eedfa421a164122d4081ac22d77b856d46373",
+        "size": 9536,
+        "role": "tool"
+      },
+      {
+        "path": "tools/AkashicSettingsIntegrity.ps1",
+        "sha256": "fc1e789d244c2d6802d2572060f73a1b08fc02e63f86a55488564939744ceaf4",
+        "size": 5447,
+        "role": "tool"
+      },
+      {
+        "path": "tools/Apply-AkashicClaudeHooks.ps1",
+        "sha256": "bf3b02baf91520a5141a1eb0bdf4ed455b720e55aee3163552947b0ae7b1db51",
+        "size": 10926,
+        "role": "tool"
+      },
+      {
+        "path": "tools/Assert-AkashicTrusted.ps1",
+        "sha256": "97019d2cdc589e025179c5bcc3f52387c3ee6dc583e84e9213d64d2b262d91ce",
+        "size": 1543,
+        "role": "tool"
+      },
+      {
+        "path": "tools/Clear-HeliosStaleGates.ps1",
+        "sha256": "446f7302d70f20c999b986c5f644f2d9f0a2305d5a1bd760bf44388964630136",
+        "size": 1948,
+        "role": "compatibility-wrapper"
+      },
+      {
+        "path": "tools/ConvertFrom-AkashicEvidence.ps1",
+        "sha256": "53f6060b264fb17b6ac14aa2cbf82865e67f0b76c702e3641ca89d1ba679e0e9",
+        "size": 6978,
+        "role": "tool"
+      },
+      {
+        "path": "tools/ConvertFrom-HeliosEvidence.ps1",
+        "sha256": "cd02762144e09c80661ba85734e0b1e85255e66069689bf76b8c76f63bdc5677",
+        "size": 161,
+        "role": "tool"
+      },
+      {
+        "path": "tools/Get-AkashicLockStrategy.ps1",
+        "sha256": "f8d2795f0b7c04e22302a539609de39d30439a77fb7721bdd575961731701e07",
+        "size": 9838,
+        "role": "tool"
+      },
+      {
+        "path": "tools/Get-HeliosEvidence.ps1",
+        "sha256": "608b50baf9cfdd556faa6e02501eb3b4d9b626e38e51d93132965f30fed208b2",
+        "size": 1952,
+        "role": "compatibility-wrapper"
+      },
+      {
+        "path": "tools/Get-HeliosPendingGates.ps1",
+        "sha256": "83fe65eb32c7cb6e85f3cd3c01fb1db606643accaafc386a9891d1b0dc2a3455",
+        "size": 1873,
+        "role": "compatibility-wrapper"
+      },
+      {
+        "path": "tools/Install-AkashicHeliosRuntime.ps1",
+        "sha256": "8e5cc8298dec027e2a098ea8969ee54bd4b017359939dcb38d6ba9ba39f46f3f",
+        "size": 9871,
+        "role": "tool"
+      },
+      {
+        "path": "tools/Invoke-AkashicGapTest.ps1",
+        "sha256": "7702b2fa272de958ba7312e55048600008ec7a5cb831cc3e39b7e276b2e84871",
+        "size": 3785,
+        "role": "tool"
+      },
+      {
+        "path": "tools/Invoke-AkashicRebaseline.ps1",
+        "sha256": "7f8e85aa622dc3d6c2b752dd7cceb9c752f710b7b5729509b8a68c79be9bfcb8",
+        "size": 8630,
+        "role": "tool"
+      },
+      {
+        "path": "tools/Invoke-AkashicSelfRebaseline.ps1",
+        "sha256": "f66e5e3942096cad6dd0cfa6145f6f1797ac3a4c34560c68ac7252bc6981b82f",
+        "size": 5071,
+        "role": "tool"
+      },
+      {
+        "path": "tools/Invoke-HeliosGapTest.ps1",
+        "sha256": "5f23f01245f1660dbc23ae1f2890f3d81ef18053cfc694deddf7c416cfa02b77",
+        "size": 143,
+        "role": "compatibility-wrapper"
+      },
+      {
+        "path": "tools/Invoke-HeliosRebaseline.ps1",
+        "sha256": "f1029de03365c499bad41bc04aef079d147d556e9bd21f5688906aa6393bdbbc",
+        "size": 152,
+        "role": "compatibility-wrapper"
+      },
+      {
+        "path": "tools/Invoke-HeliosRuntimeRebaseline.ps1",
+        "sha256": "5c65358f9c2b3cfdde2d8f1ddec6ef845d2f64c61ce0221d70a8687b85603e11",
+        "size": 3488,
+        "role": "compatibility-wrapper"
+      },
+      {
+        "path": "tools/lib/AkashicCoveragePolicy.ps1",
+        "sha256": "092a0518e796cf70b0f89870c8dea4e1e3eea4dee02118756c4987b09e6f15ad",
+        "size": 4144,
+        "role": "library"
+      },
+      {
+        "path": "tools/lib/AkashicLockBackend.ps1",
+        "sha256": "56e831e8b3fb24fdb715161b1c7625139af57a2f9b79af848ab4d16fc72b0374",
+        "size": 7711,
+        "role": "library"
+      },
+      {
+        "path": "tools/lib/AkashicLockTargets.ps1",
+        "sha256": "9184b99884cfdf8d8ed6bfabc0ab159abb47ef69ff089aec4003113d0ac22120",
+        "size": 526,
+        "role": "library"
+      },
+      {
+        "path": "tools/Lock-AkashicProtectedFiles.ps1",
+        "sha256": "86261e1e7acf7c1bd3e97b4da6653669d4823338a530ce26d679bec47086f316",
+        "size": 5568,
+        "role": "tool"
+      },
+      {
+        "path": "tools/Lock-AkashicRoot.ps1",
+        "sha256": "a2f7cd668e94117b2ab0ee20ab2866837c5885f02099d9445594db1a026fac7c",
+        "size": 3582,
+        "role": "tool"
+      },
+      {
+        "path": "tools/Lock-HeliosProtectedFiles.ps1",
+        "sha256": "ee45e7e97f69aaa2530e374ef56292286d99bb456122252254664191ad31fb47",
+        "size": 158,
+        "role": "compatibility-wrapper"
+      },
+      {
+        "path": "tools/Lock-HeliosRuntime.ps1",
+        "sha256": "3ba55b76bdf2a0296f4e33c56e40aaadedb4278666e7450e8ed843143d55dea1",
+        "size": 1428,
+        "role": "compatibility-wrapper"
+      },
+      {
+        "path": "tools/Move-AkashicStaleGateArtifacts.ps1",
+        "sha256": "208c7e65a7fa20e80e47aea192846f86098d3b1162a45893e4a82a42b39956ad",
+        "size": 5001,
+        "role": "tool"
+      },
+      {
+        "path": "tools/Move-HeliosStaleGateArtifacts.ps1",
+        "sha256": "4120a158043d4e81f3e68472a27c168852b03b6b5e2a49ff040c804c9e274783",
+        "size": 170,
+        "role": "compatibility-wrapper"
+      },
+      {
+        "path": "tools/New-AkashicSelfManifest.ps1",
+        "sha256": "a9011a112646657c8e2345c615732e36813bd08f75980c31e29a7bb1c7bf8e02",
+        "size": 5894,
+        "role": "tool"
+      },
+      {
+        "path": "tools/New-HeliosAdapterPackage.ps1",
+        "sha256": "a0acdde799cba70acf181e0fb464285477b22eea8a33e725eb7451ade4c3ad6c",
+        "size": 133,
+        "role": "compatibility-wrapper"
+      },
+      {
+        "path": "tools/New-HeliosCombinedInstallPlan.ps1",
+        "sha256": "0f542343b0f3f338e8ceabb1d6340a72d647e2f309e6d767f66832e544799348",
+        "size": 162,
+        "role": "compatibility-wrapper"
+      },
+      {
+        "path": "tools/New-HeliosEnvelopeManifest.ps1",
+        "sha256": "0f3eedab3939e762360980e77474e789401a016c0c548b0b17495ecaa6479f71",
+        "size": 153,
+        "role": "compatibility-wrapper"
+      },
+      {
+        "path": "tools/New-HeliosGapTestMatrix.ps1",
+        "sha256": "651554f7753406a9070b790c05dc11f17a4903f54a5691718b603653ada6b9e2",
+        "size": 144,
+        "role": "compatibility-wrapper"
+      },
+      {
+        "path": "tools/New-HeliosGate.ps1",
+        "sha256": "6de3218d4f47c44c07a00b5d065db51171ed8cb6bdb835f255b6e8ead2c2f1d6",
+        "size": 4006,
+        "role": "compatibility-wrapper"
+      },
+      {
+        "path": "tools/New-HeliosInstallOrigin.ps1",
+        "sha256": "e879a07b24e16119d07ccb318a153489be3301bae7f62208dd0be01678b4666a",
+        "size": 7093,
+        "role": "compatibility-wrapper"
+      },
+      {
+        "path": "tools/New-HeliosInstallPlan.ps1",
+        "sha256": "d4f45fb8f7322cf653d2da505cbd4192e0da59a71425d84f86577539c349d606",
+        "size": 138,
+        "role": "compatibility-wrapper"
+      },
+      {
+        "path": "tools/New-HeliosRuntimeBundle.ps1",
+        "sha256": "1c435b4e4c94d3f499fa71dddc1e7cd8e631fe422941dd89746d1f43f40c757d",
+        "size": 144,
+        "role": "compatibility-wrapper"
+      },
+      {
+        "path": "tools/Remove-AkashicClaudeHooks.ps1",
+        "sha256": "173e49db473f2d6f58254dbd172b975207f3c65b66365e511baddeaba43393bc",
+        "size": 6476,
+        "role": "tool"
+      },
+      {
+        "path": "tools/Reset-AkashicHeliosRuntime.ps1",
+        "sha256": "5ded7499695193bf4c676b7c699fadcd63ba7cc2e217ee527596043f6382ffb8",
+        "size": 23705,
+        "role": "tool"
+      },
+      {
+        "path": "tools/Restore-HeliosRuntimeFromBundle.ps1",
+        "sha256": "7a15b58d6b89ddb3d194f587ee1ebc080fd9190035c5b5d2893e9d116f74a3d9",
+        "size": 19958,
+        "role": "tool"
+      },
+      {
+        "path": "tools/Rollback-AkashicHeliosRuntime.ps1",
+        "sha256": "64eea30b5d1305fbe92391972f86091b602c20e2e9a7d61fd7b7e5890a7cfc01",
+        "size": 4346,
+        "role": "tool"
+      },
+      {
+        "path": "tools/Sync-AkashicBridge.ps1",
+        "sha256": "e733656789316b872ddb26aeb97b3830307ea97744914a84258cc283834c2e2f",
+        "size": 1747,
+        "role": "tool"
+      },
+      {
+        "path": "tools/Sync-HeliosBridge.ps1",
+        "sha256": "5987070e1a41a1d88ed5fbdb04692b7d43bea404909d0e6c203a0cb80b60636b",
+        "size": 134,
+        "role": "compatibility-wrapper"
+      },
+      {
+        "path": "tools/Test-AkashicOsLockFixture.ps1",
+        "sha256": "ed7a86a5aea35f5869d2b302ddff8532f2e14a6defe3227f707ad34ef96d002a",
+        "size": 12162,
+        "role": "tool"
+      },
+      {
+        "path": "tools/Test-AkashicSelfIntegrity.ps1",
+        "sha256": "6ffbe8ab48553e6e3fe9b17ed09fcfb0ba85392b5d6c7a092399b68cdfee161a",
+        "size": 10133,
+        "role": "tool"
+      },
+      {
+        "path": "tools/Test-HeliosAdapterPackage.ps1",
+        "sha256": "18322eb1e4dba5612623220c51627ede2c605b085575f9ed68ec5bba48fca970",
+        "size": 154,
+        "role": "compatibility-wrapper"
+      },
+      {
+        "path": "tools/Test-HeliosEndToEndInstallPlan.ps1",
+        "sha256": "bb9ea78f4587edb367266b6f3195477850d7c579ba5684a912a3a2ea4e658ce7",
+        "size": 183,
+        "role": "compatibility-wrapper"
+      },
+      {
+        "path": "tools/Test-HeliosEnvelopeIntegrity.ps1",
+        "sha256": "26eda93db55d9a659ca139e47f436ed019496d3aae82bd3a9b090473cb93dcf7",
+        "size": 177,
+        "role": "compatibility-wrapper"
+      },
+      {
+        "path": "tools/Test-HeliosLiveOperational.ps1",
+        "sha256": "c484ec5ed71c245127f16ad0d7eac1d83b8ce77a664094722cbb5c07d005ed27",
+        "size": 11146,
+        "role": "compatibility-wrapper"
+      },
+      {
+        "path": "tools/Test-HeliosLockStatus.ps1",
+        "sha256": "920b5773614c5e66e2942746497125a33ce42b4d43d9c50597795ba029c6416e",
+        "size": 136,
+        "role": "compatibility-wrapper"
+      },
+      {
+        "path": "tools/Test-HeliosPrerequisites.ps1",
+        "sha256": "14a7355444600d1ebff6b7ef683f49aaa1b20ed015d67c5176920022fa034832",
+        "size": 7410,
+        "role": "compatibility-wrapper"
+      },
+      {
+        "path": "tools/Test-HeliosRuntimeBundle.ps1",
+        "sha256": "c6bda93fa3027474bbd3bdebd59f9d264b7c0dfa318d84c9163eaa64321cb2e2",
+        "size": 165,
+        "role": "compatibility-wrapper"
+      },
+      {
+        "path": "tools/Test-HeliosRuntimeOrigin.ps1",
+        "sha256": "1949a2215ed2b6154534ec64b7c8f91736b48bc5a7e28ca9fce0d975db80d88d",
+        "size": 16918,
+        "role": "compatibility-wrapper"
+      },
+      {
+        "path": "tools/Test-HeliosSettingsIntegrity.ps1",
+        "sha256": "31a0d2fcf578e6822b78f93a3c5f729ccad3d45a5a9e880324c554fe3a80d197",
+        "size": 157,
+        "role": "compatibility-wrapper"
+      },
+      {
+        "path": "tools/Uninstall-AkashicHeliosRuntime.ps1",
+        "sha256": "8c10bae13c9f763d4e16eb3ced2313932484147371e4ab1096e217394e6d5507",
+        "size": 13610,
+        "role": "tool"
+      },
+      {
+        "path": "tools/Unlock-AkashicProtectedFiles.ps1",
+        "sha256": "587b6786d339894025c069e1958f32bbfb687f4c51a155e8982a96a597f20578",
+        "size": 5645,
+        "role": "tool"
+      },
+      {
+        "path": "tools/Unlock-AkashicRoot.ps1",
+        "sha256": "2978461d9124b84f3f19758b10be08c8c9f5c9e428e0d7e1a5a33b80bf5e0fec",
+        "size": 3543,
+        "role": "tool"
+      },
+      {
+        "path": "tools/Unlock-HeliosProtectedFiles.ps1",
+        "sha256": "ce2a7dcfadc06e84a784dc56986bca88ea26a4f66f52f97225f037f93ccb39c0",
+        "size": 164,
+        "role": "compatibility-wrapper"
+      },
+      {
+        "path": "tools/Unlock-HeliosRuntime.ps1",
+        "sha256": "cc3b1e9bef3b729ad230596de714fb346a2da35c0a4cac524cc8249495712b0d",
+        "size": 829,
+        "role": "compatibility-wrapper"
+      },
+      {
+        "path": "tools/Write-HeliosRuntimeDetection.ps1",
+        "sha256": "d900b0453605db211fb1de93faf87aed8847b824fdfa03324020720aa06e8f07",
+        "size": 3633,
+        "role": "tool"
+      }
+    ]
+  },
+  "mutable": {
+    "description": "Paths expected to change during normal Akashic operation.",
+    "paths": [
+      "evidence/*",
+      "manifest/akashic-envelope.sig",
+      "manifest/akashic-public-key.asc",
+      "install-plan.json",
+      "*.tmp",
+      "*.log"
+    ]
+  },
+  "ignored": {
+    "description": "Paths intentionally outside the trust boundary.",
+    "patterns": [
+      ".git/*",
+      ".vscode/*",
+      ".idea/*",
+      "node_modules/*",
+      "__pycache__/*"
+    ]
+  },
+  "classification": {
+    "protected_file_count": 104,
+    "mutable_pattern_count": 6,
+    "ignored_pattern_count": 5
+  }
 }

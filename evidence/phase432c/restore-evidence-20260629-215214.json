@@ -1,0 +1,124 @@
+{
+  "schema_version": "helios-runtime-restore-evidence.v1",
+  "timestamp_utc": "2026-06-29T21:52:14Z",
+  "platform": "Linux",
+  "restored_by": "restore-tool",
+  "operation_type": "Restore",
+  "source_authority": "RecordedInstallOrigin",
+  "akashic_root": "/home/void/Desktop/Akashic",
+  "helios_gate_root": "/home/void/.helios/.command-gate",
+  "origin_file_hash": "45209d15252d2d2d194e927b448f8988bb33aa77e221be636c1d9dbf2c190d9d",
+  "origin_created_utc": "2026-06-29T21:51:42Z",
+  "recorded_runtime_bundle_root": "/home/void/Desktop/Helios-/.command-gate",
+  "recorded_helios_head": "46e23931328f8d37b7ad118b6667fa204aa7790d",
+  "recorded_akashic_head": "b5debba4f390e4cc2e13474ea8bb67b434e597ae",
+  "current_runtime_bundle_root_status": "PRESENT",
+  "source_repo_present": true,
+  "source_repo_head_matches_recorded": true,
+  "source_hashes_match_recorded": true,
+  "restored_runtime_hashes": {
+    "hooks/helios_pretooluse.ps1": "31e6e82253aa1567367b92985973f799510b3ae17b89ac4379bc6e7092cac7b3",
+    "hooks/gate_check.ps1": "06a58750cd5a96c0b4be36e3ec1befeaa31fb90ce71324834d881c85075f6342",
+    "hooks/evidence_capture.ps1": "beab97ea548f0edf0826fdc7365f23adef54cba9b21257d2ed0a8902fa832e0b",
+    "hooks/tier_classifier.ps1": "9d41b12d982c0a50c706ba9ee1c17f5ebcd8ade959b7226b31019fbdbf024757",
+    "hooks/lib/HeliosIntegrityBridge.ps1": "8008a336b8d5c35704aa677a57796807f8bb7790d3ff0a9af89767519c51e454",
+    "policy/command-policy.json": "5e4fc670a3e03947d8ab0c5d64a1c59faf5c92dd887ee25474d147425359639f"
+  },
+  "post_restore_manifest_hash": "b209a1cd6f9531d41263733641443f8e83c5a11c8bc00b680b1bb1dda3177f1d",
+  "post_restore_sidecar_hash": "b209a1cd6f9531d41263733641443f8e83c5a11c8bc00b680b1bb1dda3177f1d",
+  "post_restore_origin_hash": "45209d15252d2d2d194e927b448f8988bb33aa77e221be636c1d9dbf2c190d9d",
+  "post_restore_manifest_verdict": "CLEAN",
+  "post_restore_origin_verdict": "MATCH",
+  "restore_policy": "exact_match",
+  "override_used": false,
+  "override_reason": null,
+  "archive_path": "/home/void/.helios/.command-gate/maintenance/archives/20260629-215214-restore",
+  "archived_files": [
+    "manifest/helios-envelope.json",
+    "manifest/helios-envelope.sha256",
+    "manifest/helios-install-origin.json",
+    "protected/hooks/helios_pretooluse.ps1",
+    "protected/hooks/gate_check.ps1",
+    "protected/hooks/evidence_capture.ps1",
+    "protected/hooks/tier_classifier.ps1",
+    "protected/hooks/lib/HeliosIntegrityBridge.ps1",
+    "protected/policy/command-policy.json"
+  ],
+  "source_mismatch_files": [],
+  "steps": [
+    {
+      "step": "Assert Akashic trusted",
+      "status": "PASS",
+      "detail": "Self-integrity verified"
+    },
+    {
+      "step": "Read install-origin",
+      "status": "PASS",
+      "detail": {
+        "origin_created_utc": "2026-06-29T21:51:42Z",
+        "recorded_runtime_bundle_root": "/home/void/Desktop/Helios-/.command-gate",
+        "recorded_akashic_head": "b5debba4f390e4cc2e13474ea8bb67b434e597ae",
+        "recorded_helios_head": "46e23931328f8d37b7ad118b6667fa204aa7790d"
+      }
+    },
+    {
+      "step": "Resolve recorded source state",
+      "status": "PASS",
+      "detail": {
+        "status": "PRESENT",
+        "head_matches": true,
+        "hashes_match": true,
+        "mismatch_file_count": 0
+      }
+    },
+    {
+      "step": "Confirm source available",
+      "status": "PASS",
+      "detail": "Source matches recorded state"
+    },
+    {
+      "step": "Compare runtime to recorded origin",
+      "status": "PASS",
+      "detail": "All installed files match recorded origin"
+    },
+    {
+      "step": "Archive current baseline",
+      "status": "PASS",
+      "detail": {
+        "archive_path": "/home/void/.helios/.command-gate/maintenance/archives/20260629-215214-restore",
+        "files_archived": 9
+      }
+    },
+    {
+      "step": "Restore protected files",
+      "status": "PASS",
+      "detail": "5 files restored from recorded source"
+    },
+    {
+      "step": "Sync bridge",
+      "status": "PASS",
+      "detail": "Bridge synced from current Akashic source"
+    },
+    {
+      "step": "Regenerate manifest",
+      "status": "PASS",
+      "detail": "helios-envelope.json + sha256 generated"
+    },
+    {
+      "step": "Preserve install-origin",
+      "status": "SKIP",
+      "detail": "Source matches recorded state; origin unchanged"
+    },
+    {
+      "step": "Verify manifest CLEAN",
+      "status": "PASS",
+      "detail": "Envelope integrity: CLEAN"
+    },
+    {
+      "step": "Verify origin MATCH",
+      "status": "PASS",
+      "detail": "Origin: MATCH | Detection: ORIGIN_MATCH"
+    }
+  ],
+  "overall": "COMPLETE"
+}

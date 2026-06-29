@@ -1,0 +1,69 @@
+{
+  "schema_version": "helios-runtime-uninstall-evidence.v1",
+  "timestamp_utc": "2026-06-29T21:52:43Z",
+  "platform": "Linux",
+  "uninstalled_by": "uninstall-tool",
+  "operation_type": "Uninstall",
+  "source_authority": "None",
+  "akashic_root": "/home/void/Desktop/Akashic",
+  "helios_gate_root": "/home/void/.helios/.command-gate",
+  "claude_settings_path": "/home/void/.claude/settings.json",
+  "uninstall_mode": "archive",
+  "pre_uninstall_hooks_active": true,
+  "post_uninstall_hooks_active": false,
+  "hooks_removed": true,
+  "settings_backup_path": "/home/void/.claude/settings.json.pre-helios-backup",
+  "settings_backup_hash": "961c2cd2a7517b5a6a714291906bd96fcd9822945a331409292d9963f51c2aa5",
+  "settings_after_hash": "17897dd726636d5e516f676fe19c8996d4db53d23b8ef97e02a3a6d48cf7075b",
+  "settings_backup_restored": false,
+  "files_unlocked": false,
+  "runtime_archived": true,
+  "runtime_removed": false,
+  "runtime_archive_path": "/home/void/.helios/.command-gate/maintenance/archives/20260629-215243-uninstall",
+  "manifest_archived": true,
+  "origin_archived": true,
+  "protected_files_archived": true,
+  "evidence_preserved": true,
+  "preserved_evidence_path": "/home/void/.helios/.command-gate/evidence",
+  "remove_evidence_requested": false,
+  "force_destructive": false,
+  "steps": [
+    {
+      "step": "Assert Akashic trusted",
+      "status": "PASS",
+      "detail": "Self-integrity verified"
+    },
+    {
+      "step": "Remove Helios hooks",
+      "status": "PASS",
+      "detail": {
+        "method": "selective_removal",
+        "status": "DEACTIVATED"
+      }
+    },
+    {
+      "step": "Unlock runtime files",
+      "status": "SKIP",
+      "detail": "Files already writable"
+    },
+    {
+      "step": "Archive runtime",
+      "status": "PASS",
+      "detail": {
+        "archive_path": "/home/void/.helios/.command-gate/maintenance/archives/20260629-215243-uninstall",
+        "file_count": 9
+      }
+    },
+    {
+      "step": "Preserve evidence",
+      "status": "PASS",
+      "detail": "Evidence preserved at /home/void/.helios/.command-gate/evidence"
+    },
+    {
+      "step": "Remove active runtime",
+      "status": "SKIP",
+      "detail": "Not requested (pass -ForceDestructive to remove)"
+    }
+  ],
+  "overall": "COMPLETE"
+}

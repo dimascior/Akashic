@@ -1,0 +1,248 @@
+{
+  "schema_version": "akashic-helios-install-plan.v2",
+  "timestamp_utc": "2026-06-29T21:47:52.8023543Z",
+  "mode": "Prepare",
+  "platform": "Linux",
+  "akashic_root": "/home/void/Desktop/Akashic",
+  "runtime_bundle_root": "/home/void/Desktop/Helios-/.command-gate",
+  "helios_gate_root": "/home/void/.helios/.command-gate",
+  "claude_settings_path": "/home/void/.claude/settings.json",
+  "lock_strategy": {
+    "backend": "chattr",
+    "implemented": true,
+    "strength": "strong_if_supported",
+    "requires_elevation": true,
+    "privilege_mode": "Sudo",
+    "blockers": [],
+    "notes": [
+      "Linux immutable attribute (chattr +i)",
+      "chattr: /usr/bin/chattr",
+      "lsattr: /usr/bin/lsattr",
+      "Elevation: sudo (non-interactive confirmed)"
+    ]
+  },
+  "fixture_result": "NOT_RUN",
+  "manifest_status": "CLEAN",
+  "origin_status": "PASS",
+  "origin_result": {
+    "origin_path": "/home/void/.helios/.command-gate/manifest/helios-install-origin.json",
+    "akashic_head": "b5debba4f390e4cc2e13474ea8bb67b434e597ae",
+    "helios_head": "46e23931328f8d37b7ad118b6667fa204aa7790d",
+    "source_count": 5,
+    "installed_count": 6,
+    "origin_verified": true,
+    "manifest_hash": "3215ba2d316be31a6245eb8f5dac2596d07a053397ea9acc7b98dbfeacf1f3af",
+    "sidecar_hash": "3215ba2d316be31a6245eb8f5dac2596d07a053397ea9acc7b98dbfeacf1f3af"
+  },
+  "phases": [
+    {
+      "phase": 1,
+      "name": "Verify Akashic package/root",
+      "status": "PASS",
+      "blocking": true,
+      "detail": "Akashic root verified (12 tools present): /home/void/Desktop/Akashic"
+    },
+    {
+      "phase": 2,
+      "name": "Verify RuntimeBundleRoot",
+      "status": "PASS",
+      "blocking": true,
+      "detail": "RuntimeBundleRoot verified: /home/void/Desktop/Helios-/.command-gate (5 protected, 0 support files)"
+    },
+    {
+      "phase": 3,
+      "name": "Create runtime directories",
+      "status": "PASS",
+      "blocking": true,
+      "detail": "Target exists, 15 directories verified"
+    },
+    {
+      "phase": 4,
+      "name": "Copy runtime protected files",
+      "status": "PASS",
+      "blocking": true,
+      "detail": "5 protected runtime files copied"
+    },
+    {
+      "phase": 5,
+      "name": "Copy runtime support files",
+      "status": "SKIP",
+      "blocking": false,
+      "detail": "No support files found in RuntimeBundleRoot"
+    },
+    {
+      "phase": 6,
+      "name": "Sync Akashic bridge",
+      "status": "PASS",
+      "blocking": true,
+      "detail": "Bridge synced: /home/void/.helios/.command-gate/hooks/lib/HeliosIntegrityBridge.ps1"
+    },
+    {
+      "phase": 7,
+      "name": "Verify bridge byte identity",
+      "status": "PASS",
+      "blocking": true,
+      "detail": "Byte identical: 8008a336b8d5c35704aa677a57796807f8bb7790d3ff0a9af89767519c51e454"
+    },
+    {
+      "phase": 8,
+      "name": "Generate manifest",
+      "status": "PASS",
+      "blocking": true,
+      "detail": "Manifest generated from files in final position"
+    },
+    {
+      "phase": 9,
+      "name": "Verify envelope integrity",
+      "status": "PASS",
+      "blocking": true,
+      "detail": "Envelope integrity: CLEAN"
+    },
+    {
+      "phase": 10,
+      "name": "Generate install origin",
+      "status": "PASS",
+      "blocking": true,
+      "detail": "Install origin: MATCH (source=5 installed=6)"
+    },
+    {
+      "phase": 11,
+      "name": "Detect lock strategy + run fixture",
+      "status": "PASS",
+      "blocking": true,
+      "detail": "Backend: chattr, Strength: strong_if_supported, Privilege: Sudo"
+    },
+    {
+      "phase": 12,
+      "name": "Prepare settings activation plan",
+      "status": "SKIP",
+      "blocking": false,
+      "detail": "Settings activation not requested"
+    },
+    {
+      "phase": 13,
+      "name": "Prepare lock activation plan",
+      "status": "PLAN",
+      "blocking": false,
+      "detail": "Lock plan generated (fixture: NOT_RUN, backend: chattr)"
+    },
+    {
+      "phase": 14,
+      "name": "Prepare rollback plan",
+      "status": "PASS",
+      "blocking": false,
+      "detail": "Rollback plan generated"
+    },
+    {
+      "phase": 15,
+      "name": "Write install evidence",
+      "status": "PASS",
+      "blocking": false,
+      "detail": "Evidence written: /home/void/Desktop/Akashic/evidence/phase41/install-evidence.json"
+    }
+  ],
+  "bridge_sync_plan": {
+    "source": "/home/void/Desktop/Akashic/AkashicIntegrityBridge.ps1",
+    "dest": "/home/void/.helios/.command-gate/hooks/lib/HeliosIntegrityBridge.ps1",
+    "source_exists": true,
+    "role": "bridge_vendor_copy",
+    "verify": "SHA-256 byte identity check after copy"
+  },
+  "runtime_protected_copy_plan": [
+    {
+      "relative": "hooks/helios_pretooluse.ps1",
+      "source": "/home/void/Desktop/Helios-/.command-gate/hooks/helios_pretooluse.ps1",
+      "dest": "/home/void/.helios/.command-gate/hooks/helios_pretooluse.ps1",
+      "role": "protected_runtime"
+    },
+    {
+      "relative": "hooks/gate_check.ps1",
+      "source": "/home/void/Desktop/Helios-/.command-gate/hooks/gate_check.ps1",
+      "dest": "/home/void/.helios/.command-gate/hooks/gate_check.ps1",
+      "role": "protected_runtime"
+    },
+    {
+      "relative": "hooks/evidence_capture.ps1",
+      "source": "/home/void/Desktop/Helios-/.command-gate/hooks/evidence_capture.ps1",
+      "dest": "/home/void/.helios/.command-gate/hooks/evidence_capture.ps1",
+      "role": "protected_runtime"
+    },
+    {
+      "relative": "hooks/tier_classifier.ps1",
+      "source": "/home/void/Desktop/Helios-/.command-gate/hooks/tier_classifier.ps1",
+      "dest": "/home/void/.helios/.command-gate/hooks/tier_classifier.ps1",
+      "role": "protected_runtime"
+    },
+    {
+      "relative": "policy/command-policy.json",
+      "source": "/home/void/Desktop/Helios-/.command-gate/policy/command-policy.json",
+      "dest": "/home/void/.helios/.command-gate/policy/command-policy.json",
+      "role": "protected_runtime"
+    }
+  ],
+  "runtime_support_copy_plan": [],
+  "settings_activation_plan": null,
+  "lock_activation_plan": {
+    "protected_lock_targets": [
+      "hooks/helios_pretooluse.ps1",
+      "hooks/gate_check.ps1",
+      "hooks/evidence_capture.ps1",
+      "hooks/tier_classifier.ps1",
+      "hooks/lib/HeliosIntegrityBridge.ps1",
+      "policy/command-policy.json",
+      "manifest/helios-envelope.json",
+      "manifest/helios-envelope.sha256"
+    ],
+    "mutable_dirs": [
+      "pending",
+      "inflight",
+      "evidence",
+      "blocked"
+    ],
+    "include_settings_lock": false,
+    "include_templates_lock": false,
+    "lock_tool": "tools/Lock-AkashicProtectedFiles.ps1",
+    "status_tool": "tools/AkashicLockStatus.ps1",
+    "requires_approval": true,
+    "lock_strategy": {
+      "backend": "chattr",
+      "strength": "strong_if_supported",
+      "privilege": "Sudo"
+    },
+    "fixture_prerequisite": "NOT_RUN"
+  },
+  "rollback_plan": {
+    "steps": [
+      "Run Uninstall-AkashicHeliosRuntime.ps1 -AkashicRoot /home/void/Desktop/Akashic -HeliosGateRoot /home/void/.helios/.command-gate (archives runtime, removes hooks)",
+      "Or manually: restore settings.json from backup: /home/void/.claude/settings.json.pre-helios-backup",
+      "Remove deny ACLs from locked files (Unlock-AkashicProtectedFiles)",
+      "Verify no hooks active: run shell command, confirm no gate prompt",
+      "Optionally remove target with -ForceDestructive: /home/void/.helios/.command-gate"
+    ],
+    "uninstall_tool": "tools/Uninstall-AkashicHeliosRuntime.ps1",
+    "risk": "Low — Uninstall-AkashicHeliosRuntime archives before removing"
+  },
+  "install_evidence": {
+    "schema_version": "akashic-install-evidence.v1",
+    "timestamp_utc": "2026-06-29T21:47:52.7953956Z",
+    "mode": "Prepare",
+    "platform": "Linux",
+    "akashic_root": "/home/void/Desktop/Akashic",
+    "runtime_bundle_root": "/home/void/Desktop/Helios-/.command-gate",
+    "helios_gate_root": "/home/void/.helios/.command-gate",
+    "lock_strategy": {
+      "backend": "chattr",
+      "strength": "strong_if_supported",
+      "privilege": "Sudo"
+    },
+    "fixture_result": "NOT_RUN",
+    "manifest_status": "CLEAN",
+    "origin_status": "PASS",
+    "origin_verified": true,
+    "settings_activation": "skipped",
+    "lock_activation": "plan_only",
+    "blockers": []
+  },
+  "blockers": [],
+  "overall_status": "READY"
+}

@@ -1,41 +1,41 @@
 {
-    "schema_version":  "akashic-self-integrity-evidence.v1",
-    "timestamp_utc":  "2026-06-29T14:43:31.6096910Z",
-    "akashic_root":  "C:\\Users\\dimas\\Desktop\\helios-integrity-adapter",
-    "rebaselined_by":  "phase432c-final",
-    "overall":  "COMPLETE",
-    "steps":  [
-                  {
-                      "step":  "Unlock",
-                      "status":  "SKIP",
-                      "detail":  "manifest is writable"
-                  },
-                  {
-                      "step":  "Regenerate manifest",
-                      "status":  "PASS",
-                      "detail":  {
-                                     "protected_count":  104,
-                                     "manifest_hash":  "18f900e567e70d71ea698010d7826d9b551a3748a6443c4721c813ca78fc0e8d",
-                                     "signature_status":  "SIGNATURE_NOT_IMPLEMENTED"
-                                 }
-                  },
-                  {
-                      "step":  "Verify integrity",
-                      "status":  "PASS",
-                      "detail":  {
-                                     "verdict":  "CLEAN",
-                                     "protected_count":  104,
-                                     "clean_count":  104
-                                 }
-                  },
-                  {
-                      "step":  "Re-lock",
-                      "status":  "SKIP",
-                      "detail":  "not requested (pass -RelockAfter)"
-                  }
-              ],
-    "manifest_hash":  "18f900e567e70d71ea698010d7826d9b551a3748a6443c4721c813ca78fc0e8d",
-    "protected_count":  104,
-    "signature_status":  "SIGNATURE_NOT_IMPLEMENTED",
-    "verify_verdict":  "CLEAN"
+  "schema_version": "akashic-self-integrity-evidence.v1",
+  "timestamp_utc": "2026-06-29T21:44:16.8728459Z",
+  "akashic_root": "/home/void/Desktop/Akashic",
+  "rebaselined_by": "phase432d-validation",
+  "overall": "COMPLETE",
+  "steps": [
+    {
+      "step": "Unlock",
+      "status": "SKIP",
+      "detail": "manifest is writable"
+    },
+    {
+      "step": "Regenerate manifest",
+      "status": "PASS",
+      "detail": {
+        "protected_count": 104,
+        "manifest_hash": "d2f2789b3b2dcf7e24a53897fbb8730f90ee96a35c155471caf6afba2fd3644d",
+        "signature_status": "SIGNATURE_NOT_IMPLEMENTED"
+      }
+    },
+    {
+      "step": "Verify integrity",
+      "status": "PASS",
+      "detail": {
+        "verdict": "CLEAN",
+        "protected_count": 104,
+        "clean_count": 104
+      }
+    },
+    {
+      "step": "Re-lock",
+      "status": "SKIP",
+      "detail": "not requested (pass -RelockAfter)"
+    }
+  ],
+  "manifest_hash": "d2f2789b3b2dcf7e24a53897fbb8730f90ee96a35c155471caf6afba2fd3644d",
+  "protected_count": 104,
+  "signature_status": "SIGNATURE_NOT_IMPLEMENTED",
+  "verify_verdict": "CLEAN"
 }

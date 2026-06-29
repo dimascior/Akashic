@@ -1,0 +1,21 @@
+{
+  "schema_version": "akashic-install-evidence.v1",
+  "timestamp_utc": "2026-06-29T21:47:52.7953956Z",
+  "mode": "Prepare",
+  "platform": "Linux",
+  "akashic_root": "/home/void/Desktop/Akashic",
+  "runtime_bundle_root": "/home/void/Desktop/Helios-/.command-gate",
+  "helios_gate_root": "/home/void/.helios/.command-gate",
+  "lock_strategy": {
+    "backend": "chattr",
+    "strength": "strong_if_supported",
+    "privilege": "Sudo"
+  },
+  "fixture_result": "NOT_RUN",
+  "manifest_status": "CLEAN",
+  "origin_status": "PASS",
+  "origin_verified": true,
+  "settings_activation": "skipped",
+  "lock_activation": "plan_only",
+  "blockers": []
+}

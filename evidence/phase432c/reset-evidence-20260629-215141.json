@@ -1,0 +1,230 @@
+{
+  "schema_version": "helios-runtime-reset-evidence.v1",
+  "timestamp_utc": "2026-06-29T21:51:41Z",
+  "platform": "Linux",
+  "reset_by": "reset-tool",
+  "operation_type": "Reset",
+  "source_authority": "CurrentRuntimeBundleRoot",
+  "akashic_root": "/home/void/Desktop/Akashic",
+  "runtime_bundle_root": "/home/void/Desktop/Helios-/.command-gate",
+  "helios_gate_root": "/home/void/.helios/.command-gate",
+  "pre_reset_detection_type": "ORIGIN_MATCH",
+  "pre_reset_severity": "INFO",
+  "pre_reset_recommended_action": "NONE",
+  "pre_reset_manifest_hash": "3215ba2d316be31a6245eb8f5dac2596d07a053397ea9acc7b98dbfeacf1f3af",
+  "pre_reset_sidecar_hash": "3215ba2d316be31a6245eb8f5dac2596d07a053397ea9acc7b98dbfeacf1f3af",
+  "pre_reset_origin_hash": "3bc1c5718d75b2e4b3ddff45d4bdd2c1963d45935fdece32c3cf6d5d52c7b8dc",
+  "pre_reset_detection": {
+    "schema_version": "helios-runtime-detection.v1",
+    "timestamp_utc": "2026-06-29T21:51:41Z",
+    "platform": "Linux",
+    "akashic_head": "b5debba4f390e4cc2e13474ea8bb67b434e597ae",
+    "helios_head": "46e23931328f8d37b7ad118b6667fa204aa7790d",
+    "runtime_bundle_root": "/home/void/Desktop/Helios-/.command-gate",
+    "helios_gate_root": "/home/void/.helios/.command-gate",
+    "manifest_path": "/home/void/.helios/.command-gate/manifest/helios-envelope.json",
+    "sidecar_path": "/home/void/.helios/.command-gate/manifest/helios-envelope.sha256",
+    "install_origin_path": "/home/void/.helios/.command-gate/manifest/helios-install-origin.json",
+    "current_manifest_verdict": "CLEAN",
+    "sidecar_verdict": "MATCH",
+    "origin_verdict": "MATCH",
+    "detection_type": "ORIGIN_MATCH",
+    "severity": "INFO",
+    "recommended_action": "NONE",
+    "automation_mode": "DetectOnly",
+    "affected_files": [],
+    "expected_manifest_hashes": {
+      "hooks/gate_check.ps1": "06a58750cd5a96c0b4be36e3ec1befeaa31fb90ce71324834d881c85075f6342",
+      "hooks/evidence_capture.ps1": "beab97ea548f0edf0826fdc7365f23adef54cba9b21257d2ed0a8902fa832e0b",
+      "hooks/tier_classifier.ps1": "9d41b12d982c0a50c706ba9ee1c17f5ebcd8ade959b7226b31019fbdbf024757",
+      "hooks/helios_pretooluse.ps1": "31e6e82253aa1567367b92985973f799510b3ae17b89ac4379bc6e7092cac7b3",
+      "hooks/lib/HeliosIntegrityBridge.ps1": "8008a336b8d5c35704aa677a57796807f8bb7790d3ff0a9af89767519c51e454",
+      "policy/command-policy.json": "5e4fc670a3e03947d8ab0c5d64a1c59faf5c92dd887ee25474d147425359639f"
+    },
+    "actual_runtime_hashes": {
+      "hooks/helios_pretooluse.ps1": "31e6e82253aa1567367b92985973f799510b3ae17b89ac4379bc6e7092cac7b3",
+      "hooks/gate_check.ps1": "06a58750cd5a96c0b4be36e3ec1befeaa31fb90ce71324834d881c85075f6342",
+      "hooks/evidence_capture.ps1": "beab97ea548f0edf0826fdc7365f23adef54cba9b21257d2ed0a8902fa832e0b",
+      "hooks/tier_classifier.ps1": "9d41b12d982c0a50c706ba9ee1c17f5ebcd8ade959b7226b31019fbdbf024757",
+      "hooks/lib/HeliosIntegrityBridge.ps1": "8008a336b8d5c35704aa677a57796807f8bb7790d3ff0a9af89767519c51e454",
+      "policy/command-policy.json": "5e4fc670a3e03947d8ab0c5d64a1c59faf5c92dd887ee25474d147425359639f"
+    },
+    "expected_origin_hashes": {
+      "hooks/helios_pretooluse.ps1": "31e6e82253aa1567367b92985973f799510b3ae17b89ac4379bc6e7092cac7b3",
+      "hooks/gate_check.ps1": "06a58750cd5a96c0b4be36e3ec1befeaa31fb90ce71324834d881c85075f6342",
+      "hooks/evidence_capture.ps1": "beab97ea548f0edf0826fdc7365f23adef54cba9b21257d2ed0a8902fa832e0b",
+      "hooks/tier_classifier.ps1": "9d41b12d982c0a50c706ba9ee1c17f5ebcd8ade959b7226b31019fbdbf024757",
+      "hooks/lib/HeliosIntegrityBridge.ps1": "8008a336b8d5c35704aa677a57796807f8bb7790d3ff0a9af89767519c51e454",
+      "policy/command-policy.json": "5e4fc670a3e03947d8ab0c5d64a1c59faf5c92dd887ee25474d147425359639f"
+    },
+    "source_repo_status": {
+      "verdict": "SOURCE_MATCH",
+      "current_akashic_head": "b5debba4f390e4cc2e13474ea8bb67b434e597ae",
+      "recorded_akashic_head": "b5debba4f390e4cc2e13474ea8bb67b434e597ae",
+      "current_helios_head": "46e23931328f8d37b7ad118b6667fa204aa7790d",
+      "recorded_helios_head": "46e23931328f8d37b7ad118b6667fa204aa7790d",
+      "changed_source_files": []
+    },
+    "bridge_status": {
+      "verdict": "BRIDGE_MATCH",
+      "current_source_hash": "8008a336b8d5c35704aa677a57796807f8bb7790d3ff0a9af89767519c51e454",
+      "current_installed_hash": "8008a336b8d5c35704aa677a57796807f8bb7790d3ff0a9af89767519c51e454",
+      "origin_source_hash": "8008a336b8d5c35704aa677a57796807f8bb7790d3ff0a9af89767519c51e454",
+      "origin_installed_hash": "8008a336b8d5c35704aa677a57796807f8bb7790d3ff0a9af89767519c51e454"
+    },
+    "evidence_paths": [],
+    "automation_result": "DETECTED"
+  },
+  "old_runtime_hashes": {
+    "hooks/helios_pretooluse.ps1": "31e6e82253aa1567367b92985973f799510b3ae17b89ac4379bc6e7092cac7b3",
+    "hooks/gate_check.ps1": "06a58750cd5a96c0b4be36e3ec1befeaa31fb90ce71324834d881c85075f6342",
+    "hooks/evidence_capture.ps1": "beab97ea548f0edf0826fdc7365f23adef54cba9b21257d2ed0a8902fa832e0b",
+    "hooks/tier_classifier.ps1": "9d41b12d982c0a50c706ba9ee1c17f5ebcd8ade959b7226b31019fbdbf024757",
+    "hooks/lib/HeliosIntegrityBridge.ps1": "8008a336b8d5c35704aa677a57796807f8bb7790d3ff0a9af89767519c51e454",
+    "policy/command-policy.json": "5e4fc670a3e03947d8ab0c5d64a1c59faf5c92dd887ee25474d147425359639f"
+  },
+  "old_origin_runtime_bundle_root": "/home/void/Desktop/Helios-/.command-gate",
+  "old_helios_head": "46e23931328f8d37b7ad118b6667fa204aa7790d",
+  "old_akashic_head": "b5debba4f390e4cc2e13474ea8bb67b434e597ae",
+  "post_reset_manifest_hash": "26f5af38ad23fba750e9b643ce367bded887fde18339112b92c5dae9fb7d036c",
+  "post_reset_sidecar_hash": "26f5af38ad23fba750e9b643ce367bded887fde18339112b92c5dae9fb7d036c",
+  "post_reset_origin_hash": "45209d15252d2d2d194e927b448f8988bb33aa77e221be636c1d9dbf2c190d9d",
+  "post_reset_manifest_verdict": "CLEAN",
+  "post_reset_origin_verdict": "MATCH",
+  "new_runtime_hashes": {
+    "hooks/helios_pretooluse.ps1": "31e6e82253aa1567367b92985973f799510b3ae17b89ac4379bc6e7092cac7b3",
+    "hooks/gate_check.ps1": "06a58750cd5a96c0b4be36e3ec1befeaa31fb90ce71324834d881c85075f6342",
+    "hooks/evidence_capture.ps1": "beab97ea548f0edf0826fdc7365f23adef54cba9b21257d2ed0a8902fa832e0b",
+    "hooks/tier_classifier.ps1": "9d41b12d982c0a50c706ba9ee1c17f5ebcd8ade959b7226b31019fbdbf024757",
+    "hooks/lib/HeliosIntegrityBridge.ps1": "8008a336b8d5c35704aa677a57796807f8bb7790d3ff0a9af89767519c51e454",
+    "policy/command-policy.json": "5e4fc670a3e03947d8ab0c5d64a1c59faf5c92dd887ee25474d147425359639f"
+  },
+  "new_runtime_bundle_root": "/home/void/Desktop/Helios-/.command-gate",
+  "new_helios_head": "46e23931328f8d37b7ad118b6667fa204aa7790d",
+  "new_akashic_head": "b5debba4f390e4cc2e13474ea8bb67b434e597ae",
+  "final_detection_type": "ORIGIN_MATCH",
+  "final_detection_severity": "INFO",
+  "final_origin_match": true,
+  "archive_path": "/home/void/.helios/.command-gate/maintenance/archives/20260629-215141-reset",
+  "archived_files": [
+    "manifest/helios-envelope.json",
+    "manifest/helios-envelope.sha256",
+    "manifest/helios-install-origin.json",
+    "protected/hooks/helios_pretooluse.ps1",
+    "protected/hooks/gate_check.ps1",
+    "protected/hooks/evidence_capture.ps1",
+    "protected/hooks/tier_classifier.ps1",
+    "protected/hooks/lib/HeliosIntegrityBridge.ps1",
+    "protected/policy/command-policy.json"
+  ],
+  "preserved_dirs": [
+    "pending",
+    "inflight",
+    "evidence",
+    "blocked"
+  ],
+  "hooks_deactivated": false,
+  "hooks_reactivated": false,
+  "files_unlocked": false,
+  "files_relocked": false,
+  "destructive_removal": false,
+  "reactivation_requested": false,
+  "relock_requested": false,
+  "steps": [
+    {
+      "step": "Assert Akashic trusted",
+      "status": "PASS",
+      "detail": "Self-integrity verified"
+    },
+    {
+      "step": "Pre-reset detection",
+      "status": "PASS",
+      "detail": {
+        "detection_type": "ORIGIN_MATCH",
+        "severity": "INFO",
+        "recommended_action": "NONE"
+      }
+    },
+    {
+      "step": "Write pre-reset detection",
+      "status": "SKIP",
+      "detail": "Runtime clean or detection unavailable"
+    },
+    {
+      "step": "Deactivate hooks",
+      "status": "SKIP",
+      "detail": "Not requested (pass -DisableHooksDuringReset)"
+    },
+    {
+      "step": "Unlock runtime files",
+      "status": "SKIP",
+      "detail": "Files already writable"
+    },
+    {
+      "step": "Archive active baseline",
+      "status": "PASS",
+      "detail": {
+        "archive_path": "/home/void/.helios/.command-gate/maintenance/archives/20260629-215141-reset",
+        "files_archived": 9
+      }
+    },
+    {
+      "step": "Verify mutable dirs preserved",
+      "status": "PASS",
+      "detail": {
+        "preserved": [
+          "pending",
+          "inflight",
+          "evidence",
+          "blocked"
+        ],
+        "count": 4
+      }
+    },
+    {
+      "step": "Copy protected files from RuntimeBundleRoot",
+      "status": "PASS",
+      "detail": "5 files copied"
+    },
+    {
+      "step": "Sync Akashic bridge",
+      "status": "PASS",
+      "detail": "Bridge synced from Akashic source"
+    },
+    {
+      "step": "Generate fresh manifest",
+      "status": "PASS",
+      "detail": "helios-envelope.json + sha256 generated"
+    },
+    {
+      "step": "Verify manifest CLEAN",
+      "status": "PASS",
+      "detail": "Envelope integrity: CLEAN"
+    },
+    {
+      "step": "Generate fresh install-origin",
+      "status": "PASS",
+      "detail": {
+        "source_count": 5,
+        "installed_count": 6,
+        "origin_verified": true
+      }
+    },
+    {
+      "step": "Verify origin MATCH",
+      "status": "PASS",
+      "detail": "Origin: MATCH | Detection: ORIGIN_MATCH"
+    },
+    {
+      "step": "Reactivate hooks",
+      "status": "SKIP",
+      "detail": "Not requested (pass -ReactivateHooksAfterReset)"
+    },
+    {
+      "step": "Relock runtime files",
+      "status": "SKIP",
+      "detail": "Not requested (pass -RelockAfterReset)"
+    }
+  ],
+  "overall": "COMPLETE"
+}
