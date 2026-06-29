@@ -1,11 +1,11 @@
 {
     "schema_version":  "akashic-self-integrity-evidence.v1",
-    "timestamp_utc":  "2026-06-29T07:58:22.1748638Z",
+    "timestamp_utc":  "2026-06-29T08:21:24.2557364Z",
     "akashic_root":  "C:\\Users\\dimas\\Desktop\\helios-integrity-adapter",
     "verdict":  "CLEAN",
     "signature_status":  "SIGNATURE_NOT_IMPLEMENTED",
     "sidecar_valid":  true,
-    "manifest_hash":  "c6871c5c9d9134c7c82d36998341bcef29ef2a86cd35f268fcad0b0502aa238d",
+    "manifest_hash":  "f684d7795a95e6cc8e7bb72da8fc7569a6fdcf8b8b51b789545698064a857433",
     "bom_check":  {
                       "manifest_bom_free":  true,
                       "sidecar_bom_free":  true
@@ -44,10 +44,10 @@
                          {
                              "path":  "docs/akashic-self-integrity-boundary.md",
                              "role":  "contract-doc",
-                             "expected_sha256":  "d2c5a830c319a5724cbd0b6a1e71ed1d095ab6eedfefb31c28ce4e0ee4f34901",
-                             "actual_sha256":  "d2c5a830c319a5724cbd0b6a1e71ed1d095ab6eedfefb31c28ce4e0ee4f34901",
-                             "expected_size":  8744,
-                             "actual_size":  8744,
+                             "expected_sha256":  "e8a7854fe0ecb0bfa5fc56bc387f3645c600d5f3699290482df963467fa62868",
+                             "actual_sha256":  "e8a7854fe0ecb0bfa5fc56bc387f3645c600d5f3699290482df963467fa62868",
+                             "expected_size":  10758,
+                             "actual_size":  10758,
                              "exists":  true,
                              "status":  "CLEAN"
                          },
@@ -288,6 +288,16 @@
                              "actual_sha256":  "f4a490d97e1d71e550534b508a58960ce3297c33a9a57a52dbea075a6d35f4dc",
                              "expected_size":  1249,
                              "actual_size":  1249,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "schemas/helios-runtime-detection.v1.json",
+                             "role":  "schema",
+                             "expected_sha256":  "bb02c704bc41b95963ac2c8377a6612e911c260a8d27a8db217b2d12bda5ce5d",
+                             "actual_sha256":  "bb02c704bc41b95963ac2c8377a6612e911c260a8d27a8db217b2d12bda5ce5d",
+                             "expected_size":  6443,
+                             "actual_size":  6443,
                              "exists":  true,
                              "status":  "CLEAN"
                          },
@@ -902,6 +912,16 @@
                              "status":  "CLEAN"
                          },
                          {
+                             "path":  "tools/Test-HeliosRuntimeOrigin.ps1",
+                             "role":  "compatibility-wrapper",
+                             "expected_sha256":  "daf0a36b64fc6c7fc8b3989cde6c11c4a8b0f9dbcccd891901f32c0875fce591",
+                             "actual_sha256":  "daf0a36b64fc6c7fc8b3989cde6c11c4a8b0f9dbcccd891901f32c0875fce591",
+                             "expected_size":  14825,
+                             "actual_size":  14825,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
                              "path":  "tools/Test-HeliosSettingsIntegrity.ps1",
                              "role":  "compatibility-wrapper",
                              "expected_sha256":  "31a0d2fcf578e6822b78f93a3c5f729ccad3d45a5a9e880324c554fe3a80d197",
@@ -950,15 +970,25 @@
                              "actual_size":  863,
                              "exists":  true,
                              "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/Write-HeliosRuntimeDetection.ps1",
+                             "role":  "tool",
+                             "expected_sha256":  "d900b0453605db211fb1de93faf87aed8847b824fdfa03324020720aa06e8f07",
+                             "actual_sha256":  "d900b0453605db211fb1de93faf87aed8847b824fdfa03324020720aa06e8f07",
+                             "expected_size":  3633,
+                             "actual_size":  3633,
+                             "exists":  true,
+                             "status":  "CLEAN"
                          }
                      ],
     "unmanifested_files":  [
 
                            ],
     "classification_audit":  {
-                                 "protected_manifested_count":  96,
+                                 "protected_manifested_count":  99,
                                  "protected_unmanifested_count":  0,
-                                 "mutable_present_count":  57,
+                                 "mutable_present_count":  59,
                                  "ignored_present_count":  0,
                                  "unknown_unclassified_count":  0,
                                  "unknown_unclassified_files":  [
@@ -966,8 +996,8 @@
                                                                 ]
                              },
     "allow_unclassified":  false,
-    "protected_file_count":  94,
-    "clean_count":  94,
+    "protected_file_count":  97,
+    "clean_count":  97,
     "drift_count":  0,
     "missing_count":  0
 }

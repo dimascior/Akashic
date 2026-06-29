@@ -1,7 +1,7 @@
 {
     "schema_version":  "akashic-self-envelope.v1",
-    "created_utc":  "2026-06-29T07:58:21Z",
-    "rebaselined_by":  "phase432a",
+    "created_utc":  "2026-06-29T08:21:23Z",
+    "rebaselined_by":  "phase432b",
     "signature_status":  "SIGNATURE_NOT_IMPLEMENTED",
     "protected":  {
                       "description":  "Files that can alter Akashic behavior, trust, installation, verification, CI, schema interpretation, or documentation contracts. Must not change outside of explicit human rebaseline.",
@@ -36,6 +36,7 @@
                                     "schemas/helios-install-origin.v1.json",
                                     "schemas/helios-rebaseline.schema.json",
                                     "schemas/helios-rollback-evidence.schema.json",
+                                    "schemas/helios-runtime-detection.v1.json",
                                     "schemas/helios-settings-activation-evidence.schema.json",
                                     "Tests/AkashicIntegrityBridge.Tests.ps1",
                                     "tools/AkashicCombinedInstallPlan.ps1",
@@ -97,11 +98,13 @@
                                     "tools/Test-HeliosLockStatus.ps1",
                                     "tools/Test-HeliosPrerequisites.ps1",
                                     "tools/Test-HeliosRuntimeBundle.ps1",
+                                    "tools/Test-HeliosRuntimeOrigin.ps1",
                                     "tools/Test-HeliosSettingsIntegrity.ps1",
                                     "tools/Unlock-AkashicProtectedFiles.ps1",
                                     "tools/Unlock-AkashicRoot.ps1",
                                     "tools/Unlock-HeliosProtectedFiles.ps1",
-                                    "tools/Unlock-HeliosRuntime.ps1"
+                                    "tools/Unlock-HeliosRuntime.ps1",
+                                    "tools/Write-HeliosRuntimeDetection.ps1"
                                 ],
                       "files":  [
                                     {
@@ -124,8 +127,8 @@
                                     },
                                     {
                                         "path":  "docs/akashic-self-integrity-boundary.md",
-                                        "sha256":  "d2c5a830c319a5724cbd0b6a1e71ed1d095ab6eedfefb31c28ce4e0ee4f34901",
-                                        "size":  8744,
+                                        "sha256":  "e8a7854fe0ecb0bfa5fc56bc387f3645c600d5f3699290482df963467fa62868",
+                                        "size":  10758,
                                         "role":  "contract-doc"
                                     },
                                     {
@@ -270,6 +273,12 @@
                                         "path":  "schemas/helios-rollback-evidence.schema.json",
                                         "sha256":  "f4a490d97e1d71e550534b508a58960ce3297c33a9a57a52dbea075a6d35f4dc",
                                         "size":  1249,
+                                        "role":  "schema"
+                                    },
+                                    {
+                                        "path":  "schemas/helios-runtime-detection.v1.json",
+                                        "sha256":  "bb02c704bc41b95963ac2c8377a6612e911c260a8d27a8db217b2d12bda5ce5d",
+                                        "size":  6443,
                                         "role":  "schema"
                                     },
                                     {
@@ -639,6 +648,12 @@
                                         "role":  "compatibility-wrapper"
                                     },
                                     {
+                                        "path":  "tools/Test-HeliosRuntimeOrigin.ps1",
+                                        "sha256":  "daf0a36b64fc6c7fc8b3989cde6c11c4a8b0f9dbcccd891901f32c0875fce591",
+                                        "size":  14825,
+                                        "role":  "compatibility-wrapper"
+                                    },
+                                    {
                                         "path":  "tools/Test-HeliosSettingsIntegrity.ps1",
                                         "sha256":  "31a0d2fcf578e6822b78f93a3c5f729ccad3d45a5a9e880324c554fe3a80d197",
                                         "size":  157,
@@ -667,6 +682,12 @@
                                         "sha256":  "922be991e9f6fa0a7b23af179d77991c33dbb44fa683faccff5c537ca1b82be2",
                                         "size":  863,
                                         "role":  "compatibility-wrapper"
+                                    },
+                                    {
+                                        "path":  "tools/Write-HeliosRuntimeDetection.ps1",
+                                        "sha256":  "d900b0453605db211fb1de93faf87aed8847b824fdfa03324020720aa06e8f07",
+                                        "size":  3633,
+                                        "role":  "tool"
                                     }
                                 ]
                   },
@@ -692,9 +713,9 @@
                                  ]
                 },
     "classification":  {
-                           "protected_file_count":  94,
+                           "protected_file_count":  97,
                            "mutable_pattern_count":  6,
                            "ignored_pattern_count":  5
                        },
-    "note":  "Phase 4.3.2a: install-origin schema and generation"
+    "note":  "Phase 4.3.2b: runtime origin detection and logging"
 }

@@ -1,0 +1,177 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "helios-runtime-detection.v1",
+  "title": "Helios Runtime Detection Event",
+  "description": "Records a detection event classifying the disagreement between manifest consistency, install-origin lineage, current source repo state, and bridge source state. Severity and recommended action are mapped from the detection type.",
+  "type": "object",
+  "required": [
+    "schema_version", "timestamp_utc", "platform",
+    "akashic_head", "helios_head",
+    "runtime_bundle_root", "helios_gate_root",
+    "manifest_path", "sidecar_path", "install_origin_path",
+    "current_manifest_verdict", "sidecar_verdict", "origin_verdict",
+    "detection_type", "severity", "recommended_action",
+    "automation_mode",
+    "affected_files",
+    "expected_manifest_hashes", "actual_runtime_hashes", "expected_origin_hashes",
+    "source_repo_status", "bridge_status",
+    "evidence_paths"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "helios-runtime-detection.v1"
+    },
+    "timestamp_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "platform": {
+      "type": "string",
+      "enum": ["Windows", "macOS", "Linux"]
+    },
+    "akashic_head": {
+      "type": ["string", "null"],
+      "description": "Current git HEAD of the Akashic repo. Null if not a git repo."
+    },
+    "helios_head": {
+      "type": ["string", "null"],
+      "description": "Current git HEAD of the Helios repo. Null if not a git repo."
+    },
+    "runtime_bundle_root": {
+      "type": ["string", "null"],
+      "description": "Path to the RuntimeBundleRoot used for source comparison. Null if not provided."
+    },
+    "helios_gate_root": {
+      "type": "string"
+    },
+    "manifest_path": {
+      "type": "string"
+    },
+    "sidecar_path": {
+      "type": "string"
+    },
+    "install_origin_path": {
+      "type": "string"
+    },
+    "current_manifest_verdict": {
+      "type": "string",
+      "enum": ["CLEAN", "DRIFT", "NO_MANIFEST"],
+      "description": "Result of hashing live protected files against helios-envelope.json."
+    },
+    "sidecar_verdict": {
+      "type": "string",
+      "enum": ["MATCH", "MISMATCH", "MISSING"],
+      "description": "Result of comparing helios-envelope.sha256 to the manifest file hash."
+    },
+    "origin_verdict": {
+      "type": "string",
+      "enum": ["MATCH", "DRIFT", "NO_ORIGIN", "BASELINE_REWRITE_SUSPECTED"],
+      "description": "Result of comparing live installed hashes to helios-install-origin.json recorded hashes."
+    },
+    "detection_type": {
+      "type": "string",
+      "enum": [
+        "CURRENT_MANIFEST_CLEAN",
+        "CURRENT_MANIFEST_DRIFT",
+        "SIDECAR_MISMATCH",
+        "NO_INSTALL_ORIGIN",
+        "ORIGIN_MATCH",
+        "ORIGIN_DRIFT",
+        "BASELINE_REWRITE_SUSPECTED",
+        "SOURCE_REPO_CHANGED",
+        "SOURCE_REPO_MISSING",
+        "BRIDGE_ORIGIN_DRIFT"
+      ],
+      "description": "Primary detection finding, chosen by severity priority."
+    },
+    "severity": {
+      "type": "string",
+      "enum": ["INFO", "MEDIUM", "HIGH", "CRITICAL"]
+    },
+    "recommended_action": {
+      "type": "string",
+      "enum": [
+        "NONE",
+        "RESET_FROM_REPO",
+        "RESTORE_FROM_ORIGIN",
+        "VERIFY_ORIGIN_THEN_REGENERATE_OR_RESET",
+        "RESET_FROM_REPO_TO_CREATE_ORIGIN",
+        "PLAN_RESET_FROM_NEW_REPO_STATE",
+        "BLOCK_RESET_UNTIL_SOURCE_RESOLVED",
+        "RESET_TOOL_NOT_IMPLEMENTED"
+      ]
+    },
+    "automation_mode": {
+      "type": "string",
+      "enum": ["DetectOnly", "LogOnly", "PlanReset", "AutoReset", "AutoResetAndReactivate"]
+    },
+    "affected_files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "status"],
+        "properties": {
+          "path": { "type": "string" },
+          "status": { "type": "string", "enum": ["MATCH", "DRIFT", "MISSING", "UNTRACKED"] },
+          "manifest_hash": { "type": ["string", "null"] },
+          "origin_hash": { "type": ["string", "null"] },
+          "actual_hash": { "type": ["string", "null"] }
+        }
+      },
+      "description": "Per-file breakdown of detected issues."
+    },
+    "expected_manifest_hashes": {
+      "type": "object",
+      "additionalProperties": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+      "description": "Hashes from helios-envelope.json protected.hashes."
+    },
+    "actual_runtime_hashes": {
+      "type": "object",
+      "additionalProperties": { "type": ["string", "null"] },
+      "description": "Currently computed SHA-256 hashes of live runtime files."
+    },
+    "expected_origin_hashes": {
+      "type": "object",
+      "additionalProperties": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+      "description": "Installed runtime hashes recorded in helios-install-origin.json."
+    },
+    "source_repo_status": {
+      "type": "object",
+      "required": ["verdict"],
+      "properties": {
+        "verdict": { "type": "string", "enum": ["SOURCE_MATCH", "SOURCE_REPO_CHANGED", "SOURCE_REPO_MISSING", "SOURCE_NOT_PROVIDED"] },
+        "current_akashic_head": { "type": ["string", "null"] },
+        "recorded_akashic_head": { "type": ["string", "null"] },
+        "current_helios_head": { "type": ["string", "null"] },
+        "recorded_helios_head": { "type": ["string", "null"] },
+        "changed_source_files": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "bridge_status": {
+      "type": "object",
+      "required": ["verdict"],
+      "properties": {
+        "verdict": { "type": "string", "enum": ["BRIDGE_MATCH", "BRIDGE_ORIGIN_DRIFT", "BRIDGE_SOURCE_MISSING", "BRIDGE_INSTALLED_MISSING"] },
+        "current_source_hash": { "type": ["string", "null"] },
+        "current_installed_hash": { "type": ["string", "null"] },
+        "origin_source_hash": { "type": ["string", "null"] },
+        "origin_installed_hash": { "type": ["string", "null"] }
+      }
+    },
+    "evidence_paths": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Paths where detection evidence was written."
+    },
+    "automation_result": {
+      "type": ["string", "null"],
+      "enum": [null, "DETECTED", "LOGGED", "PLAN_GENERATED", "RESET_COMPLETE", "RESET_TOOL_NOT_IMPLEMENTED"],
+      "description": "What the automation mode actually produced."
+    }
+  },
+  "additionalProperties": false
+}

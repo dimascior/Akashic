@@ -166,14 +166,49 @@ This catches the bypass case where an actor rewrites both protected runtime file
 - SHA-256 of the Akashic installer tools that performed the install
 - Bridge source and installed hashes
 
-Origin is generated during Prepare (Phase 10) after manifest verification confirms CLEAN. Detection, reset, restore, and uninstall operations that consume the origin are defined in later phases.
+Origin is generated during Prepare (Phase 10) after manifest verification confirms CLEAN.
 
 | Tool | Purpose |
 |------|---------|
 | `New-HeliosInstallOrigin.ps1` | Generate install origin during Prepare/Reset/Restore |
+| `Test-HeliosRuntimeOrigin.ps1` | Detect disagreements across manifest, origin, source repo, and bridge |
+| `Write-HeliosRuntimeDetection.ps1` | Write detection events to evidence directories with terminal summary |
+
+## Runtime Origin Detection
+
+The detector classifies disagreements between manifest consistency, install-origin lineage, current source repo state, and bridge source state. It compares six axes:
+
+1. Live runtime files vs `helios-envelope.json` (manifest consistency)
+2. Live runtime files vs `helios-install-origin.json` (origin lineage)
+3. Current RuntimeBundleRoot files vs recorded source hashes (source repo state)
+4. Current Akashic bridge vs installed HeliosIntegrityBridge (bridge state)
+5. Current Akashic HEAD vs recorded Akashic HEAD (repo advance)
+6. Current Helios HEAD vs recorded Helios HEAD (repo advance)
+
+Detection types by severity:
+
+| Detection | Severity | Recommended Action |
+|-----------|----------|-------------------|
+| BASELINE_REWRITE_SUSPECTED | CRITICAL | RESET_FROM_REPO |
+| SIDECAR_MISMATCH | HIGH | VERIFY_ORIGIN_THEN_REGENERATE_OR_RESET |
+| CURRENT_MANIFEST_DRIFT | HIGH | RESET_FROM_REPO |
+| NO_INSTALL_ORIGIN | HIGH | RESET_FROM_REPO_TO_CREATE_ORIGIN |
+| ORIGIN_DRIFT | HIGH | RESET_FROM_REPO |
+| SOURCE_REPO_MISSING | HIGH | BLOCK_RESET_UNTIL_SOURCE_RESOLVED |
+| SOURCE_REPO_CHANGED | MEDIUM | PLAN_RESET_FROM_NEW_REPO_STATE |
+| BRIDGE_ORIGIN_DRIFT | MEDIUM | RESET_FROM_REPO |
+| ORIGIN_MATCH | INFO | NONE |
+| CURRENT_MANIFEST_CLEAN | INFO | NONE |
+
+Bridge drift is classified separately from runtime file drift because the bridge comes from Akashic, while runtime files come from Helios RuntimeBundleRoot.
+
+Automation modes: `DetectOnly`, `LogOnly`, `PlanReset`, `AutoReset`, `AutoResetAndReactivate`. `AutoReset` and `AutoResetAndReactivate` return `RESET_TOOL_NOT_IMPLEMENTED` until Phase 4.3.2c.
+
+The detector logs only. It does not modify runtime files, manifests, hooks, locks, or Claude settings. Reset, restore, and uninstall are separate operations defined in Phase 4.3.2c.
 
 ## Schemas
 
 - `schemas/akashic-self-envelope.v1.json` defines the manifest format.
 - `schemas/akashic-self-integrity-evidence.v1.json` defines the verification evidence format.
 - `schemas/helios-install-origin.v1.json` defines the install origin format.
+- `schemas/helios-runtime-detection.v1.json` defines the detection event format.
