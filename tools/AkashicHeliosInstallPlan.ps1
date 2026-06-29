@@ -125,7 +125,8 @@ if (-not (Test-Path $AkashicRoot)) {
             'tools/Sync-AkashicBridge.ps1',
             'tools/AkashicEnvelopeManifest.ps1',
             'tools/AkashicEnvelopeIntegrityValidation.ps1',
-            'tools/AkashicSettingsIntegrity.ps1'
+            'tools/AkashicSettingsIntegrity.ps1',
+            'tools/New-HeliosInstallOrigin.ps1'
         )
         $missingTools = @()
         foreach ($tool in $requiredTools) {
@@ -449,7 +450,48 @@ if (-not $isPlanOnly -and $manifestStatus -eq 'GENERATED') {
 Add-Phase -Order 9 -Name 'Verify envelope integrity' -Status $phase9Status -Detail $phase9Detail
 
 # ============================================================
-# Phase 10: Detect lock strategy + run OS lock fixture
+# Phase 10: Generate install origin
+# ============================================================
+$originStatus = 'SKIP'
+$originDetail = 'Install origin deferred to Prepare/Activate'
+$originResult = $null
+if (-not $isPlanOnly -and $manifestStatus -eq 'CLEAN') {
+    $originScript = Join-Path $AkashicRoot 'tools\New-HeliosInstallOrigin.ps1'
+    if (Test-Path $originScript) {
+        try {
+            $originResult = & $originScript `
+                -AkashicRoot $AkashicRoot `
+                -RuntimeBundleRoot $RuntimeBundleRoot `
+                -HeliosGateRoot $HeliosGateRoot `
+                -Platform $Platform `
+                -InstallMode $Mode `
+                -InstalledBy 'installer'
+            if ($originResult -and $originResult.origin_verified) {
+                $originStatus = 'PASS'
+                $originDetail = "Install origin: MATCH (source=$($originResult.source_count) installed=$($originResult.installed_count))"
+            } else {
+                $originStatus = 'FAIL'
+                $originDetail = 'Install origin: source/installed mismatch after fresh install'
+                $blockers.Add("Phase 10: $originDetail")
+            }
+        } catch {
+            $originStatus = 'FAIL'
+            $originDetail = "Install origin generation failed: $_"
+            $blockers.Add("Phase 10: $originDetail")
+        }
+    } else {
+        $originStatus = 'FAIL'
+        $originDetail = "Origin script not found: $originScript"
+        $blockers.Add("Phase 10: $originDetail")
+    }
+} elseif (-not $isPlanOnly -and $manifestStatus -ne 'CLEAN') {
+    $originStatus = 'SKIP'
+    $originDetail = 'Install origin skipped: manifest not CLEAN'
+}
+Add-Phase -Order 10 -Name 'Generate install origin' -Status $originStatus -Detail $originDetail
+
+# ============================================================
+# Phase 11: Detect lock strategy + run OS lock fixture
 # ============================================================
 $strategyScript = Join-Path $AkashicRoot 'tools\Get-AkashicLockStrategy.ps1'
 $strategyArgs = @{}
@@ -468,15 +510,15 @@ if (Test-Path $strategyScript) {
             $phase10Detail = "Backend: $($lockStrategy.backend), Strength: $($lockStrategy.strength), Privilege: $($lockStrategy.privilege_mode)"
         } else {
             $phase10Detail = "Lock backend not available: $($lockStrategy.blockers -join ', ')"
-            $blockers.Add("Phase 10: $phase10Detail")
+            $blockers.Add("Phase 11: $phase10Detail")
         }
     } catch {
         $phase10Detail = "Lock strategy detection failed: $_"
-        $blockers.Add("Phase 10: $phase10Detail")
+        $blockers.Add("Phase 11: $phase10Detail")
     }
 } else {
     $phase10Detail = "Strategy script not found: $strategyScript"
-    $blockers.Add("Phase 10: $phase10Detail")
+    $blockers.Add("Phase 11: $phase10Detail")
 }
 
 if ($RunFixtureCheck -and -not $isPlanOnly -and $lockStrategy -and $lockStrategy.implemented) {
@@ -492,7 +534,7 @@ if ($RunFixtureCheck -and -not $isPlanOnly -and $lockStrategy -and $lockStrategy
                 if ($fixtureResult -ne 'PASS') {
                     $phase10Status = 'FAIL'
                     $phase10Detail += " | Fixture: $fixtureResult"
-                    $blockers.Add("Phase 10: Fixture $fixtureResult")
+                    $blockers.Add("Phase 11: Fixture $fixtureResult")
                 } else {
                     $phase10Detail += " | Fixture: PASS"
                 }
@@ -501,7 +543,7 @@ if ($RunFixtureCheck -and -not $isPlanOnly -and $lockStrategy -and $lockStrategy
             $fixtureResult = 'FAIL'
             $phase10Status = 'FAIL'
             $phase10Detail += " | Fixture error: $_"
-            $blockers.Add("Phase 10: Fixture failed: $_")
+            $blockers.Add("Phase 11: Fixture failed: $_")
         }
     }
 } elseif ($RunFixtureCheck -and $isPlanOnly) {
@@ -510,10 +552,10 @@ if ($RunFixtureCheck -and -not $isPlanOnly -and $lockStrategy -and $lockStrategy
     $fixtureResult = 'BLOCKED'
     $phase10Detail += ' | Fixture blocked: lock strategy not available'
 }
-Add-Phase -Order 10 -Name 'Detect lock strategy + run fixture' -Status $phase10Status -Detail $phase10Detail
+Add-Phase -Order 11 -Name 'Detect lock strategy + run fixture' -Status $phase10Status -Detail $phase10Detail
 
 # ============================================================
-# Phase 11: Prepare settings activation plan
+# Phase 12: Prepare settings activation plan
 # ============================================================
 $settingsExists = Test-Path $ClaudeSettingsPath
 $hooksAlreadyConfigured = $false
@@ -572,10 +614,10 @@ if ($IncludeSettingsActivation) {
         $settingsActivationStatus = 'plan_only'
     }
 }
-Add-Phase -Order 11 -Name 'Prepare settings activation plan' -Status $phase11Status -Blocking $false -Detail $phase11Detail
+Add-Phase -Order 12 -Name 'Prepare settings activation plan' -Status $phase11Status -Blocking $false -Detail $phase11Detail
 
 # ============================================================
-# Phase 12: Prepare lock activation plan
+# Phase 13: Prepare lock activation plan
 # ============================================================
 $lockActivationStatus = 'skipped'
 $lockActivationPlan = [ordered]@{
@@ -617,10 +659,10 @@ if (-not $lockStrategy -or -not $lockStrategy.implemented) {
     $phase12Detail = "Lock plan generated (fixture: $fixtureResult, backend: $($lockStrategy.backend))"
     $lockActivationStatus = 'plan_only'
 }
-Add-Phase -Order 12 -Name 'Prepare lock activation plan' -Status $phase12Status -Blocking $false -Detail $phase12Detail
+Add-Phase -Order 13 -Name 'Prepare lock activation plan' -Status $phase12Status -Blocking $false -Detail $phase12Detail
 
 # ============================================================
-# Phase 13: Prepare rollback plan
+# Phase 14: Prepare rollback plan
 # ============================================================
 $rollbackPlan = [ordered]@{
     steps = @(
@@ -631,10 +673,10 @@ $rollbackPlan = [ordered]@{
     )
     risk = 'Low — restoring settings.json disables hooks immediately'
 }
-Add-Phase -Order 13 -Name 'Prepare rollback plan' -Status 'PASS' -Blocking $false -Detail 'Rollback plan generated'
+Add-Phase -Order 14 -Name 'Prepare rollback plan' -Status 'PASS' -Blocking $false -Detail 'Rollback plan generated'
 
 # ============================================================
-# Phase 14: Write install evidence
+# Phase 15: Write install evidence
 # ============================================================
 $phase14Status = 'SKIP'
 $phase14Detail = 'Evidence deferred to Prepare/Activate'
@@ -657,6 +699,8 @@ if (-not $isPlanOnly) {
         } else { $null }
         fixture_result       = $fixtureResult
         manifest_status      = $manifestStatus
+        origin_status        = $originStatus
+        origin_verified      = if ($originResult) { $originResult.origin_verified } else { $null }
         settings_activation  = $settingsActivationStatus
         lock_activation      = $lockActivationStatus
         blockers             = [string[]]$blockers
@@ -671,7 +715,7 @@ if (-not $isPlanOnly) {
     $phase14Status = 'PASS'
     $phase14Detail = "Evidence written: $evidencePath"
 }
-Add-Phase -Order 14 -Name 'Write install evidence' -Status $phase14Status -Blocking $false -Detail $phase14Detail
+Add-Phase -Order 15 -Name 'Write install evidence' -Status $phase14Status -Blocking $false -Detail $phase14Detail
 
 # ============================================================
 # Assemble the install plan
@@ -698,6 +742,8 @@ $plan = [ordered]@{
     } else { $null }
     fixture_result            = $fixtureResult
     manifest_status           = $manifestStatus
+    origin_status             = $originStatus
+    origin_result             = $originResult
     phases                    = [object[]]$phases
     bridge_sync_plan          = $bridgeSyncPlan
     runtime_protected_copy_plan = $runtimeProtectedCopyPlan

@@ -1,11 +1,11 @@
 {
     "schema_version":  "akashic-self-integrity-evidence.v1",
-    "timestamp_utc":  "2026-06-29T07:33:14.2676863Z",
+    "timestamp_utc":  "2026-06-29T07:58:22.1748638Z",
     "akashic_root":  "C:\\Users\\dimas\\Desktop\\helios-integrity-adapter",
     "verdict":  "CLEAN",
     "signature_status":  "SIGNATURE_NOT_IMPLEMENTED",
     "sidecar_valid":  true,
-    "manifest_hash":  "690d897df96640c757db5df90017a8f93a0956e767303adfb0a48d3da3066284",
+    "manifest_hash":  "c6871c5c9d9134c7c82d36998341bcef29ef2a86cd35f268fcad0b0502aa238d",
     "bom_check":  {
                       "manifest_bom_free":  true,
                       "sidecar_bom_free":  true
@@ -44,10 +44,10 @@
                          {
                              "path":  "docs/akashic-self-integrity-boundary.md",
                              "role":  "contract-doc",
-                             "expected_sha256":  "a52a1b83dce4cfa4583894f36d5ed99a7cb4b76b59b82e88518d3d63b707693d",
-                             "actual_sha256":  "a52a1b83dce4cfa4583894f36d5ed99a7cb4b76b59b82e88518d3d63b707693d",
-                             "expected_size":  7540,
-                             "actual_size":  7540,
+                             "expected_sha256":  "d2c5a830c319a5724cbd0b6a1e71ed1d095ab6eedfefb31c28ce4e0ee4f34901",
+                             "actual_sha256":  "d2c5a830c319a5724cbd0b6a1e71ed1d095ab6eedfefb31c28ce4e0ee4f34901",
+                             "expected_size":  8744,
+                             "actual_size":  8744,
                              "exists":  true,
                              "status":  "CLEAN"
                          },
@@ -262,6 +262,16 @@
                              "status":  "CLEAN"
                          },
                          {
+                             "path":  "schemas/helios-install-origin.v1.json",
+                             "role":  "schema",
+                             "expected_sha256":  "fc14e2426faa05369ec6fc7091bc0d0199a4cc446ff7b091666dc1d347d4e8bc",
+                             "actual_sha256":  "fc14e2426faa05369ec6fc7091bc0d0199a4cc446ff7b091666dc1d347d4e8bc",
+                             "expected_size":  4248,
+                             "actual_size":  4248,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
                              "path":  "schemas/helios-rebaseline.schema.json",
                              "role":  "schema",
                              "expected_sha256":  "69fdbdff0b21d2e9328afaf648d7967b73adb0eb24c92b35c15f7bff6489cd4f",
@@ -354,10 +364,10 @@
                          {
                              "path":  "tools/AkashicHeliosInstallPlan.ps1",
                              "role":  "tool",
-                             "expected_sha256":  "faa4d59b82c71d89fc8563133b3114611e6c84048335e78211a98fb08ff1a2f6",
-                             "actual_sha256":  "faa4d59b82c71d89fc8563133b3114611e6c84048335e78211a98fb08ff1a2f6",
-                             "expected_size":  30769,
-                             "actual_size":  30769,
+                             "expected_sha256":  "a38f96518787c4fc2bbcfadab72cdba4cce3d0f0da36312a65a70137d8b751c1",
+                             "actual_sha256":  "a38f96518787c4fc2bbcfadab72cdba4cce3d0f0da36312a65a70137d8b751c1",
+                             "expected_size":  32939,
+                             "actual_size":  32939,
                              "exists":  true,
                              "status":  "CLEAN"
                          },
@@ -732,6 +742,16 @@
                              "status":  "CLEAN"
                          },
                          {
+                             "path":  "tools/New-HeliosInstallOrigin.ps1",
+                             "role":  "compatibility-wrapper",
+                             "expected_sha256":  "e879a07b24e16119d07ccb318a153489be3301bae7f62208dd0be01678b4666a",
+                             "actual_sha256":  "e879a07b24e16119d07ccb318a153489be3301bae7f62208dd0be01678b4666a",
+                             "expected_size":  7093,
+                             "actual_size":  7093,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
                              "path":  "tools/New-HeliosInstallPlan.ps1",
                              "role":  "compatibility-wrapper",
                              "expected_sha256":  "d4f45fb8f7322cf653d2da505cbd4192e0da59a71425d84f86577539c349d606",
@@ -936,9 +956,9 @@
 
                            ],
     "classification_audit":  {
-                                 "protected_manifested_count":  94,
+                                 "protected_manifested_count":  96,
                                  "protected_unmanifested_count":  0,
-                                 "mutable_present_count":  56,
+                                 "mutable_present_count":  57,
                                  "ignored_present_count":  0,
                                  "unknown_unclassified_count":  0,
                                  "unknown_unclassified_files":  [
@@ -946,8 +966,8 @@
                                                                 ]
                              },
     "allow_unclassified":  false,
-    "protected_file_count":  92,
-    "clean_count":  92,
+    "protected_file_count":  94,
+    "clean_count":  94,
     "drift_count":  0,
     "missing_count":  0
 }

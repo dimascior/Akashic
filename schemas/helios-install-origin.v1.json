@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "helios-install-origin.v1",
+  "title": "Helios Install Origin",
+  "description": "Records the repo/source state used to create a Helios runtime installation. Separates current consistency (helios-envelope.json) from source lineage. Used to detect the case where both protected runtime files and the runtime manifest were rewritten together.",
+  "type": "object",
+  "required": [
+    "schema_version", "created_utc", "installed_by", "install_mode",
+    "platform", "akashic_root", "runtime_bundle_root", "helios_gate_root",
+    "source_protected_hashes", "installed_runtime_hashes",
+    "initial_manifest_hash", "initial_sidecar_hash", "origin_verified"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "helios-install-origin.v1"
+    },
+    "created_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "installed_by": {
+      "type": "string",
+      "description": "Identity of the install actor. Typically 'installer' for automated installs."
+    },
+    "install_mode": {
+      "type": "string",
+      "enum": ["Prepare", "Reset", "Restore"],
+      "description": "Which operation created this origin record."
+    },
+    "platform": {
+      "type": "string",
+      "enum": ["Windows", "macOS", "Linux"]
+    },
+    "pwsh_path": {
+      "type": ["string", "null"],
+      "description": "Absolute path to the PowerShell interpreter used for this install."
+    },
+    "claude_settings_path": {
+      "type": ["string", "null"],
+      "description": "Path to Claude settings.json for this platform/user."
+    },
+    "akashic_root": {
+      "type": "string",
+      "description": "Absolute path to the Akashic installer repo root."
+    },
+    "akashic_head": {
+      "type": ["string", "null"],
+      "description": "Git HEAD commit hash of the Akashic repo at install time. Null if not a git repo."
+    },
+    "helios_repo_root": {
+      "type": ["string", "null"],
+      "description": "Git repo root containing the RuntimeBundleRoot. Null if not inside a git repo."
+    },
+    "helios_head": {
+      "type": ["string", "null"],
+      "description": "Git HEAD commit hash of the Helios repo at install time. Null if not a git repo."
+    },
+    "runtime_bundle_root": {
+      "type": "string",
+      "description": "Absolute path to the source RuntimeBundleRoot used for this install."
+    },
+    "helios_gate_root": {
+      "type": "string",
+      "description": "Absolute path to the live HeliosGateRoot where runtime was installed."
+    },
+    "source_protected_hashes": {
+      "type": "object",
+      "additionalProperties": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+      "description": "SHA-256 hashes of each protected file in RuntimeBundleRoot at install time. Keys are relative paths."
+    },
+    "installed_runtime_hashes": {
+      "type": "object",
+      "additionalProperties": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+      "description": "SHA-256 hashes of each protected runtime file in HeliosGateRoot after install. Keys are relative paths."
+    },
+    "bridge_source_hash": {
+      "type": ["string", "null"],
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "SHA-256 of AkashicIntegrityBridge.ps1 from AkashicRoot."
+    },
+    "bridge_installed_hash": {
+      "type": ["string", "null"],
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "SHA-256 of HeliosIntegrityBridge.ps1 in HeliosGateRoot."
+    },
+    "initial_manifest_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "SHA-256 of helios-envelope.json at install time."
+    },
+    "initial_sidecar_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "Contents of helios-envelope.sha256 at install time."
+    },
+    "akashic_installer_hashes": {
+      "type": "object",
+      "additionalProperties": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+      "description": "SHA-256 hashes of the Akashic installer tools that performed this install."
+    },
+    "origin_verified": {
+      "type": "boolean",
+      "description": "True if all source hashes match installed hashes at generation time."
+    }
+  },
+  "additionalProperties": false
+}

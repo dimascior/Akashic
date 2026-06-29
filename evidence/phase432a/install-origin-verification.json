@@ -1,0 +1,78 @@
+{
+  "phase": "4.3.2a",
+  "title": "Helios Install-Origin Schema and Generation",
+  "timestamp_utc": "2026-06-29T07:55:00Z",
+  "tests": [
+    {
+      "name": "Schema created",
+      "status": "PASS",
+      "detail": "schemas/helios-install-origin.v1.json created with 13 required fields, 8 optional fields"
+    },
+    {
+      "name": "Parse validation - New-HeliosInstallOrigin.ps1",
+      "status": "PASS",
+      "detail": "Zero parse errors in PowerShell 5.1"
+    },
+    {
+      "name": "Parse validation - AkashicHeliosInstallPlan.ps1",
+      "status": "PASS",
+      "detail": "Zero parse errors after Phase 10 insertion and phase renumbering (10-14 -> 11-15)"
+    },
+    {
+      "name": "Origin generation produces valid output",
+      "status": "PASS",
+      "detail": "All 13 required schema fields present, all 8 optional fields populated"
+    },
+    {
+      "name": "Source protected hashes recorded",
+      "status": "PASS",
+      "detail": "5 source files hashed from RuntimeBundleRoot: helios_pretooluse.ps1, gate_check.ps1, evidence_capture.ps1, tier_classifier.ps1, command-policy.json"
+    },
+    {
+      "name": "Installed runtime hashes recorded",
+      "status": "PASS",
+      "detail": "6 installed files hashed from HeliosGateRoot: 5 source files + HeliosIntegrityBridge.ps1"
+    },
+    {
+      "name": "Git HEAD resolution",
+      "status": "PASS",
+      "detail": "Akashic HEAD: 06d271daed32378ab04db305972f8f6dac582826, Helios HEAD: 4fdacfe0bc2712bab784970e5d7e1b5fa4bce848"
+    },
+    {
+      "name": "Bridge drift detection",
+      "status": "PASS",
+      "detail": "Correctly detected bridge drift: AkashicIntegrityBridge (ba6c95...) != HeliosIntegrityBridge (c26f92...). origin_verified=false is correct for this state."
+    },
+    {
+      "name": "Source/installed consistency check",
+      "status": "PASS",
+      "detail": "All 5 source protected hashes match their installed counterparts (expected because source=installed in this test)"
+    },
+    {
+      "name": "Manifest and sidecar hashes captured",
+      "status": "PASS",
+      "detail": "initial_manifest_hash=3f9deb..., initial_sidecar_hash=3f9deb... (matching = CLEAN envelope)"
+    },
+    {
+      "name": "Akashic installer tool hashes recorded",
+      "status": "PASS",
+      "detail": "6 installer tools hashed including New-HeliosInstallOrigin.ps1 itself"
+    },
+    {
+      "name": "Install plan integration",
+      "status": "PASS",
+      "detail": "Phase 10 inserted after envelope verification (Phase 9), existing phases renumbered 11-15. Origin status added to evidence and plan assembly."
+    }
+  ],
+  "files_created": [
+    "schemas/helios-install-origin.v1.json",
+    "tools/New-HeliosInstallOrigin.ps1",
+    "evidence/phase432a/install-origin-verification.json"
+  ],
+  "files_modified": [
+    "tools/AkashicHeliosInstallPlan.ps1",
+    "docs/akashic-self-integrity-boundary.md"
+  ],
+  "overall": "PASS",
+  "notes": "origin_verified=false in the test run is correct and expected. The test used RuntimeBundleRoot=HeliosGateRoot, so all 5 source files matched. Bridge drift was correctly detected because the live HeliosIntegrityBridge.ps1 has drifted from the current AkashicIntegrityBridge.ps1. In a real install flow, bridge sync (Phase 6-7) runs before origin generation (Phase 10), so origin_verified would be true."
+}

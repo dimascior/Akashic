@@ -153,7 +153,27 @@ If the verifier finds unclassified files after rebaseline, update the coverage p
 
 Manifest signature verification is SIGNATURE_NOT_IMPLEMENTED in this phase. The placeholder files `manifest/akashic-envelope.sig` and `manifest/akashic-public-key.asc` exist to define the future interface. No cryptographic authority separation exists until signature verification is implemented and tested.
 
+## Install Origin Authority
+
+`helios-install-origin.json` records the repo/source state used to create a Helios runtime installation. While `helios-envelope.json` proves current consistency (files match manifest), `helios-install-origin.json` proves source lineage (files match the repo state that created them).
+
+This catches the bypass case where an actor rewrites both protected runtime files and the runtime manifest together. The origin file records:
+
+- Git HEAD commits of both Akashic and Helios repos at install time
+- SHA-256 hashes of every source file in RuntimeBundleRoot
+- SHA-256 hashes of every installed file in HeliosGateRoot
+- SHA-256 of the manifest and sidecar at install time
+- SHA-256 of the Akashic installer tools that performed the install
+- Bridge source and installed hashes
+
+Origin is generated during Prepare (Phase 10) after manifest verification confirms CLEAN. Detection, reset, restore, and uninstall operations that consume the origin are defined in later phases.
+
+| Tool | Purpose |
+|------|---------|
+| `New-HeliosInstallOrigin.ps1` | Generate install origin during Prepare/Reset/Restore |
+
 ## Schemas
 
 - `schemas/akashic-self-envelope.v1.json` defines the manifest format.
 - `schemas/akashic-self-integrity-evidence.v1.json` defines the verification evidence format.
+- `schemas/helios-install-origin.v1.json` defines the install origin format.

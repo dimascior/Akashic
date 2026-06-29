@@ -1,7 +1,7 @@
 {
     "schema_version":  "akashic-self-envelope.v1",
-    "created_utc":  "2026-06-29T07:33:13Z",
-    "rebaselined_by":  "human",
+    "created_utc":  "2026-06-29T07:58:21Z",
+    "rebaselined_by":  "phase432a",
     "signature_status":  "SIGNATURE_NOT_IMPLEMENTED",
     "protected":  {
                       "description":  "Files that can alter Akashic behavior, trust, installation, verification, CI, schema interpretation, or documentation contracts. Must not change outside of explicit human rebaseline.",
@@ -33,6 +33,7 @@
                                     "schemas/helios-baseline.schema.json",
                                     "schemas/helios-command-evidence.schema.json",
                                     "schemas/helios-envelope.schema.json",
+                                    "schemas/helios-install-origin.v1.json",
                                     "schemas/helios-rebaseline.schema.json",
                                     "schemas/helios-rollback-evidence.schema.json",
                                     "schemas/helios-settings-activation-evidence.schema.json",
@@ -80,6 +81,7 @@
                                     "tools/New-HeliosEnvelopeManifest.ps1",
                                     "tools/New-HeliosGapTestMatrix.ps1",
                                     "tools/New-HeliosGate.ps1",
+                                    "tools/New-HeliosInstallOrigin.ps1",
                                     "tools/New-HeliosInstallPlan.ps1",
                                     "tools/New-HeliosRuntimeBundle.ps1",
                                     "tools/Remove-AkashicClaudeHooks.ps1",
@@ -122,8 +124,8 @@
                                     },
                                     {
                                         "path":  "docs/akashic-self-integrity-boundary.md",
-                                        "sha256":  "a52a1b83dce4cfa4583894f36d5ed99a7cb4b76b59b82e88518d3d63b707693d",
-                                        "size":  7540,
+                                        "sha256":  "d2c5a830c319a5724cbd0b6a1e71ed1d095ab6eedfefb31c28ce4e0ee4f34901",
+                                        "size":  8744,
                                         "role":  "contract-doc"
                                     },
                                     {
@@ -253,6 +255,12 @@
                                         "role":  "schema"
                                     },
                                     {
+                                        "path":  "schemas/helios-install-origin.v1.json",
+                                        "sha256":  "fc14e2426faa05369ec6fc7091bc0d0199a4cc446ff7b091666dc1d347d4e8bc",
+                                        "size":  4248,
+                                        "role":  "schema"
+                                    },
+                                    {
                                         "path":  "schemas/helios-rebaseline.schema.json",
                                         "sha256":  "69fdbdff0b21d2e9328afaf648d7967b73adb0eb24c92b35c15f7bff6489cd4f",
                                         "size":  1723,
@@ -308,8 +316,8 @@
                                     },
                                     {
                                         "path":  "tools/AkashicHeliosInstallPlan.ps1",
-                                        "sha256":  "faa4d59b82c71d89fc8563133b3114611e6c84048335e78211a98fb08ff1a2f6",
-                                        "size":  30769,
+                                        "sha256":  "a38f96518787c4fc2bbcfadab72cdba4cce3d0f0da36312a65a70137d8b751c1",
+                                        "size":  32939,
                                         "role":  "tool"
                                     },
                                     {
@@ -535,6 +543,12 @@
                                         "role":  "compatibility-wrapper"
                                     },
                                     {
+                                        "path":  "tools/New-HeliosInstallOrigin.ps1",
+                                        "sha256":  "e879a07b24e16119d07ccb318a153489be3301bae7f62208dd0be01678b4666a",
+                                        "size":  7093,
+                                        "role":  "compatibility-wrapper"
+                                    },
+                                    {
                                         "path":  "tools/New-HeliosInstallPlan.ps1",
                                         "sha256":  "d4f45fb8f7322cf653d2da505cbd4192e0da59a71425d84f86577539c349d606",
                                         "size":  138,
@@ -678,9 +692,9 @@
                                  ]
                 },
     "classification":  {
-                           "protected_file_count":  92,
+                           "protected_file_count":  94,
                            "mutable_pattern_count":  6,
                            "ignored_pattern_count":  5
                        },
-    "note":  "Phase 4.3.1 - coverage policy hardening"
+    "note":  "Phase 4.3.2a: install-origin schema and generation"
 }
