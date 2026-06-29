@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "helios-runtime-reset-evidence.v1",
+  "title": "Helios Runtime Reset Evidence",
+  "description": "Proves the state transition: suspicious/drifted runtime -> archive old authority -> regenerate from source authority -> final CLEAN + ORIGIN_MATCH.",
+  "type": "object",
+  "required": [
+    "schema_version", "timestamp_utc", "platform", "reset_by",
+    "operation_type", "source_authority",
+    "akashic_root", "runtime_bundle_root", "helios_gate_root",
+    "archive_path", "steps",
+    "post_reset_manifest_verdict", "post_reset_origin_verdict",
+    "final_detection_type", "final_origin_match",
+    "overall"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "const": "helios-runtime-reset-evidence.v1" },
+    "timestamp_utc": { "type": "string", "format": "date-time" },
+    "platform": { "type": "string", "enum": ["Windows", "macOS", "Linux"] },
+    "reset_by": { "type": "string" },
+    "operation_type": { "type": "string", "const": "Reset" },
+    "source_authority": { "type": "string", "const": "CurrentRuntimeBundleRoot" },
+    "akashic_root": { "type": "string" },
+    "runtime_bundle_root": { "type": "string" },
+    "helios_gate_root": { "type": "string" },
+
+    "pre_reset_detection_type": { "type": ["string", "null"] },
+    "pre_reset_severity": { "type": ["string", "null"] },
+    "pre_reset_recommended_action": { "type": ["string", "null"] },
+    "pre_reset_manifest_hash": { "type": ["string", "null"] },
+    "pre_reset_sidecar_hash": { "type": ["string", "null"] },
+    "pre_reset_origin_hash": { "type": ["string", "null"] },
+    "pre_reset_detection": { "type": ["object", "null"] },
+    "old_runtime_hashes": {
+      "type": ["object", "null"],
+      "additionalProperties": { "type": ["string", "null"] }
+    },
+    "old_origin_runtime_bundle_root": { "type": ["string", "null"] },
+    "old_helios_head": { "type": ["string", "null"] },
+    "old_akashic_head": { "type": ["string", "null"] },
+
+    "post_reset_manifest_hash": { "type": ["string", "null"] },
+    "post_reset_sidecar_hash": { "type": ["string", "null"] },
+    "post_reset_origin_hash": { "type": ["string", "null"] },
+    "post_reset_manifest_verdict": { "type": "string" },
+    "post_reset_origin_verdict": { "type": "string" },
+    "new_runtime_hashes": {
+      "type": ["object", "null"],
+      "additionalProperties": { "type": ["string", "null"] }
+    },
+    "new_runtime_bundle_root": { "type": "string" },
+    "new_helios_head": { "type": ["string", "null"] },
+    "new_akashic_head": { "type": ["string", "null"] },
+
+    "final_detection_type": { "type": "string" },
+    "final_detection_severity": { "type": ["string", "null"] },
+    "final_origin_match": { "type": "boolean" },
+
+    "archive_path": { "type": ["string", "null"] },
+    "archived_files": { "type": "array", "items": { "type": "string" } },
+    "preserved_dirs": { "type": "array", "items": { "type": "string" } },
+
+    "hooks_deactivated": { "type": "boolean" },
+    "hooks_reactivated": { "type": "boolean" },
+    "files_unlocked": { "type": "boolean" },
+    "files_relocked": { "type": "boolean" },
+    "destructive_removal": { "type": "boolean" },
+    "reactivation_requested": { "type": "boolean" },
+    "relock_requested": { "type": "boolean" },
+
+    "steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["step", "status"],
+        "properties": {
+          "step": { "type": "string" },
+          "status": { "type": "string", "enum": ["PASS", "FAIL", "SKIP", "WARN"] },
+          "detail": {}
+        }
+      }
+    },
+    "overall": { "type": "string", "enum": ["COMPLETE", "PARTIAL", "FAILED"] }
+  },
+  "additionalProperties": false
+}

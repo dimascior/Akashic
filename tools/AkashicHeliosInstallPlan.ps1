@@ -666,12 +666,14 @@ Add-Phase -Order 13 -Name 'Prepare lock activation plan' -Status $phase12Status 
 # ============================================================
 $rollbackPlan = [ordered]@{
     steps = @(
-        "Restore settings.json from backup: $ClaudeSettingsPath.pre-helios-backup"
+        "Run Uninstall-AkashicHeliosRuntime.ps1 -AkashicRoot $AkashicRoot -HeliosGateRoot $HeliosGateRoot (archives runtime, removes hooks)"
+        "Or manually: restore settings.json from backup: $ClaudeSettingsPath.pre-helios-backup"
         'Remove deny ACLs from locked files (Unlock-AkashicProtectedFiles)'
         'Verify no hooks active: run shell command, confirm no gate prompt'
-        "Optionally remove target: $HeliosGateRoot"
+        "Optionally remove target with -ForceDestructive: $HeliosGateRoot"
     )
-    risk = 'Low — restoring settings.json disables hooks immediately'
+    uninstall_tool = 'tools/Uninstall-AkashicHeliosRuntime.ps1'
+    risk = 'Low — Uninstall-AkashicHeliosRuntime archives before removing'
 }
 Add-Phase -Order 14 -Name 'Prepare rollback plan' -Status 'PASS' -Blocking $false -Detail 'Rollback plan generated'
 

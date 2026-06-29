@@ -1,0 +1,243 @@
+{
+    "schema_version":  "helios-runtime-reset-evidence.v1",
+    "timestamp_utc":  "2026-06-29T14:36:33Z",
+    "platform":  "Windows",
+    "reset_by":  "bypass-proof-432c",
+    "operation_type":  "Reset",
+    "source_authority":  "CurrentRuntimeBundleRoot",
+    "akashic_root":  "C:\\Users\\dimas\\Desktop\\helios-integrity-adapter",
+    "runtime_bundle_root":  "E:\\AppData\\Local\\Temp\\claude\\C--Users-dimas-Desktop-CODEAPI\\6e026890-2754-46db-bd73-b6fd3ac193a8\\scratchpad\\clean-bundle",
+    "helios_gate_root":  "C:\\Users\\dimas\\Desktop\\MythosJustAFable\\.command-gate",
+    "pre_reset_detection_type":  "BASELINE_REWRITE_SUSPECTED",
+    "pre_reset_severity":  "CRITICAL",
+    "pre_reset_recommended_action":  "RESET_FROM_REPO",
+    "pre_reset_manifest_hash":  "19386ba9841992419969b423b566a12c60d35a956fc67c10be78e6d1522716b8",
+    "pre_reset_sidecar_hash":  "19386ba9841992419969b423b566a12c60d35a956fc67c10be78e6d1522716b8",
+    "pre_reset_origin_hash":  "c372b5943f8a96580d60e27e7dd163d728e891859baf8ab185364a4532af5fb1",
+    "pre_reset_detection":  {
+                                "schema_version":  "helios-runtime-detection.v1",
+                                "timestamp_utc":  "2026-06-29T14:36:33Z",
+                                "platform":  "Windows",
+                                "akashic_head":  "ca168184d668b0b778350898052adebeab4fa2c0",
+                                "helios_head":  null,
+                                "runtime_bundle_root":  "E:\\AppData\\Local\\Temp\\claude\\C--Users-dimas-Desktop-CODEAPI\\6e026890-2754-46db-bd73-b6fd3ac193a8\\scratchpad\\clean-bundle",
+                                "helios_gate_root":  "C:\\Users\\dimas\\Desktop\\MythosJustAFable\\.command-gate",
+                                "manifest_path":  "C:\\Users\\dimas\\Desktop\\MythosJustAFable\\.command-gate\\manifest\\helios-envelope.json",
+                                "sidecar_path":  "C:\\Users\\dimas\\Desktop\\MythosJustAFable\\.command-gate\\manifest\\helios-envelope.sha256",
+                                "install_origin_path":  "C:\\Users\\dimas\\Desktop\\MythosJustAFable\\.command-gate\\manifest\\helios-install-origin.json",
+                                "current_manifest_verdict":  "CLEAN",
+                                "sidecar_verdict":  "MATCH",
+                                "origin_verdict":  "BASELINE_REWRITE_SUSPECTED",
+                                "detection_type":  "BASELINE_REWRITE_SUSPECTED",
+                                "severity":  "CRITICAL",
+                                "recommended_action":  "RESET_FROM_REPO",
+                                "automation_mode":  "DetectOnly",
+                                "affected_files":  [
+                                                       {
+                                                           "path":  "policy/command-policy.json",
+                                                           "status":  "DRIFT",
+                                                           "manifest_hash":  "c16dadcf21113b3adaa70858101ba05a4dc6e23d71b397ef7fbae12ddcb783af",
+                                                           "origin_hash":  "838ede2f4a195d5435c6f22033ef59dca0f785a84743a74ed01f2db4a6dd6488",
+                                                           "actual_hash":  "c16dadcf21113b3adaa70858101ba05a4dc6e23d71b397ef7fbae12ddcb783af"
+                                                       }
+                                                   ],
+                                "expected_manifest_hashes":  {
+                                                                 "hooks/evidence_capture.ps1":  "b7c80f66b44de5ed749d963bc1c65108af5f44cb5c5296751520db3f05f88b10",
+                                                                 "hooks/gate_check.ps1":  "004aaae86bd5ff666b191576c1a4eef12b549b214c5c6a26e83553bb1f53114c",
+                                                                 "hooks/helios_pretooluse.ps1":  "31e6e82253aa1567367b92985973f799510b3ae17b89ac4379bc6e7092cac7b3",
+                                                                 "hooks/lib/HeliosIntegrityBridge.ps1":  "c26f927dbe1e52fbc9da2db473fd7c69b0d21a0e1b9b915a8d4b5710b8bc8b0a",
+                                                                 "hooks/tier_classifier.ps1":  "b1bc9475898e473a829ea6c4b3f39f2e7578fe2864326cf39a18716db14bf2aa",
+                                                                 "policy/command-policy.json":  "c16dadcf21113b3adaa70858101ba05a4dc6e23d71b397ef7fbae12ddcb783af"
+                                                             },
+                                "actual_runtime_hashes":  {
+                                                              "hooks/helios_pretooluse.ps1":  "31e6e82253aa1567367b92985973f799510b3ae17b89ac4379bc6e7092cac7b3",
+                                                              "hooks/gate_check.ps1":  "004aaae86bd5ff666b191576c1a4eef12b549b214c5c6a26e83553bb1f53114c",
+                                                              "hooks/evidence_capture.ps1":  "b7c80f66b44de5ed749d963bc1c65108af5f44cb5c5296751520db3f05f88b10",
+                                                              "hooks/tier_classifier.ps1":  "b1bc9475898e473a829ea6c4b3f39f2e7578fe2864326cf39a18716db14bf2aa",
+                                                              "hooks/lib/HeliosIntegrityBridge.ps1":  "c26f927dbe1e52fbc9da2db473fd7c69b0d21a0e1b9b915a8d4b5710b8bc8b0a",
+                                                              "policy/command-policy.json":  "c16dadcf21113b3adaa70858101ba05a4dc6e23d71b397ef7fbae12ddcb783af"
+                                                          },
+                                "expected_origin_hashes":  {
+                                                               "hooks/helios_pretooluse.ps1":  "31e6e82253aa1567367b92985973f799510b3ae17b89ac4379bc6e7092cac7b3",
+                                                               "hooks/gate_check.ps1":  "004aaae86bd5ff666b191576c1a4eef12b549b214c5c6a26e83553bb1f53114c",
+                                                               "hooks/evidence_capture.ps1":  "b7c80f66b44de5ed749d963bc1c65108af5f44cb5c5296751520db3f05f88b10",
+                                                               "hooks/tier_classifier.ps1":  "b1bc9475898e473a829ea6c4b3f39f2e7578fe2864326cf39a18716db14bf2aa",
+                                                               "hooks/lib/HeliosIntegrityBridge.ps1":  "c26f927dbe1e52fbc9da2db473fd7c69b0d21a0e1b9b915a8d4b5710b8bc8b0a",
+                                                               "policy/command-policy.json":  "838ede2f4a195d5435c6f22033ef59dca0f785a84743a74ed01f2db4a6dd6488"
+                                                           },
+                                "source_repo_status":  {
+                                                           "verdict":  "SOURCE_REPO_CHANGED",
+                                                           "current_akashic_head":  "ca168184d668b0b778350898052adebeab4fa2c0",
+                                                           "recorded_akashic_head":  "06d271daed32378ab04db305972f8f6dac582826",
+                                                           "current_helios_head":  null,
+                                                           "recorded_helios_head":  "4fdacfe0bc2712bab784970e5d7e1b5fa4bce848",
+                                                           "changed_source_files":  [
+
+                                                                                    ]
+                                                       },
+                                "bridge_status":  {
+                                                      "verdict":  "BRIDGE_ORIGIN_DRIFT",
+                                                      "current_source_hash":  "ba6c9576cee58c561d379565e533fdef6bbc6fbf709179a33299d51d859757c7",
+                                                      "current_installed_hash":  "c26f927dbe1e52fbc9da2db473fd7c69b0d21a0e1b9b915a8d4b5710b8bc8b0a",
+                                                      "origin_source_hash":  "ba6c9576cee58c561d379565e533fdef6bbc6fbf709179a33299d51d859757c7",
+                                                      "origin_installed_hash":  "c26f927dbe1e52fbc9da2db473fd7c69b0d21a0e1b9b915a8d4b5710b8bc8b0a"
+                                                  },
+                                "evidence_paths":  [
+                                                       "C:\\Users\\dimas\\Desktop\\MythosJustAFable\\.command-gate\\evidence\\detections\\20260629-143633-BASELINE_REWRITE_SUSPECTED.json",
+                                                       "C:\\Users\\dimas\\Desktop\\helios-integrity-adapter\\evidence\\phase432c\\20260629-143633-BASELINE_REWRITE_SUSPECTED.json"
+                                                   ],
+                                "automation_result":  "DETECTED"
+                            },
+    "old_runtime_hashes":  {
+                               "hooks/helios_pretooluse.ps1":  "31e6e82253aa1567367b92985973f799510b3ae17b89ac4379bc6e7092cac7b3",
+                               "hooks/gate_check.ps1":  "004aaae86bd5ff666b191576c1a4eef12b549b214c5c6a26e83553bb1f53114c",
+                               "hooks/evidence_capture.ps1":  "b7c80f66b44de5ed749d963bc1c65108af5f44cb5c5296751520db3f05f88b10",
+                               "hooks/tier_classifier.ps1":  "b1bc9475898e473a829ea6c4b3f39f2e7578fe2864326cf39a18716db14bf2aa",
+                               "hooks/lib/HeliosIntegrityBridge.ps1":  "c26f927dbe1e52fbc9da2db473fd7c69b0d21a0e1b9b915a8d4b5710b8bc8b0a",
+                               "policy/command-policy.json":  "c16dadcf21113b3adaa70858101ba05a4dc6e23d71b397ef7fbae12ddcb783af"
+                           },
+    "old_origin_runtime_bundle_root":  "C:\\Users\\dimas\\Desktop\\MythosJustAFable\\.command-gate",
+    "old_helios_head":  "4fdacfe0bc2712bab784970e5d7e1b5fa4bce848",
+    "old_akashic_head":  "06d271daed32378ab04db305972f8f6dac582826",
+    "post_reset_manifest_hash":  "cb6d542145d28ed016ff0ed0e18457cd03919423da38335b2b99e7034c011822",
+    "post_reset_sidecar_hash":  "cb6d542145d28ed016ff0ed0e18457cd03919423da38335b2b99e7034c011822",
+    "post_reset_origin_hash":  "5aaa15ad5d416d6dab3a40a33e070add23833b56fd2560710e21e8aaecc0f075",
+    "post_reset_manifest_verdict":  "CLEAN",
+    "post_reset_origin_verdict":  "MATCH",
+    "new_runtime_hashes":  {
+                               "hooks/helios_pretooluse.ps1":  "31e6e82253aa1567367b92985973f799510b3ae17b89ac4379bc6e7092cac7b3",
+                               "hooks/gate_check.ps1":  "004aaae86bd5ff666b191576c1a4eef12b549b214c5c6a26e83553bb1f53114c",
+                               "hooks/evidence_capture.ps1":  "b7c80f66b44de5ed749d963bc1c65108af5f44cb5c5296751520db3f05f88b10",
+                               "hooks/tier_classifier.ps1":  "b1bc9475898e473a829ea6c4b3f39f2e7578fe2864326cf39a18716db14bf2aa",
+                               "hooks/lib/HeliosIntegrityBridge.ps1":  "ba6c9576cee58c561d379565e533fdef6bbc6fbf709179a33299d51d859757c7",
+                               "policy/command-policy.json":  "838ede2f4a195d5435c6f22033ef59dca0f785a84743a74ed01f2db4a6dd6488"
+                           },
+    "new_runtime_bundle_root":  "E:\\AppData\\Local\\Temp\\claude\\C--Users-dimas-Desktop-CODEAPI\\6e026890-2754-46db-bd73-b6fd3ac193a8\\scratchpad\\clean-bundle",
+    "new_helios_head":  null,
+    "new_akashic_head":  "ca168184d668b0b778350898052adebeab4fa2c0",
+    "final_detection_type":  "ORIGIN_MATCH",
+    "final_detection_severity":  "INFO",
+    "final_origin_match":  true,
+    "archive_path":  "C:\\Users\\dimas\\Desktop\\MythosJustAFable\\.command-gate\\maintenance\\archives\\20260629-143633-reset",
+    "archived_files":  [
+                           "manifest/helios-envelope.json",
+                           "manifest/helios-envelope.sha256",
+                           "manifest/helios-install-origin.json",
+                           "protected/hooks/helios_pretooluse.ps1",
+                           "protected/hooks/gate_check.ps1",
+                           "protected/hooks/evidence_capture.ps1",
+                           "protected/hooks/tier_classifier.ps1",
+                           "protected/hooks/lib/HeliosIntegrityBridge.ps1",
+                           "protected/policy/command-policy.json"
+                       ],
+    "preserved_dirs":  [
+                           "pending",
+                           "inflight",
+                           "evidence",
+                           "blocked"
+                       ],
+    "hooks_deactivated":  false,
+    "hooks_reactivated":  false,
+    "files_unlocked":  false,
+    "files_relocked":  false,
+    "destructive_removal":  false,
+    "reactivation_requested":  false,
+    "relock_requested":  false,
+    "steps":  [
+                  {
+                      "step":  "Assert Akashic trusted",
+                      "status":  "PASS",
+                      "detail":  "Self-integrity verified"
+                  },
+                  {
+                      "step":  "Pre-reset detection",
+                      "status":  "PASS",
+                      "detail":  {
+                                     "detection_type":  "BASELINE_REWRITE_SUSPECTED",
+                                     "severity":  "CRITICAL",
+                                     "recommended_action":  "RESET_FROM_REPO"
+                                 }
+                  },
+                  {
+                      "step":  "Write pre-reset detection",
+                      "status":  "PASS",
+                      "detail":  "BASELINE_REWRITE_SUSPECTED"
+                  },
+                  {
+                      "step":  "Deactivate hooks",
+                      "status":  "SKIP",
+                      "detail":  "Not requested (pass -DisableHooksDuringReset)"
+                  },
+                  {
+                      "step":  "Unlock runtime files",
+                      "status":  "SKIP",
+                      "detail":  "Files already writable"
+                  },
+                  {
+                      "step":  "Archive active baseline",
+                      "status":  "PASS",
+                      "detail":  {
+                                     "archive_path":  "C:\\Users\\dimas\\Desktop\\MythosJustAFable\\.command-gate\\maintenance\\archives\\20260629-143633-reset",
+                                     "files_archived":  9
+                                 }
+                  },
+                  {
+                      "step":  "Verify mutable dirs preserved",
+                      "status":  "PASS",
+                      "detail":  {
+                                     "preserved":  [
+                                                       "pending",
+                                                       "inflight",
+                                                       "evidence",
+                                                       "blocked"
+                                                   ],
+                                     "count":  4
+                                 }
+                  },
+                  {
+                      "step":  "Copy protected files from RuntimeBundleRoot",
+                      "status":  "PASS",
+                      "detail":  "5 files copied"
+                  },
+                  {
+                      "step":  "Sync Akashic bridge",
+                      "status":  "PASS",
+                      "detail":  "Bridge synced from Akashic source"
+                  },
+                  {
+                      "step":  "Generate fresh manifest",
+                      "status":  "PASS",
+                      "detail":  "helios-envelope.json + sha256 generated"
+                  },
+                  {
+                      "step":  "Verify manifest CLEAN",
+                      "status":  "PASS",
+                      "detail":  "Envelope integrity: CLEAN"
+                  },
+                  {
+                      "step":  "Generate fresh install-origin",
+                      "status":  "PASS",
+                      "detail":  {
+                                     "source_count":  5,
+                                     "installed_count":  6,
+                                     "origin_verified":  true
+                                 }
+                  },
+                  {
+                      "step":  "Verify origin MATCH",
+                      "status":  "PASS",
+                      "detail":  "Origin: MATCH | Detection: ORIGIN_MATCH"
+                  },
+                  {
+                      "step":  "Reactivate hooks",
+                      "status":  "SKIP",
+                      "detail":  "Not requested (pass -ReactivateHooksAfterReset)"
+                  },
+                  {
+                      "step":  "Relock runtime files",
+                      "status":  "SKIP",
+                      "detail":  "Not requested (pass -RelockAfterReset)"
+                  }
+              ],
+    "overall":  "COMPLETE"
+}

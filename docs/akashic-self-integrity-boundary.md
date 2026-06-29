@@ -204,7 +204,28 @@ Bridge drift is classified separately from runtime file drift because the bridge
 
 Automation modes: `DetectOnly`, `LogOnly`, `PlanReset`, `AutoReset`, `AutoResetAndReactivate`. `AutoReset` and `AutoResetAndReactivate` return `RESET_TOOL_NOT_IMPLEMENTED` until Phase 4.3.2c.
 
-The detector logs only. It does not modify runtime files, manifests, hooks, locks, or Claude settings. Reset, restore, and uninstall are separate operations defined in Phase 4.3.2c.
+Automation modes `AutoReset` and `AutoResetAndReactivate` invoke `Reset-AkashicHeliosRuntime.ps1` when the detection type allows it. AutoReset is allowed for BASELINE_REWRITE_SUSPECTED, CURRENT_MANIFEST_DRIFT, ORIGIN_DRIFT, NO_INSTALL_ORIGIN, and BRIDGE_ORIGIN_DRIFT. It is blocked for SOURCE_REPO_MISSING, SOURCE_REPO_CHANGED, and SIDECAR_MISMATCH.
+
+## Runtime Recovery Operations
+
+Four distinct operations exist for runtime lifecycle management. They MUST remain separate.
+
+| Operation | Tool | Source Authority | Purpose |
+|-----------|------|-----------------|---------|
+| Reset | `Reset-AkashicHeliosRuntime.ps1` | CurrentRuntimeBundleRoot | Discard active baseline, regenerate from current repo source |
+| Restore | `Restore-HeliosRuntimeFromBundle.ps1` | RecordedInstallOrigin | Return to the exact source state recorded at install time |
+| Uninstall | `Uninstall-AkashicHeliosRuntime.ps1` | None | Remove hooks and runtime state safely |
+| Rebaseline | `Invoke-AkashicRebaseline.ps1` | CurrentRuntimeState | Accept current files after human review |
+
+Reset archives the old baseline, copies protected files from RuntimeBundleRoot, syncs the Akashic bridge separately, regenerates manifest and install-origin, and verifies CLEAN + ORIGIN_MATCH. Hook deactivation during reset is explicit via `-DisableHooksDuringReset`.
+
+Restore reads `helios-install-origin.json` and uses the recorded RuntimeBundleRoot, not the current one. It blocks when the recorded source is missing or changed (unless `-Force` is provided).
+
+Uninstall archives HeliosGateRoot by default and removes hooks from Claude settings. Destructive removal of runtime directories requires `-ForceDestructive`. Evidence is preserved by default.
+
+All operations write evidence that captures pre/post hash state, proving the state transition rather than just recording that the operation ran.
+
+Archive structure: `maintenance/archives/<timestamp>-<operation>/` with `manifest/`, `protected/`, `evidence/`, and `metadata/` subdirs. `metadata/archive-index.json` records every archived path with hash and size.
 
 ## Schemas
 
@@ -212,3 +233,6 @@ The detector logs only. It does not modify runtime files, manifests, hooks, lock
 - `schemas/akashic-self-integrity-evidence.v1.json` defines the verification evidence format.
 - `schemas/helios-install-origin.v1.json` defines the install origin format.
 - `schemas/helios-runtime-detection.v1.json` defines the detection event format.
+- `schemas/helios-runtime-reset-evidence.v1.json` defines the reset evidence format.
+- `schemas/helios-runtime-restore-evidence.v1.json` defines the restore evidence format.
+- `schemas/helios-runtime-uninstall-evidence.v1.json` defines the uninstall evidence format.

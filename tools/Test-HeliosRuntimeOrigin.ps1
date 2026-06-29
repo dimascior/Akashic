@@ -19,6 +19,7 @@ $ErrorActionPreference = 'Stop'
 $Utf8NoBom = New-Object System.Text.UTF8Encoding($false)
 $sha256 = [System.Security.Cryptography.SHA256]::Create()
 $sep = [System.IO.Path]::DirectorySeparatorChar
+$ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Definition
 
 if ($Platform -eq 'Auto') {
     if ($PSVersionTable.PSEdition -eq 'Desktop' -or $IsWindows) { $Platform = 'Windows' }
@@ -343,6 +344,14 @@ if ($originVerdict -eq 'BASELINE_REWRITE_SUSPECTED') {
     $recommendedAction = 'NONE'
 }
 
+$autoResetAllowed = @(
+    'BASELINE_REWRITE_SUSPECTED',
+    'CURRENT_MANIFEST_DRIFT',
+    'ORIGIN_DRIFT',
+    'NO_INSTALL_ORIGIN',
+    'BRIDGE_ORIGIN_DRIFT'
+)
+
 $automationResult = switch ($AutomationMode) {
     'DetectOnly' { 'DETECTED' }
     'LogOnly'    { 'LOGGED' }
@@ -350,8 +359,52 @@ $automationResult = switch ($AutomationMode) {
         if ($detectionType -eq 'CURRENT_MANIFEST_CLEAN' -or $detectionType -eq 'ORIGIN_MATCH') { 'DETECTED' }
         else { 'PLAN_GENERATED' }
     }
-    'AutoReset'             { 'RESET_TOOL_NOT_IMPLEMENTED' }
-    'AutoResetAndReactivate' { 'RESET_TOOL_NOT_IMPLEMENTED' }
+    'AutoReset' {
+        if ($detectionType -eq 'CURRENT_MANIFEST_CLEAN' -or $detectionType -eq 'ORIGIN_MATCH') {
+            'DETECTED'
+        } elseif ($detectionType -notin $autoResetAllowed) {
+            'RESET_BLOCKED'
+        } elseif (-not $RuntimeBundleRoot) {
+            'RESET_BLOCKED_NO_BUNDLE'
+        } else {
+            try {
+                $resetResult = & (Join-Path $ScriptDir 'Reset-AkashicHeliosRuntime.ps1') `
+                    -AkashicRoot $AkashicRoot `
+                    -RuntimeBundleRoot $RuntimeBundleRoot `
+                    -HeliosGateRoot $HeliosGateRoot `
+                    -Platform $Platform
+                if ($resetResult.overall -eq 'COMPLETE') { 'RESET_COMPLETE' }
+                else { 'RESET_PARTIAL' }
+            } catch {
+                Write-Host "[FAIL] AutoReset failed: $_" -ForegroundColor Red
+                'RESET_FAILED'
+            }
+        }
+    }
+    'AutoResetAndReactivate' {
+        if ($detectionType -eq 'CURRENT_MANIFEST_CLEAN' -or $detectionType -eq 'ORIGIN_MATCH') {
+            'DETECTED'
+        } elseif ($detectionType -notin $autoResetAllowed) {
+            'RESET_BLOCKED'
+        } elseif (-not $RuntimeBundleRoot) {
+            'RESET_BLOCKED_NO_BUNDLE'
+        } else {
+            try {
+                $resetResult = & (Join-Path $ScriptDir 'Reset-AkashicHeliosRuntime.ps1') `
+                    -AkashicRoot $AkashicRoot `
+                    -RuntimeBundleRoot $RuntimeBundleRoot `
+                    -HeliosGateRoot $HeliosGateRoot `
+                    -Platform $Platform `
+                    -DisableHooksDuringReset `
+                    -ReactivateHooksAfterReset
+                if ($resetResult.overall -eq 'COMPLETE') { 'RESET_AND_REACTIVATE_COMPLETE' }
+                else { 'RESET_AND_REACTIVATE_PARTIAL' }
+            } catch {
+                Write-Host "[FAIL] AutoResetAndReactivate failed: $_" -ForegroundColor Red
+                'RESET_FAILED'
+            }
+        }
+    }
 }
 
 Write-Host ''

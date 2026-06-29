@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "helios-runtime-restore-evidence.v1",
+  "title": "Helios Runtime Restore Evidence",
+  "description": "Proves the state transition: current runtime -> archive -> restore from recorded install-origin source -> final CLEAN + ORIGIN_MATCH.",
+  "type": "object",
+  "required": [
+    "schema_version", "timestamp_utc", "platform", "restored_by",
+    "operation_type", "source_authority",
+    "akashic_root", "helios_gate_root",
+    "recorded_runtime_bundle_root", "recorded_helios_head", "recorded_akashic_head",
+    "source_repo_present",
+    "archive_path", "steps",
+    "post_restore_manifest_verdict", "post_restore_origin_verdict",
+    "overall"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "const": "helios-runtime-restore-evidence.v1" },
+    "timestamp_utc": { "type": "string", "format": "date-time" },
+    "platform": { "type": "string", "enum": ["Windows", "macOS", "Linux"] },
+    "restored_by": { "type": "string" },
+    "operation_type": { "type": "string", "const": "Restore" },
+    "source_authority": { "type": "string", "const": "RecordedInstallOrigin" },
+    "akashic_root": { "type": "string" },
+    "helios_gate_root": { "type": "string" },
+
+    "origin_file_hash": { "type": ["string", "null"] },
+    "origin_created_utc": { "type": ["string", "null"] },
+    "recorded_runtime_bundle_root": { "type": ["string", "null"] },
+    "recorded_helios_head": { "type": ["string", "null"] },
+    "recorded_akashic_head": { "type": ["string", "null"] },
+
+    "current_runtime_bundle_root_status": { "type": ["string", "null"] },
+    "source_repo_present": { "type": "boolean" },
+    "source_repo_head_matches_recorded": { "type": ["boolean", "null"] },
+    "source_hashes_match_recorded": { "type": ["boolean", "null"] },
+
+    "restored_runtime_hashes": {
+      "type": ["object", "null"],
+      "additionalProperties": { "type": ["string", "null"] }
+    },
+    "post_restore_manifest_hash": { "type": ["string", "null"] },
+    "post_restore_sidecar_hash": { "type": ["string", "null"] },
+    "post_restore_origin_hash": { "type": ["string", "null"] },
+    "post_restore_manifest_verdict": { "type": "string" },
+    "post_restore_origin_verdict": { "type": "string" },
+
+    "restore_policy": { "type": ["string", "null"] },
+    "override_used": { "type": "boolean" },
+    "override_reason": { "type": ["string", "null"] },
+
+    "archive_path": { "type": ["string", "null"] },
+    "archived_files": { "type": "array", "items": { "type": "string" } },
+    "source_mismatch_files": { "type": "array", "items": { "type": "string" } },
+
+    "steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["step", "status"],
+        "properties": {
+          "step": { "type": "string" },
+          "status": { "type": "string", "enum": ["PASS", "FAIL", "SKIP", "WARN"] },
+          "detail": {}
+        }
+      }
+    },
+    "overall": { "type": "string", "enum": ["COMPLETE", "PARTIAL", "FAILED"] }
+  },
+  "additionalProperties": false
+}

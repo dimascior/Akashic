@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "helios-runtime-uninstall-evidence.v1",
+  "title": "Helios Runtime Uninstall Evidence",
+  "description": "Proves controlled removal of Helios hooks and runtime state, recording what settings changed, what was archived, and what was destroyed.",
+  "type": "object",
+  "required": [
+    "schema_version", "timestamp_utc", "platform", "uninstalled_by",
+    "operation_type", "source_authority",
+    "akashic_root", "helios_gate_root", "claude_settings_path",
+    "steps", "overall"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "const": "helios-runtime-uninstall-evidence.v1" },
+    "timestamp_utc": { "type": "string", "format": "date-time" },
+    "platform": { "type": "string", "enum": ["Windows", "macOS", "Linux"] },
+    "uninstalled_by": { "type": "string" },
+    "operation_type": { "type": "string", "const": "Uninstall" },
+    "source_authority": { "type": "string", "const": "None" },
+    "akashic_root": { "type": "string" },
+    "helios_gate_root": { "type": "string" },
+    "claude_settings_path": { "type": "string" },
+
+    "uninstall_mode": { "type": "string", "enum": ["archive", "destructive"] },
+    "pre_uninstall_hooks_active": { "type": ["boolean", "null"] },
+    "post_uninstall_hooks_active": { "type": "boolean" },
+    "hooks_removed": { "type": "boolean" },
+    "settings_backup_path": { "type": ["string", "null"] },
+    "settings_backup_hash": { "type": ["string", "null"] },
+    "settings_after_hash": { "type": ["string", "null"] },
+    "settings_backup_restored": { "type": "boolean" },
+
+    "files_unlocked": { "type": "boolean" },
+    "runtime_archived": { "type": "boolean" },
+    "runtime_removed": { "type": "boolean" },
+    "runtime_archive_path": { "type": ["string", "null"] },
+    "manifest_archived": { "type": "boolean" },
+    "origin_archived": { "type": "boolean" },
+    "protected_files_archived": { "type": "boolean" },
+    "evidence_preserved": { "type": "boolean" },
+    "preserved_evidence_path": { "type": ["string", "null"] },
+    "remove_evidence_requested": { "type": "boolean" },
+    "force_destructive": { "type": "boolean" },
+
+    "steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["step", "status"],
+        "properties": {
+          "step": { "type": "string" },
+          "status": { "type": "string", "enum": ["PASS", "FAIL", "SKIP", "WARN"] },
+          "detail": {}
+        }
+      }
+    },
+    "overall": { "type": "string", "enum": ["COMPLETE", "PARTIAL", "FAILED"] }
+  },
+  "additionalProperties": false
+}

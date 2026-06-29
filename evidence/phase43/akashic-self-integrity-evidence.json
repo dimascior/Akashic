@@ -1,11 +1,11 @@
 {
     "schema_version":  "akashic-self-integrity-evidence.v1",
-    "timestamp_utc":  "2026-06-29T08:21:24.2557364Z",
+    "timestamp_utc":  "2026-06-29T14:43:31.5896894Z",
     "akashic_root":  "C:\\Users\\dimas\\Desktop\\helios-integrity-adapter",
     "verdict":  "CLEAN",
     "signature_status":  "SIGNATURE_NOT_IMPLEMENTED",
     "sidecar_valid":  true,
-    "manifest_hash":  "f684d7795a95e6cc8e7bb72da8fc7569a6fdcf8b8b51b789545698064a857433",
+    "manifest_hash":  "18f900e567e70d71ea698010d7826d9b551a3748a6443c4721c813ca78fc0e8d",
     "bom_check":  {
                       "manifest_bom_free":  true,
                       "sidecar_bom_free":  true
@@ -44,10 +44,10 @@
                          {
                              "path":  "docs/akashic-self-integrity-boundary.md",
                              "role":  "contract-doc",
-                             "expected_sha256":  "e8a7854fe0ecb0bfa5fc56bc387f3645c600d5f3699290482df963467fa62868",
-                             "actual_sha256":  "e8a7854fe0ecb0bfa5fc56bc387f3645c600d5f3699290482df963467fa62868",
-                             "expected_size":  10758,
-                             "actual_size":  10758,
+                             "expected_sha256":  "b40bdc9430b7627df3f428e7399a67fa7e12e3585d7b7f19a230c944686a5a20",
+                             "actual_sha256":  "b40bdc9430b7627df3f428e7399a67fa7e12e3585d7b7f19a230c944686a5a20",
+                             "expected_size":  12919,
+                             "actual_size":  12919,
                              "exists":  true,
                              "status":  "CLEAN"
                          },
@@ -58,6 +58,16 @@
                              "actual_sha256":  "1c43bba167203ededf5073fe124df4875dda57aee04d47d9a810b2c75844c91d",
                              "expected_size":  5695,
                              "actual_size":  5695,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "docs/helios-runtime-reset-restore-uninstall.md",
+                             "role":  "contract-doc",
+                             "expected_sha256":  "d044ec3466f06bf33a1212c4956676808fea91919105267be9123bdd85e881eb",
+                             "actual_sha256":  "d044ec3466f06bf33a1212c4956676808fea91919105267be9123bdd85e881eb",
+                             "expected_size":  10340,
+                             "actual_size":  10340,
                              "exists":  true,
                              "status":  "CLEAN"
                          },
@@ -302,6 +312,36 @@
                              "status":  "CLEAN"
                          },
                          {
+                             "path":  "schemas/helios-runtime-reset-evidence.v1.json",
+                             "role":  "schema",
+                             "expected_sha256":  "84f1c64401e6d2c754df8d575e0a74f60ba89c679c96e5d2733b498fd3113c93",
+                             "actual_sha256":  "84f1c64401e6d2c754df8d575e0a74f60ba89c679c96e5d2733b498fd3113c93",
+                             "expected_size":  3737,
+                             "actual_size":  3737,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "schemas/helios-runtime-restore-evidence.v1.json",
+                             "role":  "schema",
+                             "expected_sha256":  "117825108dd7c0f4e741269ae24aebdee2cfd79c78501dc6d419ab03870364ef",
+                             "actual_sha256":  "117825108dd7c0f4e741269ae24aebdee2cfd79c78501dc6d419ab03870364ef",
+                             "expected_size":  3064,
+                             "actual_size":  3064,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "schemas/helios-runtime-uninstall-evidence.v1.json",
+                             "role":  "schema",
+                             "expected_sha256":  "de375dd108dd2e4430c3776225fcfce07f69758f23d5aa318b60db4a05e5e4d2",
+                             "actual_sha256":  "de375dd108dd2e4430c3776225fcfce07f69758f23d5aa318b60db4a05e5e4d2",
+                             "expected_size":  2605,
+                             "actual_size":  2605,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
                              "path":  "schemas/helios-settings-activation-evidence.schema.json",
                              "role":  "schema",
                              "expected_sha256":  "9921322647132df1938171f83ec62e64bad4e99dd0b91556951554b1df3aed7d",
@@ -374,10 +414,10 @@
                          {
                              "path":  "tools/AkashicHeliosInstallPlan.ps1",
                              "role":  "tool",
-                             "expected_sha256":  "a38f96518787c4fc2bbcfadab72cdba4cce3d0f0da36312a65a70137d8b751c1",
-                             "actual_sha256":  "a38f96518787c4fc2bbcfadab72cdba4cce3d0f0da36312a65a70137d8b751c1",
-                             "expected_size":  32939,
-                             "actual_size":  32939,
+                             "expected_sha256":  "cee34c6dcaabaf4506db5776f6a3b32296d930724396baedde1e8def0b786bff",
+                             "actual_sha256":  "cee34c6dcaabaf4506db5776f6a3b32296d930724396baedde1e8def0b786bff",
+                             "expected_size":  33187,
+                             "actual_size":  33187,
                              "exists":  true,
                              "status":  "CLEAN"
                          },
@@ -792,6 +832,26 @@
                              "status":  "CLEAN"
                          },
                          {
+                             "path":  "tools/Reset-AkashicHeliosRuntime.ps1",
+                             "role":  "tool",
+                             "expected_sha256":  "5ded7499695193bf4c676b7c699fadcd63ba7cc2e217ee527596043f6382ffb8",
+                             "actual_sha256":  "5ded7499695193bf4c676b7c699fadcd63ba7cc2e217ee527596043f6382ffb8",
+                             "expected_size":  23705,
+                             "actual_size":  23705,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/Restore-HeliosRuntimeFromBundle.ps1",
+                             "role":  "tool",
+                             "expected_sha256":  "7a15b58d6b89ddb3d194f587ee1ebc080fd9190035c5b5d2893e9d116f74a3d9",
+                             "actual_sha256":  "7a15b58d6b89ddb3d194f587ee1ebc080fd9190035c5b5d2893e9d116f74a3d9",
+                             "expected_size":  19958,
+                             "actual_size":  19958,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
                              "path":  "tools/Rollback-AkashicHeliosRuntime.ps1",
                              "role":  "tool",
                              "expected_sha256":  "e0129b3caaae8a2a4b0b66e34b9aed4e53aa2a8068e48baf9246e85aa7770044",
@@ -914,10 +974,10 @@
                          {
                              "path":  "tools/Test-HeliosRuntimeOrigin.ps1",
                              "role":  "compatibility-wrapper",
-                             "expected_sha256":  "daf0a36b64fc6c7fc8b3989cde6c11c4a8b0f9dbcccd891901f32c0875fce591",
-                             "actual_sha256":  "daf0a36b64fc6c7fc8b3989cde6c11c4a8b0f9dbcccd891901f32c0875fce591",
-                             "expected_size":  14825,
-                             "actual_size":  14825,
+                             "expected_sha256":  "1949a2215ed2b6154534ec64b7c8f91736b48bc5a7e28ca9fce0d975db80d88d",
+                             "actual_sha256":  "1949a2215ed2b6154534ec64b7c8f91736b48bc5a7e28ca9fce0d975db80d88d",
+                             "expected_size":  16918,
+                             "actual_size":  16918,
                              "exists":  true,
                              "status":  "CLEAN"
                          },
@@ -928,6 +988,16 @@
                              "actual_sha256":  "31a0d2fcf578e6822b78f93a3c5f729ccad3d45a5a9e880324c554fe3a80d197",
                              "expected_size":  157,
                              "actual_size":  157,
+                             "exists":  true,
+                             "status":  "CLEAN"
+                         },
+                         {
+                             "path":  "tools/Uninstall-AkashicHeliosRuntime.ps1",
+                             "role":  "tool",
+                             "expected_sha256":  "8c10bae13c9f763d4e16eb3ced2313932484147371e4ab1096e217394e6d5507",
+                             "actual_sha256":  "8c10bae13c9f763d4e16eb3ced2313932484147371e4ab1096e217394e6d5507",
+                             "expected_size":  13610,
+                             "actual_size":  13610,
                              "exists":  true,
                              "status":  "CLEAN"
                          },
@@ -986,9 +1056,9 @@
 
                            ],
     "classification_audit":  {
-                                 "protected_manifested_count":  99,
+                                 "protected_manifested_count":  106,
                                  "protected_unmanifested_count":  0,
-                                 "mutable_present_count":  59,
+                                 "mutable_present_count":  62,
                                  "ignored_present_count":  0,
                                  "unknown_unclassified_count":  0,
                                  "unknown_unclassified_files":  [
@@ -996,8 +1066,8 @@
                                                                 ]
                              },
     "allow_unclassified":  false,
-    "protected_file_count":  97,
-    "clean_count":  97,
+    "protected_file_count":  104,
+    "clean_count":  104,
     "drift_count":  0,
     "missing_count":  0
 }

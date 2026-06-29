@@ -1,0 +1,73 @@
+{
+    "schema_version":  "helios-runtime-detection.v1",
+    "timestamp_utc":  "2026-06-29T14:36:33Z",
+    "platform":  "Windows",
+    "akashic_head":  "ca168184d668b0b778350898052adebeab4fa2c0",
+    "helios_head":  null,
+    "runtime_bundle_root":  "E:\\AppData\\Local\\Temp\\claude\\C--Users-dimas-Desktop-CODEAPI\\6e026890-2754-46db-bd73-b6fd3ac193a8\\scratchpad\\clean-bundle",
+    "helios_gate_root":  "C:\\Users\\dimas\\Desktop\\MythosJustAFable\\.command-gate",
+    "manifest_path":  "C:\\Users\\dimas\\Desktop\\MythosJustAFable\\.command-gate\\manifest\\helios-envelope.json",
+    "sidecar_path":  "C:\\Users\\dimas\\Desktop\\MythosJustAFable\\.command-gate\\manifest\\helios-envelope.sha256",
+    "install_origin_path":  "C:\\Users\\dimas\\Desktop\\MythosJustAFable\\.command-gate\\manifest\\helios-install-origin.json",
+    "current_manifest_verdict":  "CLEAN",
+    "sidecar_verdict":  "MATCH",
+    "origin_verdict":  "BASELINE_REWRITE_SUSPECTED",
+    "detection_type":  "BASELINE_REWRITE_SUSPECTED",
+    "severity":  "CRITICAL",
+    "recommended_action":  "RESET_FROM_REPO",
+    "automation_mode":  "DetectOnly",
+    "affected_files":  [
+                           {
+                               "path":  "policy/command-policy.json",
+                               "status":  "DRIFT",
+                               "manifest_hash":  "c16dadcf21113b3adaa70858101ba05a4dc6e23d71b397ef7fbae12ddcb783af",
+                               "origin_hash":  "838ede2f4a195d5435c6f22033ef59dca0f785a84743a74ed01f2db4a6dd6488",
+                               "actual_hash":  "c16dadcf21113b3adaa70858101ba05a4dc6e23d71b397ef7fbae12ddcb783af"
+                           }
+                       ],
+    "expected_manifest_hashes":  {
+                                     "hooks/evidence_capture.ps1":  "b7c80f66b44de5ed749d963bc1c65108af5f44cb5c5296751520db3f05f88b10",
+                                     "hooks/gate_check.ps1":  "004aaae86bd5ff666b191576c1a4eef12b549b214c5c6a26e83553bb1f53114c",
+                                     "hooks/helios_pretooluse.ps1":  "31e6e82253aa1567367b92985973f799510b3ae17b89ac4379bc6e7092cac7b3",
+                                     "hooks/lib/HeliosIntegrityBridge.ps1":  "c26f927dbe1e52fbc9da2db473fd7c69b0d21a0e1b9b915a8d4b5710b8bc8b0a",
+                                     "hooks/tier_classifier.ps1":  "b1bc9475898e473a829ea6c4b3f39f2e7578fe2864326cf39a18716db14bf2aa",
+                                     "policy/command-policy.json":  "c16dadcf21113b3adaa70858101ba05a4dc6e23d71b397ef7fbae12ddcb783af"
+                                 },
+    "actual_runtime_hashes":  {
+                                  "hooks/helios_pretooluse.ps1":  "31e6e82253aa1567367b92985973f799510b3ae17b89ac4379bc6e7092cac7b3",
+                                  "hooks/gate_check.ps1":  "004aaae86bd5ff666b191576c1a4eef12b549b214c5c6a26e83553bb1f53114c",
+                                  "hooks/evidence_capture.ps1":  "b7c80f66b44de5ed749d963bc1c65108af5f44cb5c5296751520db3f05f88b10",
+                                  "hooks/tier_classifier.ps1":  "b1bc9475898e473a829ea6c4b3f39f2e7578fe2864326cf39a18716db14bf2aa",
+                                  "hooks/lib/HeliosIntegrityBridge.ps1":  "c26f927dbe1e52fbc9da2db473fd7c69b0d21a0e1b9b915a8d4b5710b8bc8b0a",
+                                  "policy/command-policy.json":  "c16dadcf21113b3adaa70858101ba05a4dc6e23d71b397ef7fbae12ddcb783af"
+                              },
+    "expected_origin_hashes":  {
+                                   "hooks/helios_pretooluse.ps1":  "31e6e82253aa1567367b92985973f799510b3ae17b89ac4379bc6e7092cac7b3",
+                                   "hooks/gate_check.ps1":  "004aaae86bd5ff666b191576c1a4eef12b549b214c5c6a26e83553bb1f53114c",
+                                   "hooks/evidence_capture.ps1":  "b7c80f66b44de5ed749d963bc1c65108af5f44cb5c5296751520db3f05f88b10",
+                                   "hooks/tier_classifier.ps1":  "b1bc9475898e473a829ea6c4b3f39f2e7578fe2864326cf39a18716db14bf2aa",
+                                   "hooks/lib/HeliosIntegrityBridge.ps1":  "c26f927dbe1e52fbc9da2db473fd7c69b0d21a0e1b9b915a8d4b5710b8bc8b0a",
+                                   "policy/command-policy.json":  "838ede2f4a195d5435c6f22033ef59dca0f785a84743a74ed01f2db4a6dd6488"
+                               },
+    "source_repo_status":  {
+                               "verdict":  "SOURCE_REPO_CHANGED",
+                               "current_akashic_head":  "ca168184d668b0b778350898052adebeab4fa2c0",
+                               "recorded_akashic_head":  "06d271daed32378ab04db305972f8f6dac582826",
+                               "current_helios_head":  null,
+                               "recorded_helios_head":  "4fdacfe0bc2712bab784970e5d7e1b5fa4bce848",
+                               "changed_source_files":  [
+
+                                                        ]
+                           },
+    "bridge_status":  {
+                          "verdict":  "BRIDGE_ORIGIN_DRIFT",
+                          "current_source_hash":  "ba6c9576cee58c561d379565e533fdef6bbc6fbf709179a33299d51d859757c7",
+                          "current_installed_hash":  "c26f927dbe1e52fbc9da2db473fd7c69b0d21a0e1b9b915a8d4b5710b8bc8b0a",
+                          "origin_source_hash":  "ba6c9576cee58c561d379565e533fdef6bbc6fbf709179a33299d51d859757c7",
+                          "origin_installed_hash":  "c26f927dbe1e52fbc9da2db473fd7c69b0d21a0e1b9b915a8d4b5710b8bc8b0a"
+                      },
+    "evidence_paths":  [
+                           "C:\\Users\\dimas\\Desktop\\MythosJustAFable\\.command-gate\\evidence\\detections\\20260629-143633-BASELINE_REWRITE_SUSPECTED.json"
+                       ],
+    "automation_result":  "DETECTED"
+}
