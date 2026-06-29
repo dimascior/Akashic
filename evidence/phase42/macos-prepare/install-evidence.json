@@ -1,0 +1,19 @@
+{
+  "schema_version": "akashic-install-evidence.v1",
+  "timestamp_utc": "2026-06-29T01:06:16.2963030Z",
+  "mode": "Prepare",
+  "platform": "macOS",
+  "akashic_root": "/Users/thispc/Engineering/Akashic",
+  "runtime_bundle_root": "/Users/thispc/Engineering/Helios-/.command-gate",
+  "helios_gate_root": "/Users/thispc/.helios/.command-gate",
+  "lock_strategy": {
+    "backend": "chflags",
+    "strength": "strong_user_immutable",
+    "privilege": "None"
+  },
+  "fixture_result": "PASS",
+  "manifest_status": "CLEAN",
+  "settings_activation": "skipped",
+  "lock_activation": "plan_only",
+  "blockers": []
+}
