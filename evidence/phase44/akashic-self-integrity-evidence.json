@@ -1,11 +1,11 @@
 {
     "schema_version":  "akashic-self-integrity-evidence.v1",
-    "timestamp_utc":  "2026-06-30T07:51:12.6008709Z",
-    "akashic_root":  "C:/Users/dimas/Desktop/helios-integrity-adapter",
+    "timestamp_utc":  "2026-06-30T06:59:39.5353878Z",
+    "akashic_root":  "C:\\Users\\dimas\\Desktop\\helios-integrity-adapter",
     "verdict":  "CLEAN",
     "signature_status":  "SIGNATURE_NOT_IMPLEMENTED",
     "sidecar_valid":  true,
-    "manifest_hash":  "f2257c4ab3742f1a632b38dbffa897880b383edb24fff98fd8aacbc966f2b04c",
+    "manifest_hash":  "4cabaac27ac5c78c66373620f4ca1db0e53d828251eb38899e1e3c58fc20d22a",
     "bom_check":  {
                       "manifest_bom_free":  true,
                       "sidecar_bom_free":  true
@@ -18,16 +18,6 @@
                              "actual_sha256":  "ba6c9576cee58c561d379565e533fdef6bbc6fbf709179a33299d51d859757c7",
                              "expected_size":  10838,
                              "actual_size":  10838,
-                             "exists":  true,
-                             "status":  "CLEAN"
-                         },
-                         {
-                             "path":  "docs/akashic-helios-gap-analysis.md",
-                             "role":  "contract-doc",
-                             "expected_sha256":  "747cf2e946b34e4d0a09d561899f603a2cd004e6674b55a1fa1c61122434221d",
-                             "actual_sha256":  "747cf2e946b34e4d0a09d561899f603a2cd004e6674b55a1fa1c61122434221d",
-                             "expected_size":  26409,
-                             "actual_size":  26409,
                              "exists":  true,
                              "status":  "CLEAN"
                          },
@@ -234,10 +224,10 @@
                          {
                              "path":  "schemas/akashic-self-envelope.v1.json",
                              "role":  "schema",
-                             "expected_sha256":  "4f15823ac2b8a30162ca8c704c111e79fdd70983c1e601e7bcbba6f08b0f1c1b",
-                             "actual_sha256":  "4f15823ac2b8a30162ca8c704c111e79fdd70983c1e601e7bcbba6f08b0f1c1b",
-                             "expected_size":  4478,
-                             "actual_size":  4478,
+                             "expected_sha256":  "7e6a28ead27f30578d3178e3490edba49357f384ae44ff8974cd3f30da03afd2",
+                             "actual_sha256":  "7e6a28ead27f30578d3178e3490edba49357f384ae44ff8974cd3f30da03afd2",
+                             "expected_size":  4360,
+                             "actual_size":  4360,
                              "exists":  true,
                              "status":  "CLEAN"
                          },
@@ -254,10 +244,10 @@
                          {
                              "path":  "schemas/akashic-settings-integrity-evidence.v1.json",
                              "role":  "schema",
-                             "expected_sha256":  "0c1977ddc39ed5f9666540aebec4372393c261a8b40b76a66d4892a2450a816a",
-                             "actual_sha256":  "0c1977ddc39ed5f9666540aebec4372393c261a8b40b76a66d4892a2450a816a",
-                             "expected_size":  1605,
-                             "actual_size":  1605,
+                             "expected_sha256":  "8f5bc7c21123432fdb953015b5b28d475f9e3a6ac794e372596dd7ef2600cb42",
+                             "actual_sha256":  "8f5bc7c21123432fdb953015b5b28d475f9e3a6ac794e372596dd7ef2600cb42",
+                             "expected_size":  1555,
+                             "actual_size":  1555,
                              "exists":  true,
                              "status":  "CLEAN"
                          },
@@ -304,20 +294,20 @@
                          {
                              "path":  "schemas/helios-maintenance-transition-evidence.v1.json",
                              "role":  "schema",
-                             "expected_sha256":  "7c225a156a182b38a71886873368acd8bd44ab42071a7a299aa2dda555f46cc7",
-                             "actual_sha256":  "7c225a156a182b38a71886873368acd8bd44ab42071a7a299aa2dda555f46cc7",
-                             "expected_size":  3079,
-                             "actual_size":  3079,
+                             "expected_sha256":  "e280d4f8b4e4652410e12f4614cb3af6d4b8802e0a3aaa4f342e4cd85b8f3de3",
+                             "actual_sha256":  "e280d4f8b4e4652410e12f4614cb3af6d4b8802e0a3aaa4f342e4cd85b8f3de3",
+                             "expected_size":  2990,
+                             "actual_size":  2990,
                              "exists":  true,
                              "status":  "CLEAN"
                          },
                          {
                              "path":  "schemas/helios-rebaseline.schema.json",
                              "role":  "schema",
-                             "expected_sha256":  "4e0d39bc574c2dd76c640039bfc95c98bec6b4d595874fb537faceac2e06e623",
-                             "actual_sha256":  "4e0d39bc574c2dd76c640039bfc95c98bec6b4d595874fb537faceac2e06e623",
-                             "expected_size":  2157,
-                             "actual_size":  2157,
+                             "expected_sha256":  "4a2f2f9251d6c454342eaa8fc55495636b29b210b079243c27c3ca5115e8b227",
+                             "actual_sha256":  "4a2f2f9251d6c454342eaa8fc55495636b29b210b079243c27c3ca5115e8b227",
+                             "expected_size":  2087,
+                             "actual_size":  2087,
                              "exists":  true,
                              "status":  "CLEAN"
                          },
@@ -344,20 +334,20 @@
                          {
                              "path":  "schemas/helios-runtime-reset-evidence.v1.json",
                              "role":  "schema",
-                             "expected_sha256":  "7de67a94515bd9677e44b650f1b7f6f22aa2a954299dffd65d88263dbaa53e38",
-                             "actual_sha256":  "7de67a94515bd9677e44b650f1b7f6f22aa2a954299dffd65d88263dbaa53e38",
-                             "expected_size":  4106,
-                             "actual_size":  4106,
+                             "expected_sha256":  "fe398d63039e3be6d0224d7dc372f44194373b12344af5bf3f6a620edad4a50e",
+                             "actual_sha256":  "fe398d63039e3be6d0224d7dc372f44194373b12344af5bf3f6a620edad4a50e",
+                             "expected_size":  4016,
+                             "actual_size":  4016,
                              "exists":  true,
                              "status":  "CLEAN"
                          },
                          {
                              "path":  "schemas/helios-runtime-restore-evidence.v1.json",
                              "role":  "schema",
-                             "expected_sha256":  "cd00685b5923ed8a20c8c93bd876bd91c5955e9157d62b0186a855db120806ed",
-                             "actual_sha256":  "cd00685b5923ed8a20c8c93bd876bd91c5955e9157d62b0186a855db120806ed",
-                             "expected_size":  3418,
-                             "actual_size":  3418,
+                             "expected_sha256":  "081293e10a63738e282fcf50216dc35e00b79cce71af7dc40a690c1d6fe0cc8d",
+                             "actual_sha256":  "081293e10a63738e282fcf50216dc35e00b79cce71af7dc40a690c1d6fe0cc8d",
+                             "expected_size":  3343,
+                             "actual_size":  3343,
                              "exists":  true,
                              "status":  "CLEAN"
                          },
@@ -514,10 +504,10 @@
                          {
                              "path":  "tools/AkashicSettingsIntegrity.ps1",
                              "role":  "tool",
-                             "expected_sha256":  "ce355c033f79f176b1e7462f1b46a68b72addfa596b745a744e4facb3e7c8613",
-                             "actual_sha256":  "ce355c033f79f176b1e7462f1b46a68b72addfa596b745a744e4facb3e7c8613",
-                             "expected_size":  8199,
-                             "actual_size":  8199,
+                             "expected_sha256":  "8a40d9878433df5c5472ea02160541b9de7e062ac63772530fb2152d28bf7408",
+                             "actual_sha256":  "8a40d9878433df5c5472ea02160541b9de7e062ac63772530fb2152d28bf7408",
+                             "expected_size":  7997,
+                             "actual_size":  7997,
                              "exists":  true,
                              "status":  "CLEAN"
                          },
@@ -574,20 +564,20 @@
                          {
                              "path":  "tools/Enter-HeliosMaintenanceMode.ps1",
                              "role":  "tool",
-                             "expected_sha256":  "5942b09bd92784bf6be7f00ce3765edc05d7a46571218d611a7c57b1b0b1cdb3",
-                             "actual_sha256":  "5942b09bd92784bf6be7f00ce3765edc05d7a46571218d611a7c57b1b0b1cdb3",
-                             "expected_size":  4078,
-                             "actual_size":  4078,
+                             "expected_sha256":  "1f46355f69b118a287d636039a7b1080f6136055957aa33500ac5e504239227a",
+                             "actual_sha256":  "1f46355f69b118a287d636039a7b1080f6136055957aa33500ac5e504239227a",
+                             "expected_size":  3976,
+                             "actual_size":  3976,
                              "exists":  true,
                              "status":  "CLEAN"
                          },
                          {
                              "path":  "tools/Exit-HeliosMaintenanceMode.ps1",
                              "role":  "tool",
-                             "expected_sha256":  "342a76cb1ebd05200f1bebead953d0b870b7656efe3f8be79304505dced6d986",
-                             "actual_sha256":  "342a76cb1ebd05200f1bebead953d0b870b7656efe3f8be79304505dced6d986",
-                             "expected_size":  4862,
-                             "actual_size":  4862,
+                             "expected_sha256":  "ef0ae68e1fc0e9f35f2364f240c583f9b3568b6fb7b9dd76bd0b0f495e4240a9",
+                             "actual_sha256":  "ef0ae68e1fc0e9f35f2364f240c583f9b3568b6fb7b9dd76bd0b0f495e4240a9",
+                             "expected_size":  4742,
+                             "actual_size":  4742,
                              "exists":  true,
                              "status":  "CLEAN"
                          },
@@ -1034,10 +1024,10 @@
                          {
                              "path":  "tools/Test-HeliosSessionContinuity.ps1",
                              "role":  "compatibility-wrapper",
-                             "expected_sha256":  "25b313657e3c104e82ceec26f80fd7b65685704a864201c0a31e7e970580e565",
-                             "actual_sha256":  "25b313657e3c104e82ceec26f80fd7b65685704a864201c0a31e7e970580e565",
-                             "expected_size":  2391,
-                             "actual_size":  2391,
+                             "expected_sha256":  "6f0d7ae35ace3073e0158d7e00642e90c803abaea6bbeae6203bc2240df23508",
+                             "actual_sha256":  "6f0d7ae35ace3073e0158d7e00642e90c803abaea6bbeae6203bc2240df23508",
+                             "expected_size":  2325,
+                             "actual_size":  2325,
                              "exists":  true,
                              "status":  "CLEAN"
                          },
@@ -1116,9 +1106,9 @@
 
                            ],
     "classification_audit":  {
-                                 "protected_manifested_count":  112,
+                                 "protected_manifested_count":  111,
                                  "protected_unmanifested_count":  0,
-                                 "mutable_present_count":  79,
+                                 "mutable_present_count":  62,
                                  "ignored_present_count":  0,
                                  "unknown_unclassified_count":  0,
                                  "unknown_unclassified_files":  [
@@ -1126,8 +1116,8 @@
                                                                 ]
                              },
     "allow_unclassified":  false,
-    "protected_file_count":  110,
-    "clean_count":  110,
+    "protected_file_count":  109,
+    "clean_count":  109,
     "drift_count":  0,
     "missing_count":  0
 }

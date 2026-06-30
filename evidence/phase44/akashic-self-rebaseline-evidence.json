@@ -1,8 +1,8 @@
 {
     "schema_version":  "akashic-self-integrity-evidence.v1",
-    "timestamp_utc":  "2026-06-30T07:51:12.6273908Z",
-    "akashic_root":  "C:/Users/dimas/Desktop/helios-integrity-adapter",
-    "rebaselined_by":  "claude-phase44-recovery",
+    "timestamp_utc":  "2026-06-30T06:59:39.5808979Z",
+    "akashic_root":  "C:\\Users\\dimas\\Desktop\\helios-integrity-adapter",
+    "rebaselined_by":  "phase44-compound-bypass-awareness",
     "overall":  "COMPLETE",
     "steps":  [
                   {
@@ -14,8 +14,8 @@
                       "step":  "Regenerate manifest",
                       "status":  "PASS",
                       "detail":  {
-                                     "protected_count":  110,
-                                     "manifest_hash":  "f2257c4ab3742f1a632b38dbffa897880b383edb24fff98fd8aacbc966f2b04c",
+                                     "protected_count":  109,
+                                     "manifest_hash":  "4cabaac27ac5c78c66373620f4ca1db0e53d828251eb38899e1e3c58fc20d22a",
                                      "signature_status":  "SIGNATURE_NOT_IMPLEMENTED"
                                  }
                   },
@@ -24,8 +24,8 @@
                       "status":  "PASS",
                       "detail":  {
                                      "verdict":  "CLEAN",
-                                     "protected_count":  110,
-                                     "clean_count":  110
+                                     "protected_count":  109,
+                                     "clean_count":  109
                                  }
                   },
                   {
@@ -34,8 +34,8 @@
                       "detail":  "not requested (pass -RelockAfter)"
                   }
               ],
-    "manifest_hash":  "f2257c4ab3742f1a632b38dbffa897880b383edb24fff98fd8aacbc966f2b04c",
-    "protected_count":  110,
+    "manifest_hash":  "4cabaac27ac5c78c66373620f4ca1db0e53d828251eb38899e1e3c58fc20d22a",
+    "protected_count":  109,
     "signature_status":  "SIGNATURE_NOT_IMPLEMENTED",
     "verify_verdict":  "CLEAN"
 }

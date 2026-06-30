@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "helios-maintenance-transition-evidence.v1",
+  "title": "Helios Maintenance Transition Evidence",
+  "description": "Records bounded administrative state transitions (reset, restore, uninstall, activate, deactivate). Awareness only — does not disable enforcement.",
+  "type": "object",
+  "required": [
+    "schema_version", "timestamp_utc", "transition_type",
+    "requested_transition", "prior_state_snapshot",
+    "transition_authorized_by", "authority_type", "bounded"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "helios-maintenance-transition-evidence.v1"
+    },
+    "timestamp_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "transition_type": {
+      "type": "string",
+      "enum": ["reset", "restore", "uninstall", "activate", "deactivate"]
+    },
+    "requested_transition": {
+      "type": "string",
+      "description": "Human-readable description of the requested operation."
+    },
+    "prior_state_snapshot": {
+      "type": "object",
+      "description": "Captured state before the transition.",
+      "properties": {
+        "hooks_active": { "type": "boolean" },
+        "manifest_hash": { "type": ["string", "null"] },
+        "sidecar_hash": { "type": ["string", "null"] },
+        "origin_hash": { "type": ["string", "null"] },
+        "settings_hash": { "type": ["string", "null"] }
+      }
+    },
+    "allowed_operation": {
+      "type": ["string", "null"],
+      "description": "Specific operation that the transition allows."
+    },
+    "expected_final_state": {
+      "type": ["object", "null"],
+      "description": "What the state should look like after the transition."
+    },
+    "actual_final_state": {
+      "type": ["object", "null"],
+      "description": "What the state actually looks like after the transition."
+    },
+    "transition_authorized_by": {
+      "type": "string"
+    },
+    "authority_type": {
+      "type": "string",
+      "enum": ["self_reported", "tool_reported", "signed"]
+    },
+    "authorization_method": { "type": ["string", "null"] },
+    "authorization_proof_present": { "type": "boolean" },
+    "authorization_proof_ref": { "type": ["string", "null"] },
+    "bounded": {
+      "type": "boolean",
+      "description": "Whether the transition is bounded to a specific operation and expiry."
+    },
+    "expiry": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "description": "When the maintenance window expires."
+    },
+    "steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["step", "status"],
+        "properties": {
+          "step": { "type": "string" },
+          "status": { "type": "string", "enum": ["PASS", "FAIL", "SKIP", "WARN"] },
+          "detail": {}
+        }
+      }
+    },
+    "overall": {
+      "type": "string",
+      "enum": ["COMPLETE", "PARTIAL", "FAILED"]
+    }
+  },
+  "additionalProperties": false
+}

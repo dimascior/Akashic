@@ -48,13 +48,19 @@ function Get-FileHash256([string]$Path) {
 }
 
 # --- Build hook commands ---
+$PwshAbsPath = $null
+if ($Platform -ne 'Windows') {
+    $PwshCmd = Get-Command pwsh -ErrorAction SilentlyContinue
+    if ($PwshCmd) { $PwshAbsPath = $PwshCmd.Source }
+    if (-not $PwshAbsPath) { $PwshAbsPath = 'pwsh' }
+}
 $preToolCommand = switch ($Platform) {
     'Windows' { "powershell -NoProfile -ExecutionPolicy Bypass -File `"$HeliosGateRoot\hooks\helios_pretooluse.ps1`"" }
-    default   { "pwsh -NoProfile -File '$HeliosGateRoot/hooks/helios_pretooluse.ps1'" }
+    default   { "$PwshAbsPath -NoProfile -File '$HeliosGateRoot/hooks/helios_pretooluse.ps1'" }
 }
 $evidenceCommand = switch ($Platform) {
     'Windows' { "powershell -NoProfile -ExecutionPolicy Bypass -File `"$HeliosGateRoot\hooks\evidence_capture.ps1`"" }
-    default   { "pwsh -NoProfile -File '$HeliosGateRoot/hooks/evidence_capture.ps1'" }
+    default   { "$PwshAbsPath -NoProfile -File '$HeliosGateRoot/hooks/evidence_capture.ps1'" }
 }
 
 $heliosHookEntry = @{

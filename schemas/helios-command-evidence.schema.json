@@ -7,7 +7,8 @@
     { "$ref": "#/$defs/before_evidence" },
     { "$ref": "#/$defs/decision_evidence" },
     { "$ref": "#/$defs/after_evidence" },
-    { "$ref": "#/$defs/compare_evidence" }
+    { "$ref": "#/$defs/compare_evidence" },
+    { "$ref": "#/$defs/result_evidence" }
   ],
   "$defs": {
     "protected_file_snapshot": {
@@ -175,6 +176,103 @@
             }
           }
         }
+      }
+    },
+    "forensic_classification": {
+      "type": "object",
+      "description": "System-recorded forensic fields. Produced uniformly for every command regardless of tier. Not agent-declared — these are what the system actually detected.",
+      "properties": {
+        "detected_tier": { "type": "integer", "minimum": 0, "maximum": 4 },
+        "detected_tier_name": { "type": "string" },
+        "matched_pattern": { "type": ["string", "null"] },
+        "capability_escalated": { "type": "boolean" },
+        "capability_flags": {
+          "type": "object",
+          "properties": {
+            "inline_interpreter_execution": { "type": "boolean" },
+            "dynamic_eval_execution": { "type": "boolean" },
+            "encoded_or_obfuscated_execution": { "type": "boolean" },
+            "nested_shell_execution": { "type": "boolean" }
+          }
+        },
+        "classifier_reason_codes": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "write_indicator_matched": { "type": "boolean" },
+        "policy_hash": { "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$" },
+        "hook_versions": {
+          "type": "object",
+          "additionalProperties": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+        },
+        "enforcement_surface": { "type": "string" },
+        "segments_declared": { "type": "array", "items": { "type": "string" } },
+        "segments_detected": { "type": "array", "items": { "type": "string" } },
+        "segments_match": { "type": "boolean" },
+        "watched_path_diffs": { "type": ["object", "null"] },
+        "settings_integrity_after": { "type": ["object", "null"] },
+        "session_continuity_status": { "type": ["string", "null"] }
+      }
+    },
+    "result_evidence": {
+      "type": "object",
+      "description": "Per-command result record. Written by evidence_capture.ps1 after command execution. Contains execution outcome and uniform forensic classification.",
+      "required": ["correlation_id", "tool_use_id", "session_id", "command_sha256", "hook_event", "executed_utc", "success"],
+      "properties": {
+        "correlation_id": { "type": "string" },
+        "tool_use_id": { "type": "string" },
+        "session_id": { "type": "string" },
+        "command": { "type": "string" },
+        "command_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "gate_file": { "type": "string" },
+        "hook_event": {
+          "type": "string",
+          "enum": ["PostToolUse", "PostToolUseFailure"]
+        },
+        "executed_utc": { "type": "string", "format": "date-time" },
+        "duration_ms": { "type": ["number", "null"] },
+        "cwd": { "type": ["string", "null"] },
+        "exit_code": { "type": ["integer", "null"] },
+        "exit_code_source": {
+          "type": "string",
+          "enum": ["native", "parsed_marker", "unavailable"]
+        },
+        "interrupted": { "type": ["boolean", "null"] },
+        "output_preview": { "type": ["string", "null"] },
+        "output_bytes": { "type": "integer" },
+        "success": { "type": "boolean" },
+        "fields_found": { "type": "array", "items": { "type": "string" } },
+        "fields_missing": { "type": "array", "items": { "type": "string" } },
+        "detected_tier": { "type": "integer", "minimum": 0, "maximum": 4 },
+        "detected_tier_name": { "type": "string" },
+        "matched_pattern": { "type": ["string", "null"] },
+        "capability_escalated": { "type": "boolean" },
+        "capability_flags": {
+          "type": "object",
+          "properties": {
+            "inline_interpreter_execution": { "type": "boolean" },
+            "dynamic_eval_execution": { "type": "boolean" },
+            "encoded_or_obfuscated_execution": { "type": "boolean" },
+            "nested_shell_execution": { "type": "boolean" }
+          }
+        },
+        "classifier_reason_codes": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "write_indicator_matched": { "type": "boolean" },
+        "policy_hash": { "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$" },
+        "hook_versions": {
+          "type": "object",
+          "additionalProperties": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+        },
+        "enforcement_surface": { "type": "string" },
+        "segments_declared": { "type": "array", "items": { "type": "string" } },
+        "segments_detected": { "type": "array", "items": { "type": "string" } },
+        "segments_match": { "type": "boolean" },
+        "watched_path_diffs": { "type": ["object", "null"] },
+        "settings_integrity_after": { "type": ["object", "null"] },
+        "session_continuity_status": { "type": ["string", "null"] }
       }
     }
   }

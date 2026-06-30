@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "akashic-settings-integrity-evidence.v1",
+  "title": "Akashic Settings Integrity Evidence",
+  "description": "Evidence produced by AkashicSettingsIntegrity.ps1 verifying Claude settings.json hook configuration.",
+  "type": "object",
+  "required": ["settings_path", "checked_utc", "status"],
+  "properties": {
+    "settings_path": { "type": "string" },
+    "checked_utc": { "type": "string", "format": "date-time" },
+    "status": {
+      "type": "string",
+      "enum": ["PASS", "FAIL", "UNKNOWN"]
+    },
+    "settings_hash": {
+      "type": ["string", "null"],
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "hook_commands_found": {
+      "type": "object",
+      "properties": {
+        "PreToolUse": { "type": "string" },
+        "PostToolUse": { "type": "string" },
+        "PostToolUseFailure": { "type": "string" }
+      }
+    },
+    "hook_commands_expected": {
+      "type": "object",
+      "properties": {
+        "PreToolUse": { "type": "string" },
+        "PostToolUse": { "type": "string" },
+        "PostToolUseFailure": { "type": "string" }
+      }
+    },
+    "pwsh_path_absolute": { "type": "boolean" },
+    "gate_root_match": { "type": ["boolean", "null"] },
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "check": { "type": "string" },
+          "passed": { "type": "boolean" },
+          "detail": { "type": "string" }
+        },
+        "required": ["check", "passed", "detail"]
+      }
+    }
+  }
+}

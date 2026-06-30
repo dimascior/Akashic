@@ -19,6 +19,14 @@
       "type": "string",
       "description": "Identity of the rebaseline actor. Must be 'human' for trusted rebaselines."
     },
+    "authority_type": {
+      "type": "string",
+      "enum": ["self_reported", "tool_reported", "signed"],
+      "description": "How the rebaseline identity was established."
+    },
+    "authorization_method": { "type": ["string", "null"] },
+    "authorization_proof_present": { "type": "boolean" },
+    "authorization_proof_ref": { "type": ["string", "null"] },
     "note": {
       "type": "string",
       "description": "Optional human-readable note about the rebaseline."
