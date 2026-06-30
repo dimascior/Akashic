@@ -1,10 +1,34 @@
 # Akashic
 
-Integrity witness adapter for the Helios command-gate system. Provides envelope verification, evidence capture, and lock/control tooling for gated command execution.
+Trust witness, installer, and integrity tooling for the Helios command-gate system. Provides envelope verification, manifest generation and rebaseline, settings integrity verification, session continuity forensic auditing, maintenance transition evidence, lock tooling, and the Helios runtime installer.
 
 ## Purpose
 
 Helios gates shell commands via PreToolUse/PostToolUse hooks but cannot prove its own enforcement files were intact when the gate decision was made. Akashic gives Helios a local integrity witness: it hashes protected files, compares them against a durable manifest and session baseline, and writes structured evidence for every command.
+
+Akashic also owns the Helios installer. The installer prepares, validates, and activates a Helios runtime bundle. It copies files, verifies package and runtime bundle hashes, syncs the Akashic bridge into Helios, generates or verifies manifests, validates settings hooks, optionally runs lock fixture checks, and activates Claude settings when approved. Installer activation does not approve runtime commands — Helios remains the runtime gate for every command.
+
+## Installer Role
+
+Akashic owns the Helios runtime installer via `AkashicHeliosInstallPlan.ps1`. The installer operates in three modes:
+
+| Mode | Behavior |
+|---|---|
+| `PlanOnly` | Produces the intended install/activation plan without writing runtime state. |
+| `Prepare` | Copies/syncs files, generates manifests, validates bundle and package integrity. Does not activate hooks or modify Claude settings. |
+| `Activate` | Updates Claude settings and hook wiring after human approval. |
+
+The installer does not replace the live Helios gate. It prepares, validates, and activates a Helios runtime bundle. Its responsibilities include:
+
+- Copying runtime files from the bundle to the target `.command-gate/` directory
+- Syncing the Akashic bridge source into Helios (`Sync-AkashicBridge.ps1`)
+- Generating or verifying manifests and sidecar hashes
+- Validating package and runtime bundle checksums
+- Validating settings hook entries
+- Optionally running lock fixture checks
+- Activating Claude settings only when explicitly approved
+
+Installer activation is not the same as runtime command approval. Helios still gates every command at runtime.
 
 ## Envelope Model
 
@@ -14,12 +38,12 @@ Files that **must not change** during gated execution:
 
 | Relative Path | Role |
 |---|---|
+| `hooks/helios_pretooluse.ps1` | Front controller (integrity check before policy load) |
 | `hooks/gate_check.ps1` | Command validation logic |
 | `hooks/evidence_capture.ps1` | PostToolUse/PostToolUseFailure evidence |
-| `hooks/tier_classifier.ps1` | Command tier classification |
-| `hooks/helios_pretooluse.ps1` | Front controller (integrity check before policy load) |
+| `hooks/tier_classifier.ps1` | Command tier and capability classification |
 | `hooks/lib/HeliosIntegrityBridge.ps1` | Vendored copy of this adapter |
-| `policy/command-policy.json` | Tier patterns and gate policy |
+| `policy/command-policy.json` | Tier patterns, capability patterns, and gate policy |
 
 ### Mutable Runtime Envelope
 
@@ -123,14 +147,45 @@ Linux/macOS support requires fixture validation (`Test-AkashicOsLockFixture.ps1`
 
 The lock workflow: unlock → rebaseline → relock. This repo owns the lock/unlock tooling.
 
+## Settings Integrity
+
+`AkashicSettingsIntegrity.ps1` verifies Claude settings hook entries: checks that Helios hooks (PreToolUse, PostToolUse, PostToolUseFailure) are present in `settings.json`, that they point to the expected scripts, and returns hook commands, presence status, and a settings hash suitable for embedding in per-command evidence.
+
+Helios `evidence_capture.ps1` includes `settings_integrity_after` in every PostToolUse evidence record, recording `all_hooks_present`, individual hook presence, hook commands, and `settings_hash`.
+
+## Session Continuity Audit
+
+`Test-HeliosSessionContinuity.ps1` is a forensic tool that reads the Helios session ledger for a given session ID, walks every entry, confirms matching gate/evidence chains, and reports: total commands, evidence gaps, and continuity verdict (`CONTINUOUS` or `BROKEN` at command N).
+
+The session ledger (`session/session-ledger-<session_id>.jsonl`) is written by Helios at runtime. Each command produces up to three entries: `pretooluse_seen`, `gate_consumed`, and `posttooluse_evidence_written`. Gaps between these entries indicate dropped hooks, crashed scripts, or removed enforcement.
+
+## Maintenance Transitions
+
+`Enter-HeliosMaintenanceMode.ps1` and `Exit-HeliosMaintenanceMode.ps1` produce bounded maintenance transition evidence. They record the transition type, prior state snapshot, allowed operation, expected final state, actual final state, authorization, and expiry. These tools record the transition — they do not broadly disable enforcement.
+
 ## Schemas
 
-See `schemas/` for JSON Schema definitions of:
+See `schemas/` for JSON Schema definitions:
 
-- `helios-envelope.v1` — durable manifest
-- `helios-baseline.v1` — session baseline
-- `helios-command-evidence.v1` — before, decision, after, compare evidence
-- `helios-rebaseline.v1` — rebaseline audit record
+| Schema | Purpose |
+|---|---|
+| `helios-envelope.schema.json` | Durable manifest |
+| `helios-baseline.schema.json` | Session baseline |
+| `helios-command-evidence.schema.json` | Before, decision, after, compare evidence |
+| `helios-rebaseline.schema.json` | Rebaseline audit record |
+| `akashic-self-envelope.v1.json` | Akashic self-manifest |
+| `akashic-settings-integrity-evidence.v1.json` | Expected vs actual hook configuration with hashes |
+| `helios-maintenance-transition-evidence.v1.json` | Bounded administrative transition evidence |
+| `helios-runtime-reset-evidence.v1.json` | Reset operation evidence with authority fields |
+| `helios-runtime-restore-evidence.v1.json` | Restore operation evidence with authority fields |
+| `helios-runtime-uninstall-evidence.v1.json` | Uninstall operation evidence |
+| `helios-install-origin.v1.json` | Install origin metadata |
+| `helios-runtime-detection.v1.json` | Runtime detection result |
+| `akashic-self-integrity-evidence.v1.json` | Self-integrity verification evidence |
+| `helios-settings-activation-evidence.schema.json` | Settings activation evidence |
+| `helios-rollback-evidence.schema.json` | Rollback operation evidence |
+
+Authority fields (`authority_type`, `authorization_method`, `authorization_proof_present`, `authorization_proof_ref`) are present in reset, restore, rebaseline, and uninstall evidence schemas. Current authority is claim-based (`self_reported` or `tool_reported`). Cryptographic signing is deferred.
 
 ## Packaging
 
@@ -156,6 +211,17 @@ git clone https://github.com/dimascior/Akashic.git
 | `tools/AkashicEndToEndInstallPlanValidation.ps1` | Simulate install in temp directory |
 | `tools/AkashicInstallPlan.ps1` | Legacy adapter-only install plan |
 
+### Integrity and Audit Tools
+
+| Tool | Purpose |
+|---|---|
+| `tools/AkashicSettingsIntegrity.ps1` | Verify settings.json hook entries, expected scripts, hook presence, settings hash |
+| `tools/Test-HeliosSessionContinuity.ps1` | Forensic audit of Helios session ledger: continuity verdict, evidence gaps |
+| `tools/Enter-HeliosMaintenanceMode.ps1` | Bounded maintenance transition evidence (enter) |
+| `tools/Exit-HeliosMaintenanceMode.ps1` | Bounded maintenance transition evidence (exit) |
+| `tools/Apply-AkashicClaudeHooks.ps1` | Apply Helios hooks to Claude settings.json |
+| `tools/Remove-AkashicClaudeHooks.ps1` | Remove Helios hooks from Claude settings.json |
+
 ### Lock Tools
 
 | Tool | Purpose |
@@ -166,10 +232,20 @@ git clone https://github.com/dimascior/Akashic.git
 | `tools/Lock-AkashicProtectedFiles.ps1` | Apply OS-native locks to protected files |
 | `tools/Unlock-AkashicProtectedFiles.ps1` | Remove locks for maintenance rebaseline |
 | `tools/AkashicLockStatus.ps1` | Verify all lock targets are in expected state |
-| `tools/Invoke-AkashicRebaseline.ps1` | Coordinated unlock→update→relock→verify cycle |
+| `tools/Invoke-AkashicRebaseline.ps1` | Coordinated unlock→update→rebaseline→relock→verify cycle |
 | `tools/Test-AkashicOsLockFixture.ps1` | Disposable fixture test for lock backend validation |
+
+### Runtime Operations Tools
+
+| Tool | Purpose |
+|---|---|
 | `tools/Move-AkashicStaleGateArtifacts.ps1` | Clean expired pending/ and orphaned inflight/ gates |
-| `tools/AkashicSettingsIntegrity.ps1` | Verify settings.json hook entries (control-plane check) |
+| `tools/Reset-AkashicHeliosRuntime.ps1` | Reset Helios runtime to clean state |
+| `tools/Restore-HeliosRuntimeFromBundle.ps1` | Restore runtime from a validated bundle |
+| `tools/Uninstall-AkashicHeliosRuntime.ps1` | Remove Helios runtime from a project |
+| `tools/Rollback-AkashicHeliosRuntime.ps1` | Roll back a failed install/activation |
+| `tools/Test-HeliosRuntimeOrigin.ps1` | Verify runtime origin against install-origin.json |
+| `tools/New-HeliosInstallOrigin.ps1` | Generate install-origin metadata |
 
 ### Install Flow
 
@@ -185,14 +261,44 @@ See `docs/install-sequence.md` for the complete procedure, `docs/package-archite
 
 ## Current Status
 
-**Phase:** 4.1 — cross-platform lock/unlock/rebaseline tooling. Windows fixture PASS, Windows installer PlanOnly/Prepare PASS. Void Linux fixture PASS. macOS fixture PASS, macOS installer PlanOnly/Prepare PASS. Installer contract defined. Active Helios runtime locking deferred until fixture + installer pass per platform. Activate remains approval-plan only. No live runtime touched.
+**Phase:** 4.4 — compound bypass awareness. Phase 4.1 cross-platform lock tooling is complete; Phase 4.4 adds the Helios awareness layer (capability classification, segment decomposition, uniform evidence, control-plane watcher, session continuity, chain linkage, settings integrity, maintenance transitions, PostToolUse diagnostics). Akashic provides the trust witness, installer, forensic audit, and maintenance evidence tooling.
+
+### Capability Status
+
+| Capability | Helios | Akashic | Status |
+|---|---|---|---|
+| Command gate | Owns runtime enforcement | Installs/prepares runtime | Implemented |
+| SHA-256 command hash | Validates exact command | N/A | Implemented |
+| Protected-file manifest hash | Uses manifest/sidecar | Generates/verifies manifests | Implemented |
+| PostToolUse evidence | Writes runtime evidence | Can audit via tools | Implemented |
+| Capability classification | Owns classifier | N/A | Implemented |
+| Segment decomposition | Owns decomposer | N/A | Implemented |
+| Control-plane watcher | Owns live watcher | Verifies settings integrity | Implemented |
+| Session continuity | Writes ledger and evidence | Provides forensic audit | Implemented |
+| Installer | Consumes installed runtime | Owns PlanOnly/Prepare/Activate | Implemented |
+| Signatures | Reads authority fields only | Schema language exists | Not implemented |
+| File locks | Runtime target | Owns lock tooling | Tooling exists; active runtime locking deferred |
+
+### Hashes
+
+Implemented. Helios has `manifest/helios-envelope.json` containing protected-file SHA-256 hashes and `manifest/helios-envelope.sha256` as the manifest sidecar. Akashic has `manifest/akashic-envelope.json` and `manifest/akashic-envelope.sha256`. Hashes prove byte-level drift against a known manifest. They do not prove human authorization by themselves.
+
+### Signatures
+
+Not implemented yet. The schemas now support authority language (`authority_type`, `authorization_method`, `authorization_proof_present`, `authorization_proof_ref`), but cryptographic signing is deferred. Current authority is claim-based (`self_reported` or `tool_reported`). The sidecar is a SHA-256 hash, not a signature.
+
+### File Locks
+
+Lock tooling exists in Akashic. Backends are documented for Windows (`icacls`), Linux (`chattr`), macOS (`chflags`), and POSIX (`chmod`) fallback. Fixtures have been validated across platforms. Active Helios runtime locking remains deferred unless a later activation explicitly applies locks.
+
+### Component Status
 
 | Component | Status |
 |---|---|
 | Bridge implementation (7 functions) | Complete |
 | Sync, manifest, integrity tools | Complete |
 | Pester test suite (18 tests) | Complete |
-| Schemas (4 JSON Schema files) | Complete |
+| Schemas (15 JSON Schema files) | Complete |
 | TCE adapter spec | Complete — `docs/tce-helios-integrity-adapter-spec.md` |
 | Orchestration workflow | Complete — `tools/Invoke-AkashicGapTest.ps1` |
 | Evidence parser/normalizer | Complete — `tools/ConvertFrom-AkashicEvidence.ps1` |
@@ -216,7 +322,11 @@ See `docs/install-sequence.md` for the complete procedure, `docs/package-archite
 | Unified installer | Created — `tools/AkashicHeliosInstallPlan.ps1` (16-phase, PlanOnly/Prepare/Activate) |
 | Rebaseline workflow | Implemented — live 7-step cycle pending |
 | Stale gate cleanup | Implemented — `tools/Move-AkashicStaleGateArtifacts.ps1` |
-| Settings integrity | Verified — `AkashicSettingsIntegrity` passes against live settings.json |
+| Settings integrity | Implemented — `AkashicSettingsIntegrity.ps1` verifies hook entries and settings hash |
+| Session continuity audit | Implemented — `Test-HeliosSessionContinuity.ps1` forensic audit tool |
+| Maintenance transition evidence | Implemented — `Enter-HeliosMaintenanceMode.ps1` / `Exit-HeliosMaintenanceMode.ps1` |
+| Authority schema fields | Implemented — `authority_type`, `authorization_method` in reset/restore/rebaseline schemas |
+| Self-manifest/self-integrity | Implemented — `New-AkashicSelfManifest.ps1`, `Test-AkashicSelfIntegrity.ps1` |
 | Rebaseline schema | Validated — fixture record matches `schemas/helios-rebaseline.schema.json` |
 | Phase 4.1 evidence | Complete — `evidence/phase41/` (fixture + installer validation across Windows, Void Linux, macOS; live runtime deferred) |
 | TCE main preservation | Verified — TCE main preserved at `c594a75` with no adapter entries |
@@ -236,7 +346,8 @@ Originally extracted from [TerminalContextExporter](https://github.com/dimascior
 | Phase 3.99.1 | Complete (package validation + manifest hardening + execution proof) |
 | Phase 3.99.2 | Complete (final readback audit) |
 | Phase 4.0 | Complete (lock design from gap evidence) |
-| Phase 4.1 | In progress (cross-platform lock strategy — Windows PASS, Void Linux PASS, macOS PASS; active runtime locking deferred) |
+| Phase 4.1 | Complete (cross-platform lock strategy — Windows PASS, Void Linux PASS, macOS PASS; active runtime locking deferred) |
+| Phase 4.4 | Complete (compound bypass awareness — capability classification, segment decomposition, uniform evidence, control-plane watcher, session continuity, chain linkage, settings integrity, maintenance transitions, PostToolUse diagnostics) |
 | Phase 4.2 | Future — live lock verification evidence |
 | Phase 5 | Future — lock system packaging |
 | Phase 6 | Future — long-term lock verification + audit strategy |
