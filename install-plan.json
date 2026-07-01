@@ -1,248 +1,418 @@
 {
-  "schema_version": "akashic-helios-install-plan.v2",
-  "timestamp_utc": "2026-06-29T21:47:52.8023543Z",
-  "mode": "Prepare",
-  "platform": "Linux",
-  "akashic_root": "/home/void/Desktop/Akashic",
-  "runtime_bundle_root": "/home/void/Desktop/Helios-/.command-gate",
-  "helios_gate_root": "/home/void/.helios/.command-gate",
-  "claude_settings_path": "/home/void/.claude/settings.json",
-  "lock_strategy": {
-    "backend": "chattr",
-    "implemented": true,
-    "strength": "strong_if_supported",
-    "requires_elevation": true,
-    "privilege_mode": "Sudo",
-    "blockers": [],
-    "notes": [
-      "Linux immutable attribute (chattr +i)",
-      "chattr: /usr/bin/chattr",
-      "lsattr: /usr/bin/lsattr",
-      "Elevation: sudo (non-interactive confirmed)"
-    ]
-  },
-  "fixture_result": "NOT_RUN",
-  "manifest_status": "CLEAN",
-  "origin_status": "PASS",
-  "origin_result": {
-    "origin_path": "/home/void/.helios/.command-gate/manifest/helios-install-origin.json",
-    "akashic_head": "b5debba4f390e4cc2e13474ea8bb67b434e597ae",
-    "helios_head": "46e23931328f8d37b7ad118b6667fa204aa7790d",
-    "source_count": 5,
-    "installed_count": 6,
-    "origin_verified": true,
-    "manifest_hash": "3215ba2d316be31a6245eb8f5dac2596d07a053397ea9acc7b98dbfeacf1f3af",
-    "sidecar_hash": "3215ba2d316be31a6245eb8f5dac2596d07a053397ea9acc7b98dbfeacf1f3af"
-  },
-  "phases": [
-    {
-      "phase": 1,
-      "name": "Verify Akashic package/root",
-      "status": "PASS",
-      "blocking": true,
-      "detail": "Akashic root verified (12 tools present): /home/void/Desktop/Akashic"
-    },
-    {
-      "phase": 2,
-      "name": "Verify RuntimeBundleRoot",
-      "status": "PASS",
-      "blocking": true,
-      "detail": "RuntimeBundleRoot verified: /home/void/Desktop/Helios-/.command-gate (5 protected, 0 support files)"
-    },
-    {
-      "phase": 3,
-      "name": "Create runtime directories",
-      "status": "PASS",
-      "blocking": true,
-      "detail": "Target exists, 15 directories verified"
-    },
-    {
-      "phase": 4,
-      "name": "Copy runtime protected files",
-      "status": "PASS",
-      "blocking": true,
-      "detail": "5 protected runtime files copied"
-    },
-    {
-      "phase": 5,
-      "name": "Copy runtime support files",
-      "status": "SKIP",
-      "blocking": false,
-      "detail": "No support files found in RuntimeBundleRoot"
-    },
-    {
-      "phase": 6,
-      "name": "Sync Akashic bridge",
-      "status": "PASS",
-      "blocking": true,
-      "detail": "Bridge synced: /home/void/.helios/.command-gate/hooks/lib/HeliosIntegrityBridge.ps1"
-    },
-    {
-      "phase": 7,
-      "name": "Verify bridge byte identity",
-      "status": "PASS",
-      "blocking": true,
-      "detail": "Byte identical: 8008a336b8d5c35704aa677a57796807f8bb7790d3ff0a9af89767519c51e454"
-    },
-    {
-      "phase": 8,
-      "name": "Generate manifest",
-      "status": "PASS",
-      "blocking": true,
-      "detail": "Manifest generated from files in final position"
-    },
-    {
-      "phase": 9,
-      "name": "Verify envelope integrity",
-      "status": "PASS",
-      "blocking": true,
-      "detail": "Envelope integrity: CLEAN"
-    },
-    {
-      "phase": 10,
-      "name": "Generate install origin",
-      "status": "PASS",
-      "blocking": true,
-      "detail": "Install origin: MATCH (source=5 installed=6)"
-    },
-    {
-      "phase": 11,
-      "name": "Detect lock strategy + run fixture",
-      "status": "PASS",
-      "blocking": true,
-      "detail": "Backend: chattr, Strength: strong_if_supported, Privilege: Sudo"
-    },
-    {
-      "phase": 12,
-      "name": "Prepare settings activation plan",
-      "status": "SKIP",
-      "blocking": false,
-      "detail": "Settings activation not requested"
-    },
-    {
-      "phase": 13,
-      "name": "Prepare lock activation plan",
-      "status": "PLAN",
-      "blocking": false,
-      "detail": "Lock plan generated (fixture: NOT_RUN, backend: chattr)"
-    },
-    {
-      "phase": 14,
-      "name": "Prepare rollback plan",
-      "status": "PASS",
-      "blocking": false,
-      "detail": "Rollback plan generated"
-    },
-    {
-      "phase": 15,
-      "name": "Write install evidence",
-      "status": "PASS",
-      "blocking": false,
-      "detail": "Evidence written: /home/void/Desktop/Akashic/evidence/phase41/install-evidence.json"
-    }
-  ],
-  "bridge_sync_plan": {
-    "source": "/home/void/Desktop/Akashic/AkashicIntegrityBridge.ps1",
-    "dest": "/home/void/.helios/.command-gate/hooks/lib/HeliosIntegrityBridge.ps1",
-    "source_exists": true,
-    "role": "bridge_vendor_copy",
-    "verify": "SHA-256 byte identity check after copy"
-  },
-  "runtime_protected_copy_plan": [
-    {
-      "relative": "hooks/helios_pretooluse.ps1",
-      "source": "/home/void/Desktop/Helios-/.command-gate/hooks/helios_pretooluse.ps1",
-      "dest": "/home/void/.helios/.command-gate/hooks/helios_pretooluse.ps1",
-      "role": "protected_runtime"
-    },
-    {
-      "relative": "hooks/gate_check.ps1",
-      "source": "/home/void/Desktop/Helios-/.command-gate/hooks/gate_check.ps1",
-      "dest": "/home/void/.helios/.command-gate/hooks/gate_check.ps1",
-      "role": "protected_runtime"
-    },
-    {
-      "relative": "hooks/evidence_capture.ps1",
-      "source": "/home/void/Desktop/Helios-/.command-gate/hooks/evidence_capture.ps1",
-      "dest": "/home/void/.helios/.command-gate/hooks/evidence_capture.ps1",
-      "role": "protected_runtime"
-    },
-    {
-      "relative": "hooks/tier_classifier.ps1",
-      "source": "/home/void/Desktop/Helios-/.command-gate/hooks/tier_classifier.ps1",
-      "dest": "/home/void/.helios/.command-gate/hooks/tier_classifier.ps1",
-      "role": "protected_runtime"
-    },
-    {
-      "relative": "policy/command-policy.json",
-      "source": "/home/void/Desktop/Helios-/.command-gate/policy/command-policy.json",
-      "dest": "/home/void/.helios/.command-gate/policy/command-policy.json",
-      "role": "protected_runtime"
-    }
-  ],
-  "runtime_support_copy_plan": [],
-  "settings_activation_plan": null,
-  "lock_activation_plan": {
-    "protected_lock_targets": [
-      "hooks/helios_pretooluse.ps1",
-      "hooks/gate_check.ps1",
-      "hooks/evidence_capture.ps1",
-      "hooks/tier_classifier.ps1",
-      "hooks/lib/HeliosIntegrityBridge.ps1",
-      "policy/command-policy.json",
-      "manifest/helios-envelope.json",
-      "manifest/helios-envelope.sha256"
-    ],
-    "mutable_dirs": [
-      "pending",
-      "inflight",
-      "evidence",
-      "blocked"
-    ],
-    "include_settings_lock": false,
-    "include_templates_lock": false,
-    "lock_tool": "tools/Lock-AkashicProtectedFiles.ps1",
-    "status_tool": "tools/AkashicLockStatus.ps1",
-    "requires_approval": true,
-    "lock_strategy": {
-      "backend": "chattr",
-      "strength": "strong_if_supported",
-      "privilege": "Sudo"
-    },
-    "fixture_prerequisite": "NOT_RUN"
-  },
-  "rollback_plan": {
-    "steps": [
-      "Run Uninstall-AkashicHeliosRuntime.ps1 -AkashicRoot /home/void/Desktop/Akashic -HeliosGateRoot /home/void/.helios/.command-gate (archives runtime, removes hooks)",
-      "Or manually: restore settings.json from backup: /home/void/.claude/settings.json.pre-helios-backup",
-      "Remove deny ACLs from locked files (Unlock-AkashicProtectedFiles)",
-      "Verify no hooks active: run shell command, confirm no gate prompt",
-      "Optionally remove target with -ForceDestructive: /home/void/.helios/.command-gate"
-    ],
-    "uninstall_tool": "tools/Uninstall-AkashicHeliosRuntime.ps1",
-    "risk": "Low — Uninstall-AkashicHeliosRuntime archives before removing"
-  },
-  "install_evidence": {
-    "schema_version": "akashic-install-evidence.v1",
-    "timestamp_utc": "2026-06-29T21:47:52.7953956Z",
-    "mode": "Prepare",
-    "platform": "Linux",
-    "akashic_root": "/home/void/Desktop/Akashic",
-    "runtime_bundle_root": "/home/void/Desktop/Helios-/.command-gate",
-    "helios_gate_root": "/home/void/.helios/.command-gate",
-    "lock_strategy": {
-      "backend": "chattr",
-      "strength": "strong_if_supported",
-      "privilege": "Sudo"
-    },
-    "fixture_result": "NOT_RUN",
-    "manifest_status": "CLEAN",
-    "origin_status": "PASS",
-    "origin_verified": true,
-    "settings_activation": "skipped",
-    "lock_activation": "plan_only",
-    "blockers": []
-  },
-  "blockers": [],
-  "overall_status": "READY"
+    "schema_version":  "akashic-helios-install-plan.v2",
+    "timestamp_utc":  "2026-06-30T23:45:40.9121140Z",
+    "mode":  "Prepare",
+    "platform":  "Windows",
+    "akashic_root":  "C:\\Users\\dimas\\Desktop\\helios-integrity-adapter",
+    "runtime_bundle_root":  "C:\\Users\\dimas\\Desktop\\helios-integrity-adapter\\dist\\helios-runtime-v4.4.0",
+    "helios_gate_root":  "C:\\Users\\dimas\\Desktop\\MythosJustAFable\\.command-gate",
+    "claude_settings_path":  "C:\\Users\\dimas\\.claude\\settings.json",
+    "lock_strategy":  {
+                          "backend":  "icacls",
+                          "implemented":  true,
+                          "strength":  "strong",
+                          "requires_elevation":  false,
+                          "privilege_mode":  "None",
+                          "blockers":  [
+
+                                       ],
+                          "notes":  [
+                                        "Deny write/delete ACL via Everyone SID (*S-1-1-0)"
+                                    ]
+                      },
+    "fixture_result":  "PASS",
+    "manifest_status":  "CLEAN",
+    "origin_status":  "PASS",
+    "origin_result":  {
+                          "origin_path":  "C:\\Users\\dimas\\Desktop\\MythosJustAFable\\.command-gate\\manifest\\helios-install-origin.json",
+                          "akashic_head":  "da06d022afe2c821ac7b8981082df9ec1abd7985",
+                          "helios_head":  "da06d022afe2c821ac7b8981082df9ec1abd7985",
+                          "source_count":  5,
+                          "installed_count":  6,
+                          "origin_verified":  true,
+                          "manifest_hash":  "c40366edcf54b22306eb01fb5e6fdf5fcc5648018a4b117c4b15bc3c84c851e9",
+                          "sidecar_hash":  "c40366edcf54b22306eb01fb5e6fdf5fcc5648018a4b117c4b15bc3c84c851e9"
+                      },
+    "phases":  [
+                   {
+                       "phase":  1,
+                       "name":  "Verify Akashic package/root",
+                       "status":  "PASS",
+                       "blocking":  true,
+                       "detail":  "Akashic root verified (12 tools present): C:\\Users\\dimas\\Desktop\\helios-integrity-adapter"
+                   },
+                   {
+                       "phase":  2,
+                       "name":  "Verify RuntimeBundleRoot",
+                       "status":  "PASS",
+                       "blocking":  true,
+                       "detail":  "RuntimeBundleRoot verified: C:\\Users\\dimas\\Desktop\\helios-integrity-adapter\\dist\\helios-runtime-v4.4.0 (5 protected, 21 support files)"
+                   },
+                   {
+                       "phase":  3,
+                       "name":  "Create runtime directories",
+                       "status":  "PASS",
+                       "blocking":  true,
+                       "detail":  "Target exists, 15 directories verified"
+                   },
+                   {
+                       "phase":  4,
+                       "name":  "Copy runtime protected files",
+                       "status":  "PASS",
+                       "blocking":  true,
+                       "detail":  "5 protected runtime files copied"
+                   },
+                   {
+                       "phase":  5,
+                       "name":  "Copy runtime support files",
+                       "status":  "PASS",
+                       "blocking":  false,
+                       "detail":  "21 support files copied"
+                   },
+                   {
+                       "phase":  6,
+                       "name":  "Sync Akashic bridge",
+                       "status":  "PASS",
+                       "blocking":  true,
+                       "detail":  "Bridge synced: C:\\Users\\dimas\\Desktop\\MythosJustAFable\\.command-gate\\hooks\\lib\\HeliosIntegrityBridge.ps1"
+                   },
+                   {
+                       "phase":  7,
+                       "name":  "Verify bridge byte identity",
+                       "status":  "PASS",
+                       "blocking":  true,
+                       "detail":  "Byte identical: ba6c9576cee58c561d379565e533fdef6bbc6fbf709179a33299d51d859757c7"
+                   },
+                   {
+                       "phase":  8,
+                       "name":  "Generate manifest",
+                       "status":  "PASS",
+                       "blocking":  true,
+                       "detail":  "Manifest generated from files in final position"
+                   },
+                   {
+                       "phase":  9,
+                       "name":  "Verify envelope integrity",
+                       "status":  "PASS",
+                       "blocking":  true,
+                       "detail":  "Envelope integrity: CLEAN"
+                   },
+                   {
+                       "phase":  10,
+                       "name":  "Generate install origin",
+                       "status":  "PASS",
+                       "blocking":  true,
+                       "detail":  "Install origin: MATCH (source=5 installed=6)"
+                   },
+                   {
+                       "phase":  11,
+                       "name":  "Detect lock strategy + run fixture",
+                       "status":  "PASS",
+                       "blocking":  true,
+                       "detail":  "Backend: icacls, Strength: strong, Privilege: None | Fixture: PASS"
+                   },
+                   {
+                       "phase":  12,
+                       "name":  "Prepare settings activation plan",
+                       "status":  "PASS",
+                       "blocking":  false,
+                       "detail":  "Settings hooks already configured"
+                   },
+                   {
+                       "phase":  13,
+                       "name":  "Prepare lock activation plan",
+                       "status":  "PLAN",
+                       "blocking":  false,
+                       "detail":  "Lock plan ready (fixture PASS, backend: icacls)"
+                   },
+                   {
+                       "phase":  14,
+                       "name":  "Prepare rollback plan",
+                       "status":  "PASS",
+                       "blocking":  false,
+                       "detail":  "Rollback plan generated"
+                   },
+                   {
+                       "phase":  15,
+                       "name":  "Write install evidence",
+                       "status":  "PASS",
+                       "blocking":  false,
+                       "detail":  "Evidence written: C:\\Users\\dimas\\Desktop\\helios-integrity-adapter\\evidence\\phase41\\install-evidence.json"
+                   }
+               ],
+    "bridge_sync_plan":  {
+                             "source":  "C:\\Users\\dimas\\Desktop\\helios-integrity-adapter\\AkashicIntegrityBridge.ps1",
+                             "dest":  "C:\\Users\\dimas\\Desktop\\MythosJustAFable\\.command-gate\\hooks\\lib\\HeliosIntegrityBridge.ps1",
+                             "source_exists":  true,
+                             "role":  "bridge_vendor_copy",
+                             "verify":  "SHA-256 byte identity check after copy"
+                         },
+    "runtime_protected_copy_plan":  [
+                                        {
+                                            "relative":  "hooks/helios_pretooluse.ps1",
+                                            "source":  "C:\\Users\\dimas\\Desktop\\helios-integrity-adapter\\dist\\helios-runtime-v4.4.0\\hooks\\helios_pretooluse.ps1",
+                                            "dest":  "C:\\Users\\dimas\\Desktop\\MythosJustAFable\\.command-gate\\hooks\\helios_pretooluse.ps1",
+                                            "role":  "protected_runtime"
+                                        },
+                                        {
+                                            "relative":  "hooks/gate_check.ps1",
+                                            "source":  "C:\\Users\\dimas\\Desktop\\helios-integrity-adapter\\dist\\helios-runtime-v4.4.0\\hooks\\gate_check.ps1",
+                                            "dest":  "C:\\Users\\dimas\\Desktop\\MythosJustAFable\\.command-gate\\hooks\\gate_check.ps1",
+                                            "role":  "protected_runtime"
+                                        },
+                                        {
+                                            "relative":  "hooks/evidence_capture.ps1",
+                                            "source":  "C:\\Users\\dimas\\Desktop\\helios-integrity-adapter\\dist\\helios-runtime-v4.4.0\\hooks\\evidence_capture.ps1",
+                                            "dest":  "C:\\Users\\dimas\\Desktop\\MythosJustAFable\\.command-gate\\hooks\\evidence_capture.ps1",
+                                            "role":  "protected_runtime"
+                                        },
+                                        {
+                                            "relative":  "hooks/tier_classifier.ps1",
+                                            "source":  "C:\\Users\\dimas\\Desktop\\helios-integrity-adapter\\dist\\helios-runtime-v4.4.0\\hooks\\tier_classifier.ps1",
+                                            "dest":  "C:\\Users\\dimas\\Desktop\\MythosJustAFable\\.command-gate\\hooks\\tier_classifier.ps1",
+                                            "role":  "protected_runtime"
+                                        },
+                                        {
+                                            "relative":  "policy/command-policy.json",
+                                            "source":  "C:\\Users\\dimas\\Desktop\\helios-integrity-adapter\\dist\\helios-runtime-v4.4.0\\policy\\command-policy.json",
+                                            "dest":  "C:\\Users\\dimas\\Desktop\\MythosJustAFable\\.command-gate\\policy\\command-policy.json",
+                                            "role":  "protected_runtime"
+                                        }
+                                    ],
+    "runtime_support_copy_plan":  [
+                                      {
+                                          "relative":  "schemas/control-plane-diff.v1.schema.json",
+                                          "source":  "C:\\Users\\dimas\\Desktop\\helios-integrity-adapter\\dist\\helios-runtime-v4.4.0\\schemas\\control-plane-diff.v1.schema.json",
+                                          "dest":  "C:\\Users\\dimas\\Desktop\\MythosJustAFable\\.command-gate\\schemas\\control-plane-diff.v1.schema.json",
+                                          "role":  "support"
+                                      },
+                                      {
+                                          "relative":  "schemas/helios-baseline.v1.schema.json",
+                                          "source":  "C:\\Users\\dimas\\Desktop\\helios-integrity-adapter\\dist\\helios-runtime-v4.4.0\\schemas\\helios-baseline.v1.schema.json",
+                                          "dest":  "C:\\Users\\dimas\\Desktop\\MythosJustAFable\\.command-gate\\schemas\\helios-baseline.v1.schema.json",
+                                          "role":  "support"
+                                      },
+                                      {
+                                          "relative":  "schemas/helios-command-evidence.v1.schema.json",
+                                          "source":  "C:\\Users\\dimas\\Desktop\\helios-integrity-adapter\\dist\\helios-runtime-v4.4.0\\schemas\\helios-command-evidence.v1.schema.json",
+                                          "dest":  "C:\\Users\\dimas\\Desktop\\MythosJustAFable\\.command-gate\\schemas\\helios-command-evidence.v1.schema.json",
+                                          "role":  "support"
+                                      },
+                                      {
+                                          "relative":  "schemas/helios-envelope.v1.schema.json",
+                                          "source":  "C:\\Users\\dimas\\Desktop\\helios-integrity-adapter\\dist\\helios-runtime-v4.4.0\\schemas\\helios-envelope.v1.schema.json",
+                                          "dest":  "C:\\Users\\dimas\\Desktop\\MythosJustAFable\\.command-gate\\schemas\\helios-envelope.v1.schema.json",
+                                          "role":  "support"
+                                      },
+                                      {
+                                          "relative":  "schemas/helios-maintenance-rebaseline.v1.schema.json",
+                                          "source":  "C:\\Users\\dimas\\Desktop\\helios-integrity-adapter\\dist\\helios-runtime-v4.4.0\\schemas\\helios-maintenance-rebaseline.v1.schema.json",
+                                          "dest":  "C:\\Users\\dimas\\Desktop\\MythosJustAFable\\.command-gate\\schemas\\helios-maintenance-rebaseline.v1.schema.json",
+                                          "role":  "support"
+                                      },
+                                      {
+                                          "relative":  "schemas/session-ledger.v1.schema.json",
+                                          "source":  "C:\\Users\\dimas\\Desktop\\helios-integrity-adapter\\dist\\helios-runtime-v4.4.0\\schemas\\session-ledger.v1.schema.json",
+                                          "dest":  "C:\\Users\\dimas\\Desktop\\MythosJustAFable\\.command-gate\\schemas\\session-ledger.v1.schema.json",
+                                          "role":  "support"
+                                      },
+                                      {
+                                          "relative":  "tools/Check-ParseErrors.ps1",
+                                          "source":  "C:\\Users\\dimas\\Desktop\\helios-integrity-adapter\\dist\\helios-runtime-v4.4.0\\tools\\Check-ParseErrors.ps1",
+                                          "dest":  "C:\\Users\\dimas\\Desktop\\MythosJustAFable\\.command-gate\\tools\\Check-ParseErrors.ps1",
+                                          "role":  "support"
+                                      },
+                                      {
+                                          "relative":  "tools/do-akashic-readme-commit.ps1",
+                                          "source":  "C:\\Users\\dimas\\Desktop\\helios-integrity-adapter\\dist\\helios-runtime-v4.4.0\\tools\\do-akashic-readme-commit.ps1",
+                                          "dest":  "C:\\Users\\dimas\\Desktop\\MythosJustAFable\\.command-gate\\tools\\do-akashic-readme-commit.ps1",
+                                          "role":  "support"
+                                      },
+                                      {
+                                          "relative":  "tools/do-cpfix-commit.ps1",
+                                          "source":  "C:\\Users\\dimas\\Desktop\\helios-integrity-adapter\\dist\\helios-runtime-v4.4.0\\tools\\do-cpfix-commit.ps1",
+                                          "dest":  "C:\\Users\\dimas\\Desktop\\MythosJustAFable\\.command-gate\\tools\\do-cpfix-commit.ps1",
+                                          "role":  "support"
+                                      },
+                                      {
+                                          "relative":  "tools/do-readme-commit.ps1",
+                                          "source":  "C:\\Users\\dimas\\Desktop\\helios-integrity-adapter\\dist\\helios-runtime-v4.4.0\\tools\\do-readme-commit.ps1",
+                                          "dest":  "C:\\Users\\dimas\\Desktop\\MythosJustAFable\\.command-gate\\tools\\do-readme-commit.ps1",
+                                          "role":  "support"
+                                      },
+                                      {
+                                          "relative":  "tools/Move-HeliosStaleGateArtifacts.ps1",
+                                          "source":  "C:\\Users\\dimas\\Desktop\\helios-integrity-adapter\\dist\\helios-runtime-v4.4.0\\tools\\Move-HeliosStaleGateArtifacts.ps1",
+                                          "dest":  "C:\\Users\\dimas\\Desktop\\MythosJustAFable\\.command-gate\\tools\\Move-HeliosStaleGateArtifacts.ps1",
+                                          "role":  "support"
+                                      },
+                                      {
+                                          "relative":  "tools/New-HeliosEnvelopeManifest.ps1",
+                                          "source":  "C:\\Users\\dimas\\Desktop\\helios-integrity-adapter\\dist\\helios-runtime-v4.4.0\\tools\\New-HeliosEnvelopeManifest.ps1",
+                                          "dest":  "C:\\Users\\dimas\\Desktop\\MythosJustAFable\\.command-gate\\tools\\New-HeliosEnvelopeManifest.ps1",
+                                          "role":  "support"
+                                      },
+                                      {
+                                          "relative":  "tools/Test-ControlPlaneMutation.ps1",
+                                          "source":  "C:\\Users\\dimas\\Desktop\\helios-integrity-adapter\\dist\\helios-runtime-v4.4.0\\tools\\Test-ControlPlaneMutation.ps1",
+                                          "dest":  "C:\\Users\\dimas\\Desktop\\MythosJustAFable\\.command-gate\\tools\\Test-ControlPlaneMutation.ps1",
+                                          "role":  "support"
+                                      },
+                                      {
+                                          "relative":  "tools/Test-HeliosEnvelopeIntegrity.ps1",
+                                          "source":  "C:\\Users\\dimas\\Desktop\\helios-integrity-adapter\\dist\\helios-runtime-v4.4.0\\tools\\Test-HeliosEnvelopeIntegrity.ps1",
+                                          "dest":  "C:\\Users\\dimas\\Desktop\\MythosJustAFable\\.command-gate\\tools\\Test-HeliosEnvelopeIntegrity.ps1",
+                                          "role":  "support"
+                                      },
+                                      {
+                                          "relative":  "tools/Test-HeliosEvidenceChain.ps1",
+                                          "source":  "C:\\Users\\dimas\\Desktop\\helios-integrity-adapter\\dist\\helios-runtime-v4.4.0\\tools\\Test-HeliosEvidenceChain.ps1",
+                                          "dest":  "C:\\Users\\dimas\\Desktop\\MythosJustAFable\\.command-gate\\tools\\Test-HeliosEvidenceChain.ps1",
+                                          "role":  "support"
+                                      },
+                                      {
+                                          "relative":  "tools/Test-HeliosGateEnforcement.ps1",
+                                          "source":  "C:\\Users\\dimas\\Desktop\\helios-integrity-adapter\\dist\\helios-runtime-v4.4.0\\tools\\Test-HeliosGateEnforcement.ps1",
+                                          "dest":  "C:\\Users\\dimas\\Desktop\\MythosJustAFable\\.command-gate\\tools\\Test-HeliosGateEnforcement.ps1",
+                                          "role":  "support"
+                                      },
+                                      {
+                                          "relative":  "docs/bypass-surface.md",
+                                          "source":  "C:\\Users\\dimas\\Desktop\\helios-integrity-adapter\\dist\\helios-runtime-v4.4.0\\docs\\bypass-surface.md",
+                                          "dest":  "C:\\Users\\dimas\\Desktop\\MythosJustAFable\\.command-gate\\docs\\bypass-surface.md",
+                                          "role":  "support"
+                                      },
+                                      {
+                                          "relative":  "docs/integrity-witness.md",
+                                          "source":  "C:\\Users\\dimas\\Desktop\\helios-integrity-adapter\\dist\\helios-runtime-v4.4.0\\docs\\integrity-witness.md",
+                                          "dest":  "C:\\Users\\dimas\\Desktop\\MythosJustAFable\\.command-gate\\docs\\integrity-witness.md",
+                                          "role":  "support"
+                                      },
+                                      {
+                                          "relative":  "docs/phase4-lock-handoff.md",
+                                          "source":  "C:\\Users\\dimas\\Desktop\\helios-integrity-adapter\\dist\\helios-runtime-v4.4.0\\docs\\phase4-lock-handoff.md",
+                                          "dest":  "C:\\Users\\dimas\\Desktop\\MythosJustAFable\\.command-gate\\docs\\phase4-lock-handoff.md",
+                                          "role":  "support"
+                                      },
+                                      {
+                                          "relative":  "docs/rebaseline-boundary.md",
+                                          "source":  "C:\\Users\\dimas\\Desktop\\helios-integrity-adapter\\dist\\helios-runtime-v4.4.0\\docs\\rebaseline-boundary.md",
+                                          "dest":  "C:\\Users\\dimas\\Desktop\\MythosJustAFable\\.command-gate\\docs\\rebaseline-boundary.md",
+                                          "role":  "support"
+                                      },
+                                      {
+                                          "relative":  "tests/HeliosIntegrity.Tests.ps1",
+                                          "source":  "C:\\Users\\dimas\\Desktop\\helios-integrity-adapter\\dist\\helios-runtime-v4.4.0\\tests\\HeliosIntegrity.Tests.ps1",
+                                          "dest":  "C:\\Users\\dimas\\Desktop\\MythosJustAFable\\.command-gate\\tests\\HeliosIntegrity.Tests.ps1",
+                                          "role":  "support"
+                                      }
+                                  ],
+    "settings_activation_plan":  {
+                                     "target_file":  "C:\\Users\\dimas\\.claude\\settings.json",
+                                     "backup_path":  "C:\\Users\\dimas\\.claude\\settings.json.pre-helios-backup",
+                                     "requires_approval":  true,
+                                     "already_configured":  true,
+                                     "hooks_to_add":  {
+                                                          "PreToolUse":  [
+                                                                             {
+                                                                                 "hooks":  [
+                                                                                               {
+                                                                                                   "command":  "powershell.exe -ExecutionPolicy Bypass -File \"C:\\Users\\dimas\\Desktop\\MythosJustAFable\\.command-gate\\hooks\\helios_pretooluse.ps1\"",
+                                                                                                   "type":  "command"
+                                                                                               }
+                                                                                           ],
+                                                                                 "matcher":  "Bash|PowerShell"
+                                                                             }
+                                                                         ],
+                                                          "PostToolUse":  [
+                                                                              {
+                                                                                  "hooks":  [
+                                                                                                {
+                                                                                                    "command":  "powershell.exe -ExecutionPolicy Bypass -File \"C:\\Users\\dimas\\Desktop\\MythosJustAFable\\.command-gate\\hooks\\evidence_capture.ps1\"",
+                                                                                                    "type":  "command"
+                                                                                                }
+                                                                                            ],
+                                                                                  "matcher":  "Bash|PowerShell"
+                                                                              }
+                                                                          ],
+                                                          "PostToolUseFailure":  [
+                                                                                     {
+                                                                                         "hooks":  [
+                                                                                                       {
+                                                                                                           "command":  "powershell.exe -ExecutionPolicy Bypass -File \"C:\\Users\\dimas\\Desktop\\MythosJustAFable\\.command-gate\\hooks\\evidence_capture.ps1\"",
+                                                                                                           "type":  "command"
+                                                                                                       }
+                                                                                                   ],
+                                                                                         "matcher":  "Bash|PowerShell"
+                                                                                     }
+                                                                                 ]
+                                                      }
+                                 },
+    "lock_activation_plan":  {
+                                 "protected_lock_targets":  [
+                                                                "hooks/helios_pretooluse.ps1",
+                                                                "hooks/gate_check.ps1",
+                                                                "hooks/evidence_capture.ps1",
+                                                                "hooks/tier_classifier.ps1",
+                                                                "hooks/lib/HeliosIntegrityBridge.ps1",
+                                                                "policy/command-policy.json",
+                                                                "manifest/helios-envelope.json",
+                                                                "manifest/helios-envelope.sha256"
+                                                            ],
+                                 "mutable_dirs":  [
+                                                      "pending",
+                                                      "inflight",
+                                                      "evidence",
+                                                      "blocked"
+                                                  ],
+                                 "include_settings_lock":  false,
+                                 "include_templates_lock":  false,
+                                 "lock_tool":  "tools/Lock-AkashicProtectedFiles.ps1",
+                                 "status_tool":  "tools/AkashicLockStatus.ps1",
+                                 "requires_approval":  true,
+                                 "lock_strategy":  {
+                                                       "backend":  "icacls",
+                                                       "strength":  "strong",
+                                                       "privilege":  "None"
+                                                   },
+                                 "fixture_prerequisite":  "PASS"
+                             },
+    "rollback_plan":  {
+                          "steps":  [
+                                        "Run Uninstall-AkashicHeliosRuntime.ps1 -AkashicRoot C:\\Users\\dimas\\Desktop\\helios-integrity-adapter -HeliosGateRoot C:\\Users\\dimas\\Desktop\\MythosJustAFable\\.command-gate (archives runtime, removes hooks)",
+                                        "Or manually: restore settings.json from backup: C:\\Users\\dimas\\.claude\\settings.json.pre-helios-backup",
+                                        "Remove deny ACLs from locked files (Unlock-AkashicProtectedFiles)",
+                                        "Verify no hooks active: run shell command, confirm no gate prompt",
+                                        "Optionally remove target with -ForceDestructive: C:\\Users\\dimas\\Desktop\\MythosJustAFable\\.command-gate"
+                                    ],
+                          "uninstall_tool":  "tools/Uninstall-AkashicHeliosRuntime.ps1",
+                          "risk":  "Low â€” Uninstall-AkashicHeliosRuntime archives before removing"
+                      },
+    "install_evidence":  {
+                             "schema_version":  "akashic-install-evidence.v1",
+                             "timestamp_utc":  "2026-06-30T23:45:40.9111138Z",
+                             "mode":  "Prepare",
+                             "platform":  "Windows",
+                             "akashic_root":  "C:\\Users\\dimas\\Desktop\\helios-integrity-adapter",
+                             "runtime_bundle_root":  "C:\\Users\\dimas\\Desktop\\helios-integrity-adapter\\dist\\helios-runtime-v4.4.0",
+                             "helios_gate_root":  "C:\\Users\\dimas\\Desktop\\MythosJustAFable\\.command-gate",
+                             "lock_strategy":  {
+                                                   "backend":  "icacls",
+                                                   "strength":  "strong",
+                                                   "privilege":  "None"
+                                               },
+                             "fixture_result":  "PASS",
+                             "manifest_status":  "CLEAN",
+                             "origin_status":  "PASS",
+                             "origin_verified":  true,
+                             "settings_activation":  "already_configured",
+                             "lock_activation":  "plan_only",
+                             "blockers":  [
+
+                                          ]
+                         },
+    "blockers":  [
+
+                 ],
+    "overall_status":  "READY"
 }

@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "helios-maintenance-rebaseline.v1",
+  "title": "Helios Maintenance Rebaseline Request",
+  "description": "Request for the front controller to perform an internal rebaseline during protected drift.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "request_id",
+    "created_utc",
+    "expires_utc",
+    "requested_by",
+    "base_manifest_hash",
+    "expected_drift_paths",
+    "reason",
+    "write_mode"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "helios-maintenance-rebaseline.v1"
+    },
+    "request_id": {
+      "type": "string",
+      "description": "Unique identifier for this maintenance request."
+    },
+    "created_utc": {
+      "type": "string",
+      "format": "date-time",
+      "description": "UTC timestamp when the request was created."
+    },
+    "expires_utc": {
+      "type": "string",
+      "format": "date-time",
+      "description": "UTC timestamp after which this request is no longer valid."
+    },
+    "requested_by": {
+      "type": "string",
+      "description": "Who authorized this maintenance rebaseline (e.g. 'human')."
+    },
+    "base_manifest_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "SHA256 of the current manifest JSON. Must match the sidecar hash at request time."
+    },
+    "expected_drift_paths": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "description": "Relative paths of protected files expected to have drifted. Must match actual drift exactly."
+    },
+    "reason": {
+      "type": "string",
+      "description": "Human-readable reason for the maintenance rebaseline."
+    },
+    "write_mode": {
+      "type": "string",
+      "const": "front_controller_internal_rebaseline",
+      "description": "Must be 'front_controller_internal_rebaseline'. Confirms the rebaseline is performed by the front controller, not an external tool."
+    }
+  },
+  "additionalProperties": false
+}

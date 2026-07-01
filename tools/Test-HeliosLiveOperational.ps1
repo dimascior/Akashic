@@ -1,4 +1,4 @@
-# Test-HeliosLiveOperational.ps1 — Verify Helios runtime is correctly
+# Test-HeliosLiveOperational.ps1 - Verify Helios runtime is correctly
 # installed, hooked into Claude settings, and structurally sound.
 # Covers automated static checks. Live hook execution requires real
 # Claude tool calls and cannot be tested from within a script.
@@ -45,7 +45,7 @@ function Add-Check([string]$Name, [string]$Status, [string]$Detail) {
     $checks.Add([ordered]@{ name = $Name; status = $Status; detail = $Detail })
     if ($Status -eq 'FAIL') { $failures.Add("$Name`: $Detail") }
     $mark = switch ($Status) { 'PASS' { '[PASS]' }; 'FAIL' { '[FAIL]' }; default { "[${Status}]" } }
-    Write-Host "$mark $Name — $Detail"
+    Write-Host "$mark $Name - $Detail"
 }
 
 # --- 1. Runtime target exists ---
@@ -244,7 +244,9 @@ Add-Check 'Gate lifecycle' 'INFO' "Pending: $pendingCount, Evidence: $evidenceCo
 # --- Summary ---
 $overallStatus = if ($failures.Count -eq 0) { 'PASS' } else { 'FAIL' }
 Write-Host ""
-Write-Host "=== Overall: $overallStatus ($($checks.Count) checks, $($failures.Count) failures) ==="
+$checkTotal = $checks.Count
+$failTotal = $failures.Count
+Write-Host "=== Overall: $overallStatus ($checkTotal checks, $failTotal failures) ==="
 
 $result = [ordered]@{
     schema_version      = 'helios-live-operational-check.v1'

@@ -1,7 +1,7 @@
 {
     "schema_version":  "akashic-self-envelope.v1",
-    "created_utc":  "2026-06-30T07:51:12Z",
-    "rebaselined_by":  "claude-phase44-recovery",
+    "created_utc":  "2026-06-30T23:45:01Z",
+    "rebaselined_by":  "claude-session",
     "signature_status":  "SIGNATURE_NOT_IMPLEMENTED",
     "protected":  {
                       "description":  "Files that can alter Akashic behavior, trust, installation, verification, CI, schema interpretation, or documentation contracts. Must not change outside of explicit human rebaseline.",
@@ -248,8 +248,8 @@
                                     },
                                     {
                                         "path":  "README.md",
-                                        "sha256":  "589bed14f09083b7c7237899f6a3036e4d0bcb5ff201180189a568fa670f116d",
-                                        "size":  13515,
+                                        "sha256":  "b0eb0e70e957cc49021864e42943621708487c78b40ae19af747c53295442f7f",
+                                        "size":  22204,
                                         "role":  "contract-doc"
                                     },
                                     {
@@ -530,8 +530,8 @@
                                     },
                                     {
                                         "path":  "tools/lib/AkashicCoveragePolicy.ps1",
-                                        "sha256":  "092a0518e796cf70b0f89870c8dea4e1e3eea4dee02118756c4987b09e6f15ad",
-                                        "size":  4144,
+                                        "sha256":  "f3cbba2dce93f08c79f341c2746e3bf86c3f6f86593b287ec1b3f0a07d5a1f9e",
+                                        "size":  4158,
                                         "role":  "library"
                                     },
                                     {
@@ -786,6 +786,7 @@
                     "description":  "Paths expected to change during normal Akashic operation.",
                     "paths":  [
                                   "evidence/*",
+                                  "dist/*",
                                   "manifest/akashic-envelope.sig",
                                   "manifest/akashic-public-key.asc",
                                   "install-plan.json",
@@ -805,7 +806,8 @@
                 },
     "classification":  {
                            "protected_file_count":  110,
-                           "mutable_pattern_count":  6,
+                           "mutable_pattern_count":  7,
                            "ignored_pattern_count":  5
-                       }
+                       },
+    "note":  "Add dist/* to mutable coverage policy, clear unclassified files"
 }

@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "session-ledger.v1",
+  "title": "Helios Session Ledger",
+  "description": "Append-only JSONL ledger tracking the gate/evidence lifecycle for each command in a session. Each line is one of three event types.",
+  "oneOf": [
+    { "$ref": "#/$defs/pretooluse_seen" },
+    { "$ref": "#/$defs/gate_consumed" },
+    { "$ref": "#/$defs/posttooluse_evidence_written" }
+  ],
+  "$defs": {
+    "pretooluse_seen": {
+      "type": "object",
+      "description": "PreToolUse hook fired and a command was received.",
+      "required": ["event_type", "timestamp_utc", "session_id", "command_sha256", "tool_use_id"],
+      "properties": {
+        "event_type": { "type": "string", "const": "pretooluse_seen" },
+        "timestamp_utc": { "type": "string", "format": "date-time" },
+        "session_id": { "type": "string" },
+        "command_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "tool_use_id": { "type": "string" },
+        "policy_hash": { "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$" },
+        "continuity_break": { "type": "boolean" }
+      }
+    },
+    "gate_consumed": {
+      "type": "object",
+      "description": "Gate validated and moved to inflight.",
+      "required": ["event_type", "timestamp_utc", "session_id", "correlation_id", "command_sha256"],
+      "properties": {
+        "event_type": { "type": "string", "const": "gate_consumed" },
+        "timestamp_utc": { "type": "string", "format": "date-time" },
+        "session_id": { "type": "string" },
+        "correlation_id": { "type": "string" },
+        "command_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "tool_use_id": { "type": "string" },
+        "declared_tier": { "type": "integer" },
+        "verdict": { "type": "string" }
+      }
+    },
+    "posttooluse_evidence_written": {
+      "type": "object",
+      "description": "PostToolUse fired and evidence was created.",
+      "required": ["event_type", "timestamp_utc", "session_id", "correlation_id"],
+      "properties": {
+        "event_type": { "type": "string", "const": "posttooluse_evidence_written" },
+        "timestamp_utc": { "type": "string", "format": "date-time" },
+        "session_id": { "type": "string" },
+        "correlation_id": { "type": "string" },
+        "tool_use_id": { "type": "string" },
+        "command_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "exit_code": { "type": ["integer", "null"] },
+        "hook_presence_after": { "type": "boolean" },
+        "watched_path_changes": { "type": "boolean" }
+      }
+    }
+  }
+}

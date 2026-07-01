@@ -1,5 +1,7 @@
 # Akashic
 
+![Akashic Trust Witness Demo](helios-akashic-demo.gif)
+
 Trust witness, installer, and integrity tooling for the Helios command-gate system. Provides envelope verification, manifest generation and rebaseline, settings integrity verification, session continuity forensic auditing, maintenance transition evidence, lock tooling, and the Helios runtime installer.
 
 ## Purpose

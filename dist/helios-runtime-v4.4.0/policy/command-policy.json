@@ -1,0 +1,189 @@
+{
+  "schema_version": "command-policy.v1",
+  "tier_4_forbidden": [
+    "rm\\s+-rf\\s+/[^t]",
+    "dd\\s+if=/dev",
+    "mkfs\\.",
+    "format\\s+[A-Z]:",
+    ":\\(\\)\\{",
+    ">/dev/sd",
+    "curl.*\\|\\s*(ba)?sh",
+    "wget.*\\|\\s*(ba)?sh",
+    "Remove-Item\\s+.*(-Recurse|/s).*C:\\\\",
+    "Remove-Item\\s+.*C:\\\\Windows",
+    "Remove-Item\\s+.*C:\\\\Users",
+    "Clear-Content\\s+.*C:\\\\",
+    "Set-ExecutionPolicy\\s+Bypass",
+    "reg\\s+save\\s+HKLM\\\\SAM",
+    "vssadmin\\s+delete\\s+shadows",
+    "cipher\\s+/w:",
+    "bcdedit\\s+",
+    "procdump.*lsass",
+    "rundll32.*comsvcs.*MiniDump",
+    "sekurlsa",
+    "mimikatz",
+    "credential.*dump"
+  ],
+  "tier_3_modifying": [
+    "\\brm\\b",
+    "\\bmv\\b",
+    "\\bscp\\b.*:",
+    "\\bcat\\b.*>",
+    "\\bkill\\b",
+    "\\bsv\\s+(restart|stop|start)\\b",
+    "\\bpip\\s+install\\b",
+    "\\bxbps-install\\b",
+    "\\bnpm\\s+install\\b",
+    "\\bgit\\s+push\\b",
+    "\\bgit\\s+reset\\b",
+    "\\bchmod\\b",
+    "\\bchown\\b",
+    "\\bmkdir\\b",
+    "\\btouch\\b",
+    "\\btee\\b",
+    "\\bsed\\s+-i\\b",
+    "Set-Content",
+    "Out-File",
+    "Add-Content",
+    "New-Item",
+    "Copy-Item",
+    "Move-Item"
+  ],
+  "tier_2_remote_admin": [
+    "\\btailscale\\s+ssh\\b",
+    "\\bssh\\b",
+    "\\bsudo\\b",
+    "\\bcurl\\s+localhost",
+    "\\brv\\s+(click|type|key|focus-window|close-window|exec|scroll|dbus|clipboard|drag|hover|scroll-to)\\b",
+    "\\bsv\\s+check\\b",
+    "\\bloginctl\\b",
+    "\\bbusctl\\b"
+  ],
+  "tier_1_diagnostic": [
+    "\\bps\\b",
+    "\\bcat\\b",
+    "\\bgrep\\b",
+    "\\bfind\\b",
+    "\\bls\\b",
+    "\\brv\\s+(status|windows|visual|elements|find|moments|changes|verify|digest|watch|outcomes|proctree|irds|desktop|tree|hash|diff|predict|section|drill|nodes|moment|trace|fractal|dom|pane|orphans|self-test|help)\\b",
+    "\\bbase64\\b",
+    "\\bpython\\s+-c.*compile\\b",
+    "\\biw\\s+dev\\b",
+    "\\bip\\s+(addr|link|route)\\b",
+    "\\bdf\\b",
+    "\\bfree\\b",
+    "\\buptime\\b",
+    "\\buname\\b",
+    "\\bwho\\b",
+    "\\blast\\b",
+    "Get-Process",
+    "Get-Service",
+    "Get-ChildItem",
+    "Get-Content",
+    "Select-String",
+    "Test-Path",
+    "Get-Item"
+  ],
+  "tier_required_fields": {
+    "0": ["need", "expected", "actual_means", "next_logic"],
+    "1": ["need", "expected", "actual_means", "next_logic"],
+    "2": ["need", "expected", "actual_means", "next_logic", "stop_conditions"],
+    "3": ["need", "expected", "actual_means", "next_logic", "stop_conditions", "read_write_impact"]
+  },
+  "exit_capture_suffixes": {
+    "bash": ["; echo EXIT=$?"],
+    "powershell": [
+      "; Write-Host \"EXIT=$LASTEXITCODE\"",
+      "; echo \"EXIT=$LASTEXITCODE\""
+    ]
+  },
+  "exit_capture_modes": {
+    "suffix": "Command ends with an approved exit-capture suffix. Tool may exit nonzero and trigger PostToolUseFailure, losing tool_response.",
+    "wrapper_required": "Command wraps the real operation in a try/catch or subshell that captures the real exit code, prints EXIT=<code>, and exits 0. Tool always triggers PostToolUse so evidence_capture receives tool_response.stdout. Wrapper commands are exempt from chain detection because the wrapper structure is the approved pattern.",
+    "not_applicable": "Command has no meaningful exit code. Requires exit_capture_reason from the approved list."
+  },
+  "exit_capture_not_applicable_reasons": [
+    "pure_output",
+    "no_exit_code_semantic",
+    "interactive_tool",
+    "background_process"
+  ],
+  "wrapper_validators": {
+    "bash": {
+      "must_contain": "echo \"EXIT=",
+      "must_end_with": "exit 0"
+    },
+    "powershell": {
+      "must_contain": "Write-Host \"EXIT=",
+      "must_end_with": "exit 0"
+    }
+  },
+  "wrapper_required_fields": {
+    "wrapped_command": "The semantic command being measured, extracted from the wrapper. Must appear literally inside the full command.",
+    "wrapped_command_sha256": "SHA256 of wrapped_command (UTF-8 bytes). Validated at gate check — must match computed hash.",
+    "wrapper_reason": "Why the wrapper is needed. Typically: nonzero exit is expected diagnostic output that must be captured as evidence."
+  },
+  "chain_detection_notes": "v2 strict: no chain exemptions. Every command containing ;, &&, ||, or | (outside single-quoted strings) must declare multi_command:true with segments. This includes exit-capture suffix commands. Only wrapper-mode commands (exit_capture=wrapper_required) are exempt from chain detection because the full command hash, wrapped_command identity, and wrapper validators protect against hidden actions. Single-quote aware only; double-quote false positives overblock (safe).",
+  "capability_patterns": {
+    "inline_interpreter_execution": {
+      "patterns": ["python3?\\s+-[ce]", "\\bnode\\s+-e", "\\bruby\\s+-e", "\\bperl\\s+-[eE]", "\\bpwsh\\s+-[Cc]ommand", "\\bpowershell\\s+-[Cc]ommand", "\\bbash\\s+-c", "\\bsh\\s+-c"],
+      "tier": 3,
+      "requires_read_write_impact": true,
+      "requires_stop_conditions": true,
+      "reason": "Inline interpreter execution can perform hidden filesystem or control-plane mutations."
+    },
+    "dynamic_eval_execution": {
+      "patterns": ["\\beval\\b", "Invoke-Expression", "\\biex\\s"],
+      "tier": 3,
+      "requires_read_write_impact": true,
+      "requires_stop_conditions": true,
+      "reason": "Dynamic evaluation hides execution semantics inside an argument."
+    },
+    "encoded_or_obfuscated_execution": {
+      "patterns": ["-[Ee]ncoded[Cc]ommand", "-[Ee]nc\\s", "\\bbase64\\s+-d.*\\|\\s*(ba)?sh"],
+      "tier": 3,
+      "requires_read_write_impact": true,
+      "requires_stop_conditions": true,
+      "reason": "Encoded execution prevents reliable surface inspection."
+    },
+    "nested_shell_execution": {
+      "patterns": ["\\$\\(", "\\`[^\\`]+\\`"],
+      "tier": 2,
+      "requires_read_write_impact": true,
+      "requires_stop_conditions": true,
+      "reason": "Nested shell execution can bypass direct pattern classification."
+    }
+  },
+  "control_plane_paths": [
+    "\\.claude[/\\\\]settings",
+    "command-policy\\.json",
+    "tier_classifier\\.ps1",
+    "gate_check\\.ps1",
+    "evidence_capture\\.ps1",
+    "helios_pretooluse\\.ps1",
+    "akashic-envelope"
+  ],
+  "write_indicators": [
+    "\\b(rm|mv|cp|scp|tee|chmod|chown|mkdir|touch|kill|pkill)\\b",
+    "\\bsed\\s+-i\\b",
+    "\\bcat\\b.*>",
+    ">\\s",
+    ">>\\s",
+    "\\bgit\\s+(push|reset|commit|merge|rebase|checkout|branch\\s+-[dD])\\b",
+    "\\bsv\\s+(restart|stop|start)\\b",
+    "\\bpip\\s+install\\b",
+    "\\bxbps-install\\b",
+    "\\bnpm\\s+install\\b",
+    "\\brv\\s+(click|type|key|focus-window|close-window|exec|scroll|dbus|clipboard|drag|hover|scroll-to)\\b",
+    "Set-Content",
+    "Out-File",
+    "Add-Content",
+    "New-Item",
+    "Copy-Item",
+    "Move-Item",
+    "Remove-Item",
+    "Rename-Item",
+    "\\becho\\b.*>",
+    "\\bprintf\\b.*>"
+  ]
+}

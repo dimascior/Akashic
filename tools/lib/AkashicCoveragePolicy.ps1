@@ -40,6 +40,7 @@ $script:AkashicProtectedDiscovery = @(
 # Mutable patterns: paths expected to change during operation.
 $script:AkashicMutablePatterns = @(
     'evidence/*',
+    'dist/*',
     'manifest/akashic-envelope.sig',
     'manifest/akashic-public-key.asc',
     'install-plan.json',

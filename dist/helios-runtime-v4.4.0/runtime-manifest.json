@@ -1,0 +1,236 @@
+{
+    "schema_version":  "helios-runtime-bundle.v1",
+    "package_name":  "helios-runtime",
+    "package_version":  "4.4.0",
+    "source_repo":  "MythosJustAFable",
+    "source_branch":  "main",
+    "source_commit":  "2cb052748d3a935f002288c5a7ee53e6999336cc",
+    "build_timestamp_utc":  "2026-06-30T23:34:11Z",
+    "files":  [
+                  {
+                      "path":  "hooks\\helios_pretooluse.ps1",
+                      "required":  true,
+                      "role":  "protected"
+                  },
+                  {
+                      "path":  "hooks\\gate_check.ps1",
+                      "required":  true,
+                      "role":  "protected"
+                  },
+                  {
+                      "path":  "hooks\\evidence_capture.ps1",
+                      "required":  true,
+                      "role":  "protected"
+                  },
+                  {
+                      "path":  "hooks\\tier_classifier.ps1",
+                      "required":  true,
+                      "role":  "protected"
+                  },
+                  {
+                      "path":  "policy\\command-policy.json",
+                      "required":  true,
+                      "role":  "protected"
+                  },
+                  {
+                      "path":  "schemas\\control-plane-diff.v1.schema.json",
+                      "required":  false,
+                      "role":  "support"
+                  },
+                  {
+                      "path":  "schemas\\helios-baseline.v1.schema.json",
+                      "required":  false,
+                      "role":  "support"
+                  },
+                  {
+                      "path":  "schemas\\helios-command-evidence.v1.schema.json",
+                      "required":  false,
+                      "role":  "support"
+                  },
+                  {
+                      "path":  "schemas\\helios-envelope.v1.schema.json",
+                      "required":  false,
+                      "role":  "support"
+                  },
+                  {
+                      "path":  "schemas\\helios-maintenance-rebaseline.v1.schema.json",
+                      "required":  false,
+                      "role":  "support"
+                  },
+                  {
+                      "path":  "schemas\\session-ledger.v1.schema.json",
+                      "required":  false,
+                      "role":  "support"
+                  },
+                  {
+                      "path":  "tools\\Check-ParseErrors.ps1",
+                      "required":  false,
+                      "role":  "support"
+                  },
+                  {
+                      "path":  "tools\\do-akashic-readme-commit.ps1",
+                      "required":  false,
+                      "role":  "support"
+                  },
+                  {
+                      "path":  "tools\\do-cpfix-commit.ps1",
+                      "required":  false,
+                      "role":  "support"
+                  },
+                  {
+                      "path":  "tools\\do-readme-commit.ps1",
+                      "required":  false,
+                      "role":  "support"
+                  },
+                  {
+                      "path":  "tools\\Move-HeliosStaleGateArtifacts.ps1",
+                      "required":  false,
+                      "role":  "support"
+                  },
+                  {
+                      "path":  "tools\\New-HeliosEnvelopeManifest.ps1",
+                      "required":  false,
+                      "role":  "support"
+                  },
+                  {
+                      "path":  "tools\\Test-ControlPlaneMutation.ps1",
+                      "required":  false,
+                      "role":  "support"
+                  },
+                  {
+                      "path":  "tools\\Test-HeliosEnvelopeIntegrity.ps1",
+                      "required":  false,
+                      "role":  "support"
+                  },
+                  {
+                      "path":  "tools\\Test-HeliosEvidenceChain.ps1",
+                      "required":  false,
+                      "role":  "support"
+                  },
+                  {
+                      "path":  "tools\\Test-HeliosGateEnforcement.ps1",
+                      "required":  false,
+                      "role":  "support"
+                  },
+                  {
+                      "path":  "docs\\bypass-surface.md",
+                      "required":  false,
+                      "role":  "support"
+                  },
+                  {
+                      "path":  "docs\\integrity-witness.md",
+                      "required":  false,
+                      "role":  "support"
+                  },
+                  {
+                      "path":  "docs\\phase4-lock-handoff.md",
+                      "required":  false,
+                      "role":  "support"
+                  },
+                  {
+                      "path":  "docs\\rebaseline-boundary.md",
+                      "required":  false,
+                      "role":  "support"
+                  },
+                  {
+                      "path":  "tests\\HeliosIntegrity.Tests.ps1",
+                      "required":  false,
+                      "role":  "support"
+                  },
+                  {
+                      "path":  "pending\\.gitkeep",
+                      "required":  true,
+                      "role":  "mutable_scaffold"
+                  },
+                  {
+                      "path":  "inflight\\.gitkeep",
+                      "required":  true,
+                      "role":  "mutable_scaffold"
+                  },
+                  {
+                      "path":  "evidence\\.gitkeep",
+                      "required":  true,
+                      "role":  "mutable_scaffold"
+                  },
+                  {
+                      "path":  "blocked\\.gitkeep",
+                      "required":  true,
+                      "role":  "mutable_scaffold"
+                  },
+                  {
+                      "path":  "templates\\.gitkeep",
+                      "required":  true,
+                      "role":  "mutable_scaffold"
+                  }
+              ],
+    "file_hashes":  {
+                        "policy\\command-policy.json":  "e373c3dcf11e7bf06a2221e816a9f669eb0f832e549f4b26a9b7bc28053373ac",
+                        "docs\\bypass-surface.md":  "2c64b23e5d1d5700b7326f106f5e265025a8488d2a4cf56f410397b4841561b5",
+                        "tools\\Move-HeliosStaleGateArtifacts.ps1":  "fb06eea016baa8f425c85d550d6f1b04e6fa608f20b18d9c5143095b3273730d",
+                        "hooks\\gate_check.ps1":  "564b1dc1dc03c690a589e6d91560e2626c31d6467181fa30e05e5dd125b0a850",
+                        "hooks\\evidence_capture.ps1":  "677871a087e56543eeeb865116cb2a7e9713f1c31a2a8d8cad7cc9af0c1db077",
+                        "blocked\\.gitkeep":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                        "tools\\do-cpfix-commit.ps1":  "946402b72b0a911939b4f8c99da822503bbfdff59f50e487d8bdf1385d1e71e4",
+                        "tools\\Test-HeliosGateEnforcement.ps1":  "8c711194d7dee161589fc6baa3fae3d51a5ed246299ae116a046611c822e7cb6",
+                        "evidence\\.gitkeep":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                        "schemas\\helios-envelope.v1.schema.json":  "77948f40da312727573e5affa80313c1f46838092056f2dd378e95e0e0d76449",
+                        "hooks\\tier_classifier.ps1":  "289f3158afe070327a967bcd786744931b2650651c4847ef06498b21c0dc95e2",
+                        "docs\\rebaseline-boundary.md":  "36e42880fa9dfb86da231114c2357a338ad8bba93b8b7d0305b04f68c1faa718",
+                        "docs\\integrity-witness.md":  "eb27d61dcff27fba8f1b4792c84e60f8085b0b24c2b029280b19756c242f32ba",
+                        "tools\\do-readme-commit.ps1":  "e07c2c59de07de6afe172db57c7c16d79ab67fe5fed1463ca884292b3d4806c4",
+                        "schemas\\helios-command-evidence.v1.schema.json":  "bbc3e4156a17821b0cdcfa7926de1f2d9eb7b3bbba037b96584c4c06ee058395",
+                        "tools\\do-akashic-readme-commit.ps1":  "a6560194d56958de1eb858bcb0a7bc21d6e670275badad482471f32771b32547",
+                        "tools\\New-HeliosEnvelopeManifest.ps1":  "6605c15cf24ee57994198a343986657c7ab886ce25699953a2e30702b7ee6913",
+                        "tools\\Test-ControlPlaneMutation.ps1":  "c09fad127a4e4d29adbd916164fd993fef32d88249507c61b4b3ed1440cce8e3",
+                        "schemas\\helios-maintenance-rebaseline.v1.schema.json":  "6a8d3685a4c50f684e8c300f298063e7a86769bfc6a6af2b6d194ad28a389bb6",
+                        "schemas\\helios-baseline.v1.schema.json":  "d7c160d074eed7c7aff39a39b2950405fbe69c9de370d18d1e1d55c73cd2bc0a",
+                        "docs\\phase4-lock-handoff.md":  "6a7b52607dc7814682daefc4d972e37dd1a3b35d5fa7e7d08b16367a3efb9184",
+                        "tests\\HeliosIntegrity.Tests.ps1":  "3c15d02a77335df37ccf52da39720318ef35586ab3a9fa74c0e6f4e6650ec8c5",
+                        "tools\\Test-HeliosEnvelopeIntegrity.ps1":  "69fa60913b7667085c01a345c56936a8aeaee9d6fa90ecaf58a1553348f8e3a8",
+                        "templates\\.gitkeep":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                        "inflight\\.gitkeep":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                        "schemas\\session-ledger.v1.schema.json":  "723b0241330d5aecbdfba5ead206890fbfb885bed54442e963bf125725107d41",
+                        "schemas\\control-plane-diff.v1.schema.json":  "b38079cf944a505216ecad3b4b9b5e7094cb8c08eb025a358f4dbadb1d84f78b",
+                        "tools\\Test-HeliosEvidenceChain.ps1":  "b38584906a398f12b77b7cb67e7de3b6998db6d5d6a90300179a8e5ea975e30a",
+                        "pending\\.gitkeep":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                        "tools\\Check-ParseErrors.ps1":  "9cb33f1d5e812fda18197b25d22b4500aa9acb4c904a24019950a2232cb61c8c",
+                        "hooks\\helios_pretooluse.ps1":  "0a9708f3902611042d694d56f81a7f3b58eeb871f35d137091bf45ce7ec7fddc"
+                    },
+    "protected_files":  [
+                            "hooks\\helios_pretooluse.ps1",
+                            "hooks\\gate_check.ps1",
+                            "hooks\\evidence_capture.ps1",
+                            "hooks\\tier_classifier.ps1",
+                            "policy\\command-policy.json"
+                        ],
+    "mutable_dirs":  [
+                         "pending",
+                         "inflight",
+                         "evidence",
+                         "blocked"
+                     ],
+    "excluded":  [
+                     "pending/*.gate.json",
+                     "inflight/*.gate.json",
+                     "evidence/integrity/sessions/",
+                     "evidence/*.result.json",
+                     "evidence/*.tool_response.json",
+                     "evidence/stale/",
+                     "evidence/maintenance/",
+                     "evidence/install-evidence.json",
+                     "blocked/*.json",
+                     "hooks/lib/HeliosIntegrityBridge.ps1",
+                     "manifest/helios-envelope.json",
+                     "manifest/helios-envelope.sha256"
+                 ],
+    "adapter_source":  {
+                           "repo":  "dimascior/Akashic",
+                           "note":  "Bridge and adapter tools are sourced from the Akashic repo, not this bundle."
+                       },
+    "notes":  [
+                  "Bridge is installed from the Akashic adapter package, not bundled.",
+                  "Manifest and sidecar are generated locally during install.",
+                  "Mutable directories contain .gitkeep only.",
+                  "Runtime source is the Helios repo; adapter source is the Akashic repo."
+              ]
+}

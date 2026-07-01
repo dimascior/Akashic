@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "control-plane-diff.v1",
+  "title": "Control-Plane Diff",
+  "description": "Before/after comparison of enforcement-relevant files. Produced by control_plane_watcher.ps1.",
+  "type": "object",
+  "$defs": {
+    "file_snapshot": {
+      "type": "object",
+      "properties": {
+        "path": { "type": "string" },
+        "exists": { "type": "boolean" },
+        "hash": { "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$" }
+      },
+      "required": ["path", "exists", "hash"]
+    },
+    "hook_presence": {
+      "type": "object",
+      "properties": {
+        "settings_exists": { "type": "boolean" },
+        "settings_hash": { "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$" },
+        "pretooluse_present": { "type": "boolean" },
+        "posttooluse_present": { "type": "boolean" },
+        "posttoolusefailure_present": { "type": "boolean" },
+        "pretooluse_command": { "type": ["string", "null"] },
+        "posttooluse_command": { "type": ["string", "null"] },
+        "posttoolusefailure_command": { "type": ["string", "null"] },
+        "all_hooks_present": { "type": "boolean" }
+      }
+    },
+    "control_plane_snapshot": {
+      "type": "object",
+      "properties": {
+        "timestamp_utc": { "type": "string", "format": "date-time" },
+        "files": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/file_snapshot" }
+        },
+        "hook_presence": { "$ref": "#/$defs/hook_presence" }
+      },
+      "required": ["timestamp_utc", "files", "hook_presence"]
+    },
+    "file_diff": {
+      "type": "object",
+      "properties": {
+        "changed": { "type": "boolean", "const": true },
+        "reason": {
+          "type": "string",
+          "enum": ["hash_changed", "appeared", "disappeared", "new_in_after", "removed_from_watched_set", "hook_presence_changed"]
+        },
+        "before_hash": { "type": ["string", "null"] },
+        "after_hash": { "type": ["string", "null"] },
+        "before_exists": { "type": "boolean" },
+        "after_exists": { "type": "boolean" },
+        "before": { "type": "object" },
+        "after": { "type": "object" }
+      },
+      "required": ["changed", "reason"]
+    },
+    "comparison_result": {
+      "type": "object",
+      "properties": {
+        "has_changes": { "type": "boolean" },
+        "hook_presence_changed": { "type": "boolean" },
+        "diffs": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/file_diff" }
+        }
+      },
+      "required": ["has_changes", "diffs"]
+    }
+  }
+}

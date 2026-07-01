@@ -1,21 +1,23 @@
 {
-  "schema_version": "akashic-install-evidence.v1",
-  "timestamp_utc": "2026-06-29T21:47:52.7953956Z",
-  "mode": "Prepare",
-  "platform": "Linux",
-  "akashic_root": "/home/void/Desktop/Akashic",
-  "runtime_bundle_root": "/home/void/Desktop/Helios-/.command-gate",
-  "helios_gate_root": "/home/void/.helios/.command-gate",
-  "lock_strategy": {
-    "backend": "chattr",
-    "strength": "strong_if_supported",
-    "privilege": "Sudo"
-  },
-  "fixture_result": "NOT_RUN",
-  "manifest_status": "CLEAN",
-  "origin_status": "PASS",
-  "origin_verified": true,
-  "settings_activation": "skipped",
-  "lock_activation": "plan_only",
-  "blockers": []
+    "schema_version":  "akashic-install-evidence.v1",
+    "timestamp_utc":  "2026-06-30T23:45:40.9111138Z",
+    "mode":  "Prepare",
+    "platform":  "Windows",
+    "akashic_root":  "C:\\Users\\dimas\\Desktop\\helios-integrity-adapter",
+    "runtime_bundle_root":  "C:\\Users\\dimas\\Desktop\\helios-integrity-adapter\\dist\\helios-runtime-v4.4.0",
+    "helios_gate_root":  "C:\\Users\\dimas\\Desktop\\MythosJustAFable\\.command-gate",
+    "lock_strategy":  {
+                          "backend":  "icacls",
+                          "strength":  "strong",
+                          "privilege":  "None"
+                      },
+    "fixture_result":  "PASS",
+    "manifest_status":  "CLEAN",
+    "origin_status":  "PASS",
+    "origin_verified":  true,
+    "settings_activation":  "already_configured",
+    "lock_activation":  "plan_only",
+    "blockers":  [
+
+                 ]
 }
